@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TextInput} from 'react-native';
+import { StyleSheet, View, Text} from 'react-native';
+import Picker from 'react-native-picker-select';
+import Database from "../Database.json"
 
 export default class TextPlaceHolder extends Component {  
-    state = {};
+    state = {
+        category: ""
+    };
 
     render(){
+        console.log(this.props)
         return (
             <View style={styles.container}>
-                
+                {this.props.input ? 
+                    <Picker style={styles} onValueChange={(value) => this.setState({category: value})}
+                        items={Database[this.props.input]}/> 
+                    : <Text style={styles.text}>{this.props.text}</Text>}
             </View>
           );
     }
@@ -27,5 +35,32 @@ const styles = StyleSheet.create({
         height: 4,
       },
     shadowOpacity: 0.4,
+  },
+  text: {
+    width: "100%",
+    height: "100%",
+    textAlign: "left",
+    color: "white",
+    padding: "2.5%",
+    marginLeft: "4%",
+    fontSize: 30
+  },
+  inputIOS: {
+    width: "100%",
+    height: "100%",
+    textAlign: "left",
+    color: "white",
+    padding: "2.5%",
+    marginLeft: "4%",
+    fontSize: 30
+  },
+  inputAndroid: {
+    width: "100%",
+    height: "100%",
+    textAlign: "left",
+    color: "white",
+    padding: "2.5%",
+    marginLeft: "4%",
+    fontSize: 30
   },
 });

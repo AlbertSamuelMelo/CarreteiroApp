@@ -8,8 +8,8 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <CameraPlaceHolder />
-        <TextPlaceHolder />
-        <TextPlaceHolder />
+        <TextPlaceHolder text="Britta"/>
+        <TextPlaceHolder input="Material"/>
         <TextPlaceHolder />
         <TextPlaceHolder />
     </View>
