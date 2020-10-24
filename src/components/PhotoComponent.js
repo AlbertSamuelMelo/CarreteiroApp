@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import cameraImage from "../../assets/camera.png"
+import * as MediaLibrary from 'expo-media-library';
 
 export default function CameraPage(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -22,6 +23,7 @@ export default function CameraPage(props) {
   const takePicture = async () => {
     if (this.camera) {
       let photo = await this.camera.takePictureAsync();
+      MediaLibrary.saveToLibraryAsync(photo.uri)
       returnToParent(photo)
     }
   };
