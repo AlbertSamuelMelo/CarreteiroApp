@@ -7,7 +7,6 @@ import * as MediaLibrary from 'expo-media-library';
 export default function CameraPage(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [state, setState] = useState()
   
   const returnToParent = (photo) => {
     props.callbackFromParent(photo);
