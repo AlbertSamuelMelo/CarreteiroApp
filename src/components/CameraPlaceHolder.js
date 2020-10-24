@@ -11,7 +11,7 @@ export default class CameraPlaceHolder extends Component {
         dataChild: false,
       };
 
-    myCallback = (dataFromChild) => {
+    photoTaked = (dataFromChild) => {
         this.toggleModal()
         this.setState({ dataFromChild })
         this.setState({ dataChild: true })
@@ -29,7 +29,9 @@ export default class CameraPlaceHolder extends Component {
                     title={ !this.state.dataChild ? "Tirar foto" : "Repetir"}
                     style={styles.TouchableImage}
                 >
-                    <Image source={camera} style={{marginTop: 0 ,width: 100, height: 75 }} /> 
+                    <Image source={!this.state.dataChild ? camera : { uri: this.state.dataFromChild.uri }} 
+                        style={!this.state.dataChild ? styles.phothoIcon : styles.photoTaked} 
+                    /> 
                 </TouchableOpacity>
                 <Modal
                     style={styles.modalView}
@@ -37,7 +39,7 @@ export default class CameraPlaceHolder extends Component {
                     swipeDirection={['down', 'left', 'right']}
                     onSwipeComplete={this.toggleModal}
                     onBackdropPress={this.toggleModal}>
-                        <PhotoComponent callbackFromParent={this.myCallback}/>
+                        <PhotoComponent callbackFromParent={this.photoTaked}/>
                 </Modal>
             </View>
           );
@@ -72,5 +74,15 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  phothoIcon: {
+    marginTop: 0, 
+    width: 100, 
+    height: 75 
+  },
+  photoTaked: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 100,
   }
 });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
-import camera from "../../assets/camera.png"
+import cameraImage from "../../assets/camera.png"
 
 export default function CameraPage(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -20,10 +20,10 @@ export default function CameraPage(props) {
   }, []);
   
   const takePicture = async () => {
-      if (this.camera) {
-        let photo = await this.camera.takePictureAsync();
-        returnToParent(photo)
-      }
+    if (this.camera) {
+      let photo = await this.camera.takePictureAsync();
+      returnToParent(photo)
+    }
   };
   
   if (hasPermission === null) {
@@ -39,7 +39,7 @@ export default function CameraPage(props) {
         alignContent: "center",
         justifyContent: "center",
      }}>
-      <Camera style={{ flex: 1 }} type={type}>
+      <Camera ref={ref => { this.camera = ref; }}style={{ flex: 1 }} type={type}>
         <View
           style={{
             backgroundColor: 'transparent',
@@ -57,7 +57,7 @@ export default function CameraPage(props) {
               marginTop: "150%",
             }}
             onPress={ takePicture.bind(this) }>
-                <Image source={camera} style={{ width: 100, height: 75 }} />
+                <Image source={cameraImage} style={{ width: 100, height: 75 }} />
 
           </TouchableOpacity>
         </View>
