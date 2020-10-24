@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { StyleSheet, View, Modal, TouchableOpacity, Image } from 'react-native';
 import PhotoComponent from "../components/PhotoComponent" 
