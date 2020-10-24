@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import camera from "../../assets/camera.png"
+
 export default function CameraPage(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [state, setState] = useState()
+  
   const returnToParent = (photo) => {
     props.callbackFromParent(photo);
   }
@@ -55,7 +57,7 @@ export default function CameraPage(props) {
               marginTop: "150%",
             }}
             onPress={ takePicture.bind(this) }>
-                <Image source={camera} style={{ width: 152, height: 75 }} />
+                <Image source={camera} style={{ width: 100, height: 75 }} />
 
           </TouchableOpacity>
         </View>

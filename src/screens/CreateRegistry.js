@@ -1,14 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import PhotoComponent from "../components/PhotoComponent" 
+import CameraPlaceHolder from '../components/CameraPlaceHolder';
 
 export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <PhotoComponent />
-
+      <CameraPlaceHolder />
     </View>
   );
 }
