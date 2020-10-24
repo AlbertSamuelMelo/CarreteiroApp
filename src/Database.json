@@ -24,7 +24,7 @@
     {"label": "MIST. (ARG./BR.)", "value": "MIST. (ARG./BR.)"},
     {"label": "REJEITO", "value": "REJEITO"}
 ],
-"Locais": [
+"Local": [
     {"label":"ARAÇÁ USINA", "value": "ARAÇÁ USINA"},
     {"label":"BASE", "value": "BASE"},
     {"label":"BR-319", "value": "BR-319"},
@@ -58,7 +58,7 @@
     {"label":"USINA LOTE 1", "value": "USINA LOTE 1"},
     {"label":"USINA LOTE 2", "value": "USINA LOTE 2"}
     ],
-"Placa": [
+"Carro": [
     { "label": "HBR 3675", "value": "HBR 3675"},
     { "label": "GTJ-6785", "value": "GTJ-6785"},
     { "label": "JWX-3807", "value": "JWX-3807"},

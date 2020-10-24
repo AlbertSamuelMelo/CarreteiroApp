@@ -14,7 +14,12 @@ export default class TextPlaceHolder extends Component {
             <View style={styles.container}>
                 {this.props.input ? 
                     <Picker style={styles} onValueChange={(value) => this.setState({category: value})}
-                        items={Database[this.props.input]}/> 
+                        items={Database[this.props.input]}
+                        placeholder={{
+                            label: 'Selecione o ' + this.props.input,
+                            value: null,
+                            backgroundColor: 'white',
+                          }}/> 
                     : <Text style={styles.text}>{this.props.text}</Text>}
             </View>
           );
@@ -27,7 +32,7 @@ const styles = StyleSheet.create({
     height: "8%",
     marginLeft: "20%",
     marginBottom: "8%",
-    backgroundColor: '#ADCDFF',
+    backgroundColor: '#4099B8',
     borderRadius: 100,
     shadowColor: 'black',
     shadowOffset: {
@@ -50,17 +55,19 @@ const styles = StyleSheet.create({
     height: "100%",
     textAlign: "left",
     color: "white",
+    fontWeight: "bold",
     padding: "2.5%",
     marginLeft: "4%",
-    fontSize: 30
+    fontSize: 30,
   },
   inputAndroid: {
     width: "100%",
     height: "100%",
     textAlign: "left",
     color: "white",
+    fontWeight: "bold",
     padding: "2.5%",
     marginLeft: "4%",
-    fontSize: 30
+    fontSize: 30,
   },
 });
