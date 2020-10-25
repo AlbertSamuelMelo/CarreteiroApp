@@ -4,22 +4,43 @@ import Picker from 'react-native-picker-select';
 import Database from "../Database.json"
 
 export default class TextPlaceHolder extends Component {  
-    state = {
-        category: ""
-    };
+    constructor() {
+        super();
+        this.state = {
+          category:"",
+        };
+      }
+      
+    changePicker(selectedCategory){
+        this.setState({category: selectedCategory}, 
+          () => this.sendAfterUpdate())
+    }
+
+    sendAfterUpdate(){
+      this.props.callbackFromParent(this.state)
+    }
 
     render(){
         return (
             <View style={styles.container}>
                 {this.props.input ? 
-                    <Picker style={styles} onValueChange={(value) => this.setState({category: value})}
+                    <Picker 
+                        style={styles} 
+                        onValueChange={
+                            (value) => this.changePicker(value)
+                        }
                         items={Database[this.props.input]}
                         placeholder={{
                             label: 'Selecione o ' + this.props.input,
                             value: null,
                             backgroundColor: 'white',
-                          }}/> 
-                    : <Text style={styles.text}>{this.props.text}</Text>}
+                          }
+                        }/> 
+                :<Text 
+                    style={styles.text}>
+                        {this.props.text}
+                </Text>
+                }
             </View>
           );
     }

@@ -40,7 +40,10 @@ export default function CameraPage(props) {
         alignContent: "center",
         justifyContent: "center",
      }}>
-      <Camera ref={ref => { this.camera = ref; }}style={{ flex: 1 }} type={type}>
+      <Camera 
+        ref={ref => { this.camera = ref; }}
+        style={{ flex: 1 }} 
+        type={type}>
         <View
           style={{
             backgroundColor: 'transparent',

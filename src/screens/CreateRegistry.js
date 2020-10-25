@@ -4,17 +4,70 @@ import { StyleSheet, View, Button } from 'react-native';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder'
 export default class CreateRegistry extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isModalVisible: false,
+      dataFromChild: {},
+      dataChild: false,
+      material: "",
+      origin: "",
+      destiny: "",
+      car: ""
+    };
+  }
+
+  photoTaked = (dataFromChild) => {
+    this.setState({ dataFromChild })
+    this.setState({ dataChild: true })
+  }
+
+  materialTaked = (material) => {
+    this.setState({ material: material })
+  }
+
+  originTaked = (origin) => {
+    this.setState({ origin: origin })
+  }
+
+  destinyTaked = (destiny) => {
+    this.setState({ destiny: destiny })
+  }
+
+  carTaked = (car) => {
+    this.setState({ car: car })
+  }
+
+  createRegistry(){
+    console.log("Registro atual: \n" + "Material: " + this.state.material)
+    console.log("Origem: " + this.state.origin)
+    console.log("Destino: " + this.state.destiny)
+    console.log("carro: " + this.state.car)
+  }
+
   render(){
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
         <CameraPlaceHolder />
-          <TextPlaceHolder input="Material"/>
-          <TextPlaceHolder input="Local"/>
-          <TextPlaceHolder input="Local"/>
-          <TextPlaceHolder input="Carro"/>
+          <TextPlaceHolder 
+            input="Material" 
+            callbackFromParent={(value) => this.materialTaked(value.category)}
+          />
+          <TextPlaceHolder 
+            input="Local" 
+            callbackFromParent={(value) => this.originTaked(value.category)}
+          />
+          <TextPlaceHolder 
+            input="Local" 
+            callbackFromParent={(value) => this.destinyTaked(value.category)}
+          />
+          <TextPlaceHolder 
+            input="Carro" 
+            callbackFromParent={(value) => this.carTaked(value.category)}
+          />
             <View style={styles.buttonContainer}>
-          <Button color= "#115B73" title="Criar Registro" ></Button>
+          <Button color= "#115B73" title="Criar Registro" onPress={() => this.createRegistry()}></Button>
         </View>
       </View>
     );
