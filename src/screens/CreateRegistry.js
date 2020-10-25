@@ -13,7 +13,7 @@ export default class CreateRegistry extends Component {
           <TextPlaceHolder input="Local"/>
           <TextPlaceHolder input="Local"/>
           <TextPlaceHolder input="Carro"/>
-        <View style={styles.buttonContainer}>
+            <View style={styles.buttonContainer}>
           <Button color= "#115B73" title="Criar Registro" ></Button>
         </View>
       </View>
