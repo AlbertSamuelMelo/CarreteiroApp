@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder'
 export default class CreateRegistry extends Component {
@@ -67,7 +68,9 @@ export default class CreateRegistry extends Component {
             callbackFromParent={(value) => this.carTaked(value.category)}
           />
             <View style={styles.buttonContainer}>
-          <Button color= "#115B73" title="Criar Registro" onPress={() => this.createRegistry()}></Button>
+          <TouchableOpacity onPress={() => this.createRegistry()}>
+            <Text style={styles.createText}>Criar Registro</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -96,5 +99,11 @@ const styles = StyleSheet.create({
       },
     shadowOpacity: 0.4,
     padding: "2%"
+  },
+  createText: {
+    color: '#115B73',
+    fontWeight: "bold",
+    fontSize: 30,
+    textAlign: "center"
   }
 });
