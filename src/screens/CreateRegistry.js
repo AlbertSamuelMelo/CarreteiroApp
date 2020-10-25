@@ -13,7 +13,9 @@ export default class CreateRegistry extends Component {
           <TextPlaceHolder input="Local"/>
           <TextPlaceHolder input="Local"/>
           <TextPlaceHolder input="Carro"/>
-  
+        <View style={styles.buttonContainer}>
+          <Button color= "#115B73" title="Criar Registro" ></Button>
+        </View>
       </View>
     );
   }
@@ -27,4 +29,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
+  buttonContainer: {
+    width: "90%",
+    height: "8%",
+    marginTop: "5%",
+    marginBottom: "8%",
+    backgroundColor: 'white',
+    borderRadius: 100,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+    shadowOpacity: 0.4,
+    padding: "2%"
+  }
 });
