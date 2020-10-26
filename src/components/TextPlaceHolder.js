@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   containerIntupt: {
     width: "95%",
-    height: "8%",
+    height: "7%",
     marginLeft: "20%",
     marginBottom: "8%",
     backgroundColor: 'white',
