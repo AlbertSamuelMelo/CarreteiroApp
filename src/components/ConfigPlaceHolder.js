@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image} from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import engine from "../../assets/config.png";
 
 export default class ConfigurePlaceHolder extends Component {  
     constructor() {
@@ -11,6 +12,9 @@ export default class ConfigurePlaceHolder extends Component {
     render(){
         return (
             <View style={styles.container}>
+                <TouchableOpacity>
+                    <Image style={styles.imageIcon} source={engine}/>
+                </TouchableOpacity>
             </View>
           );
     }
@@ -22,7 +26,7 @@ const styles = StyleSheet.create({
     height: "10%",
     marginRight: "90%",
     marginBottom: "85%",
-    backgroundColor: '#4099B8',
+    backgroundColor: 'white',
     borderRadius: 100,
     shadowColor: 'black',
     shadowOffset: {
@@ -31,4 +35,10 @@ const styles = StyleSheet.create({
       },
     shadowOpacity: 0.4,
   },
+  imageIcon: {
+    marginTop: "10%",
+    marginLeft: "45%",
+    width: 60, 
+    height: 45 
+  }
 });
