@@ -11,7 +11,12 @@ export default class Profile extends Component {
     };
   }
 
-
+  exportData(){
+    console.log("Export Data")
+  }
+  resetPassword(){
+    console.log("Reset Password")
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -19,9 +24,14 @@ export default class Profile extends Component {
         <CameraPlaceHolder/>
         <TextPlaceHolder text="Albert"/>
         <TextPlaceHolder text="Adiministrador"/>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.createRegistry()}>
+        <View style={styles.exportContainer}>
+          <TouchableOpacity onPress={() => this.exportData()}>
               <Text style={styles.text}>Exportar Dados</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.resetContainer}>
+          <TouchableOpacity onPress={() => this.resetPassword()}>
+              <Text style={styles.textPassword}>Resetar Password</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -37,11 +47,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  buttonContainer: {
+  exportContainer: {
     width: "90%",
     height: "8%",
-    marginTop: "5%",
-    marginBottom: "8%",
+    marginTop: "20%",
+    marginBottom: "10%",
     backgroundColor: 'white',
     borderRadius: 100,
     shadowColor: 'black',
@@ -56,5 +66,18 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
     padding: "3%"
-  }
+  },
+  resetContainer: {
+    width: "90%",
+    height: "8%",
+    marginTop: "5%",
+    marginBottom: "8%",
+    backgroundColor: "transparent",
+  },
+  textPassword: {
+    color: 'white',
+    fontSize: 20,
+    textAlign: "center",
+    padding: "3%"
+  },
 });
