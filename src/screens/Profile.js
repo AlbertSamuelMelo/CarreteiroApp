@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { StyleSheet, View } from 'react-native';
+import CameraPlaceHolder from '../components/CameraPlaceHolder';
+
 export default class Profile extends Component {
   constructor() {
     super();
@@ -13,6 +15,7 @@ export default class Profile extends Component {
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+        <CameraPlaceHolder/>
       </View>
     );
   }
