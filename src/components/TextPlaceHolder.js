@@ -22,7 +22,7 @@ export default class TextPlaceHolder extends Component {
 
     render(){
         return (
-            <View style={styles.container}>
+            <View style={this.props.input ? styles.containerIntupt : styles.container}>
                 {this.props.input ? 
                     <Picker 
                         style={styles} 
@@ -49,10 +49,24 @@ export default class TextPlaceHolder extends Component {
 const styles = StyleSheet.create({
   container: {
     width: "95%",
-    height: "8%",
+    height: "7%",
     marginLeft: "20%",
     marginBottom: "8%",
     backgroundColor: '#4099B8',
+    borderRadius: 100,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+    shadowOpacity: 0.4,
+  },
+  containerIntupt: {
+    width: "95%",
+    height: "8%",
+    marginLeft: "20%",
+    marginBottom: "8%",
+    backgroundColor: 'white',
     borderRadius: 100,
     shadowColor: 'black',
     shadowOffset: {
@@ -68,13 +82,13 @@ const styles = StyleSheet.create({
     color: "white",
     padding: "3.5%",
     marginLeft: "4%",
-    fontSize: 30
+    fontSize: 23
   },
   inputIOS: {
-    width: "100%",
+    width: "96%",
     height: "100%",
     textAlign: "left",
-    color: "white",
+    color: "#4099B8",
     fontWeight: "bold",
     padding: "2.5%",
     marginLeft: "4%",

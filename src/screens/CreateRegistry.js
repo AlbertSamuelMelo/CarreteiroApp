@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
-import TextPlaceHolder from '../components/TextPlaceHolder'
+import TextPlaceHolder from '../components/TextPlaceHolder';
+import Config from "../components/ConfigPlaceHolder"
 export default class CreateRegistry extends Component {
   constructor() {
     super();
