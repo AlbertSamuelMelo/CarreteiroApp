@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     color: '#115B73',
     fontWeight: "bold",
     fontSize: 30,
-    textAlign: "center"
+    textAlign: "center",
+    padding: "0.5%"
   }
 });
