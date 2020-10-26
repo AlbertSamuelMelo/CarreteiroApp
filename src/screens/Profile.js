@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
-import TextPlaceHolder from '../components/TextPlaceHolder'
-
+import TextPlaceHolder from '../components/TextPlaceHolder';
+import Configure from "../components/ConfigPlaceHolder"
 export default class Profile extends Component {
   constructor() {
     super();
@@ -21,6 +21,7 @@ export default class Profile extends Component {
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+        <Configure/>
         <CameraPlaceHolder/>
         <TextPlaceHolder text="Albert"/>
         <TextPlaceHolder text="Adiministrador"/>
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   exportContainer: {
     width: "90%",
     height: "8%",
-    marginTop: "20%",
+    marginTop: "10%",
     marginBottom: "10%",
     backgroundColor: 'white',
     borderRadius: 100,
