@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Config from "../components/ConfigPlaceHolder"
+
 export default class CreateRegistry extends Component {
   constructor() {
     super();
@@ -51,6 +52,7 @@ export default class CreateRegistry extends Component {
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+        <Config/>
         <CameraPlaceHolder />
           <TextPlaceHolder 
             input="Material" 
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "90%",
     height: "8%",
-    marginTop: "5%",
+    marginTop: "4%",
     marginBottom: "8%",
     backgroundColor: 'white',
     borderRadius: 100,
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
   createText: {
     color: '#115B73',
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 28,
     textAlign: "center",
     padding: "0.5%"
   }
