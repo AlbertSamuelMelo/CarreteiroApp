@@ -13,6 +13,7 @@ export default class CreateRegistry extends Component {
       isModalVisible: false,
       dataFromChild: {},
       dataChild: false,
+      obra: "",
       material: "",
       origin: "",
       destiny: "",
@@ -52,6 +53,7 @@ export default class CreateRegistry extends Component {
   createRegistry(){
     var packageToSave = {
       key: "", 
+      obra: "",
       data:{
         material: "",
         origin: "",
@@ -61,6 +63,7 @@ export default class CreateRegistry extends Component {
         validate: ""
     }}
     packageToSave.key = this.generateKey("CC")
+
     packageToSave.data.material = this.state.material
     packageToSave.data.origin = this.state.origin
     packageToSave.data.destiny = this.state.destiny
