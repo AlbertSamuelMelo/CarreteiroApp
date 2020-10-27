@@ -20,8 +20,16 @@ export default class CreateRegistry extends Component {
     };
   }
 
+  generateKey = (pre) => {
+    return `${ pre }_${ new Date().getTime() }`;
+  }
+
+  saveData = async (dataToSave) => {
+
+  }
+  
   photoTaked = (dataFromChild) => {
-    this.setState({ dataFromChild })
+    this.setState({ dataFromChild: dataFromChild })
     this.setState({ dataChild: true })
   }
 
@@ -42,10 +50,22 @@ export default class CreateRegistry extends Component {
   }
 
   createRegistry(){
-    console.log("Registro atual: \n" + "Material: " + this.state.material)
-    console.log("Origem: " + this.state.origin)
-    console.log("Destino: " + this.state.destiny)
-    console.log("carro: " + this.state.car)
+    var packageToSave = {
+      key: "", 
+      data:{
+        material: "",
+        origin: "",
+        destiny: "",
+        car: "",
+        picture: "",
+        validate: ""
+    }}
+    packageToSave.key = this.generateKey("CC")
+    packageToSave.data.material = this.state.material
+    packageToSave.data.origin = this.state.origin
+    packageToSave.data.destiny = this.state.destiny
+    packageToSave.data.car = this.state.car
+    packageToSave.data.picture = this.state.dataFromChild.base64
   }
 
   render(){
@@ -53,7 +73,7 @@ export default class CreateRegistry extends Component {
       <View style={styles.container}>
         <StatusBar style="auto" />
         <Config/>
-        <CameraPlaceHolder />
+        <CameraPlaceHolder callbackFromParent={(value) => this.photoTaked(value)}/>
           <TextPlaceHolder 
             input="Material" 
             callbackFromParent={(value) => this.materialTaked(value.category)}

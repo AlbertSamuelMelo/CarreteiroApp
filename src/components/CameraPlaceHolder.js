@@ -10,10 +10,15 @@ export default class CameraPlaceHolder extends Component {
         dataChild: false,
       };
 
+    returnToParent = (photo) => {
+      this.props.callbackFromParent(photo);
+    }
+
     photoTaked = (dataFromChild) => {
         this.toggleModal()
         this.setState({ dataFromChild })
         this.setState({ dataChild: true })
+        this.returnToParent(this.state.dataFromChild)
     }
 
     toggleModal = () => {

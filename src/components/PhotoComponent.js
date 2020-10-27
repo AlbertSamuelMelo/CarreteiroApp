@@ -21,7 +21,9 @@ export default function CameraPage(props) {
   
   const takePicture = async () => {
     if (this.camera) {
-      let photo = await this.camera.takePictureAsync();
+      let photo = await this.camera.takePictureAsync({
+        base64: true,
+      });
       MediaLibrary.saveToLibraryAsync(photo.uri)
       returnToParent(photo)
     }
