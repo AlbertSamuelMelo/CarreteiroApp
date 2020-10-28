@@ -1,21 +1,42 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, AsyncStorage, SafeAreaView } from 'react-native';
-import 'react-native-gesture-handler';
-import { FlatList } from 'react-native-gesture-handler';
+import { StyleSheet, View, AsyncStorage, SafeAreaView } from 'react-native';
+import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
+import ListCell from "./ListCell";
 
-export default class Profile extends Component {
+export default class List extends Component {
   constructor() {
+    navigation = this.props.navigation
+
     super();
     this.state = {
         keysOnStorage: ["Oi"]
     };
   }
 
+//   _retrieveData = async () => {
+//     try {
+//         var dataOnStorage = []
+//         const keysOnStorage = await AsyncStorage.getAllKeys()
+//         console.log("Keys from store: ", keysOnStorage)
+//         for(key in keysOnStorage){
+//             let dataOnKey = await AsyncStorage.getItem(key)
+//             dataOnStorage.push(dataOnKey)
+//         }
+//         this.setState({dataFromStore: JSON.parse(dataFromStorage)})
+//     } catch (error) {
+//       // Error retrieving data
+//     }
+//   };
   _retrieveData = async () => {
     try {
         const keysOnStorage = await AsyncStorage.getAllKeys()
         console.log("Keys from store: ", keysOnStorage)
         this.setState({keysOnStorage: keysOnStorage})
+        
+        if(this.props.key) {
+            const dataOnKey = await AsyncStorage.getItem(this.props.key)
+            this.setState({dataOnStorage: dataOnKey})
+        }
     } catch (error) {
       // Error retrieving data
     }
@@ -24,14 +45,31 @@ export default class Profile extends Component {
   componentDidMount() {
     this._retrieveData()
   }
-  
+
+  selectListItem(item) {
+    if(typeof(item) == "string") {
+        console.log("Selecionou Key")
+        navigation.navigate("List")
+    } else {
+        console.log("Selecionou Objeto")
+    }
+  }
+
   render(){
     return (
       <View style={styles.container}>
-          <SafeAreaView>
+          <SafeAreaView style={styles.safeArea}>
             <FlatList 
                 data={this.state.keysOnStorage}
-                renderItem={({item}) => <Text>{item}</Text>}
+                renderItem={({item, index, separators}) => 
+                <TouchableHighlight
+                    onPress={() => this.selectListItem(item)}
+                    onShowUnderlay={separators.highlight}
+                    onHideUnderlay={separators.unhighlight}>
+                        <ListCell 
+                            key={{key:true}} 
+                            listItem={{title: item}}/>
+                </TouchableHighlight>}
             />
           </SafeAreaView>
 
@@ -46,6 +84,10 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: '#115B73',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+  safeArea: {
+    width: "100%",
+    height: "100%",
   }
 });
