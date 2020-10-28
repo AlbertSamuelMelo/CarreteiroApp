@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, AsyncStorage } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
@@ -13,21 +13,40 @@ export default class CreateRegistry extends Component {
       isModalVisible: false,
       dataFromChild: {},
       dataChild: false,
-      obra: "",
+      obra: "Teste",
       material: "",
       origin: "",
       destiny: "",
-      car: ""
+      car: "",
+      dataFromStore: []
     };
   }
 
   generateKey = (pre) => {
     return `${ pre }_${ new Date().getTime() }`;
   }
+  _storeData = async (data) => {
+    this.state.dataFromStore.push(data)
+    try {
+      await AsyncStorage.setItem(this.state.obra, JSON.stringify(this.state.dataFromStore));
+      console.log("Saved ")
+      alert(" Registro Salvo ")
 
-  saveData = async (dataToSave) => {
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
-  }
+  _retrieveData = async () => {
+    try {
+      const dataFromObra = await AsyncStorage.getItem(this.state.obra);
+      if (dataFromObra !== null) {
+        this.setState({dataFromStore: JSON.parse(dataFromObra)})
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
   
   photoTaked = (dataFromChild) => {
     this.setState({ dataFromChild: dataFromChild })
@@ -51,24 +70,39 @@ export default class CreateRegistry extends Component {
   }
 
   createRegistry(){
-    var packageToSave = {
-      key: "", 
-      obra: "",
-      data:{
-        material: "",
-        origin: "",
-        destiny: "",
-        car: "",
-        picture: "",
-        validate: ""
-    }}
-    packageToSave.key = this.generateKey("CC")
-
-    packageToSave.data.material = this.state.material
-    packageToSave.data.origin = this.state.origin
-    packageToSave.data.destiny = this.state.destiny
-    packageToSave.data.car = this.state.car
-    packageToSave.data.picture = this.state.dataFromChild.base64
+    this._retrieveData()
+    if (this.state.material == "" || 
+        this.state.origin == "" || 
+        this.state.destiny == "" || 
+        this.state.car == "" ||
+        this.state.material == null || 
+        this.state.origin == null || 
+        this.state.destiny == null || 
+        this.state.car == null ||  
+        this.state.dataFromChild.base64 == undefined){
+      alert("Preencha todos os campos")
+      return
+    } else {
+      var packageToSave = {
+        key: "", 
+        obra: "",
+        data:{
+          material: "",
+          origin: "",
+          destiny: "",
+          car: "",
+          picture: "",
+          validate: ""
+      }}
+      packageToSave.key = this.generateKey("CC")
+      packageToSave.obra = this.state.obra
+      packageToSave.data.material = this.state.material
+      packageToSave.data.origin = this.state.origin
+      packageToSave.data.destiny = this.state.destiny
+      packageToSave.data.car = this.state.car
+      packageToSave.data.picture = this.state.dataFromChild.base64
+      this._storeData(packageToSave);
+    }
   }
 
   render(){
