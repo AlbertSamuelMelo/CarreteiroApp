@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateRegistry from "./src/screens/CreateRegistry";
 import Profile from "./src/screens/Profile"
+import List from "./src/screens/List"
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -12,10 +13,10 @@ function HomeScreen() {
   );
 }
 
-function SettingsScreen() {
+function ListScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
+      <List/>
     </View>
   );
 }
@@ -35,7 +36,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Criar" component={HomeScreen} />
-        <Tab.Screen name="Lista" component={SettingsScreen} />
+        <Tab.Screen name="Lista" component={ListScreen} />
         <Tab.Screen name="Perfil" component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
