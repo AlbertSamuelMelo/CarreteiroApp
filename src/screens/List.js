@@ -2,31 +2,17 @@ import React, {Component} from 'react';
 import { StyleSheet, View, AsyncStorage, SafeAreaView } from 'react-native';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import ListCell from "./ListCell";
+import { useNavigation } from '@react-navigation/native';
 
 export default class List extends Component {
   constructor() {
-    navigation = this.props.navigation
-
     super();
+    //navigation = useNavigation()
     this.state = {
         keysOnStorage: ["Oi"]
     };
   }
 
-//   _retrieveData = async () => {
-//     try {
-//         var dataOnStorage = []
-//         const keysOnStorage = await AsyncStorage.getAllKeys()
-//         console.log("Keys from store: ", keysOnStorage)
-//         for(key in keysOnStorage){
-//             let dataOnKey = await AsyncStorage.getItem(key)
-//             dataOnStorage.push(dataOnKey)
-//         }
-//         this.setState({dataFromStore: JSON.parse(dataFromStorage)})
-//     } catch (error) {
-//       // Error retrieving data
-//     }
-//   };
   _retrieveData = async () => {
     try {
         const keysOnStorage = await AsyncStorage.getAllKeys()
@@ -49,7 +35,7 @@ export default class List extends Component {
   selectListItem(item) {
     if(typeof(item) == "string") {
         console.log("Selecionou Key")
-        navigation.navigate("List")
+        //navigation.navigate("List")
     } else {
         console.log("Selecionou Objeto")
     }

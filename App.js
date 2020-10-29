@@ -7,6 +7,8 @@ import CreateRegistry from "./src/screens/CreateRegistry";
 import Profile from "./src/screens/Profile"
 import List from "./src/screens/List"
 
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function HomeScreen() {
   return (
@@ -19,11 +21,19 @@ function HomeScreen() {
 function ListScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <List navigation={navigation}/>
+      <List />
     </View>
   );
 }
-const Stack = createStackNavigator();
+
+function DetailsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <List />
+    </View>
+  );
+}
+
 
 function ListNavigator() {
   return(
@@ -43,8 +53,6 @@ function ProfileScreen(){
   </View>
   )
 }
-
-const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
