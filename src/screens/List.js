@@ -6,21 +6,26 @@ import ListCell from "./ListCell";
 export default class List extends Component {
   constructor() {
     super();
-    //navigation = useNavigation()
     this.state = {
-        keysOnStorage: ["Oi"]
+        keysOnStorage: [""],
+        storage: false,
+        dataOnStorage: [],
     };
   }
 
   _retrieveData = async () => {
     try {
         const keysOnStorage = await AsyncStorage.getAllKeys()
-        console.log("Keys from store: ", keysOnStorage)
+        console.log("keys: ", keysOnStorage)
+
         this.setState({keysOnStorage: keysOnStorage})
-        
-        if(this.props.key) {
-            const dataOnKey = await AsyncStorage.getItem(this.props.key)
-            this.setState({dataOnStorage: dataOnKey})
+
+        if( this.props.route.params.key != undefined ) {
+            this.setState({storage: true})
+            console.log("storage: ", this.state.storage)
+            const dataOnKey = await AsyncStorage.getItem(this.props.route.params.key)
+            console.log("data from the key: ", JSON.parse(dataOnKey))
+            this.setState({dataOnStorage: JSON.parse(dataOnKey)})
         }
     } catch (error) {
       // Error retrieving data
@@ -32,11 +37,14 @@ export default class List extends Component {
   }
 
   selectListItem(item) {
+    console.log(item)
     if(typeof(item) == "string") {
-        console.log("Selecionou Key")
-        this.props.navigation.navigate("List")
+        console.log("Selecionou Key", item)
+        this.props.navigation.push("List", {
+          key: item
+        })
     } else {
-        console.log("Selecionou Objeto")
+        console.log("Selecionou Objeto", item)
     }
   }
 
@@ -45,7 +53,8 @@ export default class List extends Component {
       <View style={styles.container}>
           <SafeAreaView style={styles.safeArea}>
             <FlatList 
-                data={this.state.keysOnStorage}
+                data={ this.state.storage ? this.state.dataOnStorage : this.state.keysOnStorage}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({item, index, separators}) => 
                 <TouchableHighlight
                     onPress={() => this.selectListItem(item)}
@@ -53,7 +62,11 @@ export default class List extends Component {
                     onHideUnderlay={separators.unhighlight}>
                         <ListCell 
                             key={{key:true}} 
-                            listItem={{title: item}}/>
+                            listItem={ this.state.storage ? {title: item.data.material + " - " 
+                              + item.data.origin + " - "
+                              + item.data.destiny + " - " 
+                              + item.data.car } 
+                              : {title: item}}/>
                 </TouchableHighlight>}
             />
           </SafeAreaView>

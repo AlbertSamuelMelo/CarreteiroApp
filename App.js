@@ -18,10 +18,10 @@ function HomeScreen() {
   );
 }
 
-function ListScreen({ navigation }) {
+function ListScreen({ navigation, route }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <List navigation={navigation}/>
+      <List navigation={navigation} route={route}/>
     </View>
   );
 }
