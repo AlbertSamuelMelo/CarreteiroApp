@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View } from 'react-native';
-import { useNavigation, NavigationContainer } from '@react-navigation/native';
+import { View, Button } from 'react-native';
+import { useNavigation, NavigationContainer, createAppContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateRegistry from "./src/screens/CreateRegistry";
@@ -18,22 +18,13 @@ function HomeScreen() {
   );
 }
 
-function ListScreen() {
+function ListScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <List />
+      <List navigation={navigation}/>
     </View>
   );
 }
-
-function DetailsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <List />
-    </View>
-  );
-}
-
 
 function ListNavigator() {
   return(

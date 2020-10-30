@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { StyleSheet, View, AsyncStorage, SafeAreaView } from 'react-native';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import ListCell from "./ListCell";
-import { useNavigation } from '@react-navigation/native';
 
 export default class List extends Component {
   constructor() {
@@ -35,7 +34,7 @@ export default class List extends Component {
   selectListItem(item) {
     if(typeof(item) == "string") {
         console.log("Selecionou Key")
-        //navigation.navigate("List")
+        this.props.navigation.navigate("List")
     } else {
         console.log("Selecionou Objeto")
     }
