@@ -70,7 +70,6 @@ export default class CreateRegistry extends Component {
   }
 
   createRegistry(){
-    this._retrieveData()
     if (this.state.material == "" || 
         this.state.origin == "" || 
         this.state.destiny == "" || 
@@ -106,6 +105,7 @@ export default class CreateRegistry extends Component {
   }
 
   render(){
+    this._retrieveData()
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />

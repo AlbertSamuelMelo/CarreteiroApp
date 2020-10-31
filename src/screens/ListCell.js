@@ -13,11 +13,7 @@ export default class ListCell extends Component {
   render(){
     return (
       <View style={styles.container}>
-            <Text style={styles.text}>{!this.props.data ? 
-                this.props.listItem.title : 
-                this.props.listItem.material + 
-                " - " + this.props.listItem.origin + 
-                " - " + this.props.listItem.destiny}
+            <Text style={styles.text}>{ this.props.listItem.title }
             </Text>
           <Image style={styles.imageIcon} source={next}/>
       </View>
@@ -32,20 +28,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: "space-around",
-    flexDirection: "row"
+    flexDirection: "row",
+    borderBottomWidth: 2,
+    borderBottomColor: "gray"
   },
   text: {
-    width: "100%",
+    width: "85%",
     height: "100%",
-    textAlign: "left",
-    fontSize: 20,
+    textAlign: "justify",
+    fontSize: 25,
     padding: "5%",
     marginLeft: "5%"
   },
   imageIcon: {
-    width: 30, 
+    width: "15%", 
     height: "50%",
-    marginRight: "8%",
+    marginRight: "5%",
     opacity: 0.3
     }
 });

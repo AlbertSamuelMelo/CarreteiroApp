@@ -16,15 +16,11 @@ export default class List extends Component {
   _retrieveData = async () => {
     try {
         const keysOnStorage = await AsyncStorage.getAllKeys()
-        console.log("keys: ", keysOnStorage)
-
         this.setState({keysOnStorage: keysOnStorage})
 
         if( this.props.route.params.key != undefined ) {
             this.setState({storage: true})
-            console.log("storage: ", this.state.storage)
             const dataOnKey = await AsyncStorage.getItem(this.props.route.params.key)
-            console.log("data from the key: ", JSON.parse(dataOnKey))
             this.setState({dataOnStorage: JSON.parse(dataOnKey)})
         }
     } catch (error) {
@@ -62,9 +58,9 @@ export default class List extends Component {
                     onHideUnderlay={separators.unhighlight}>
                         <ListCell 
                             key={{key:true}} 
-                            listItem={ this.state.storage ? {title: item.data.material + " - " 
-                              + item.data.origin + " - "
-                              + item.data.destiny + " - " 
+                            listItem={ this.state.storage ? {
+                              title: 
+                              item.data.material + " - " 
                               + item.data.car } 
                               : {title: item}}/>
                 </TouchableHighlight>}

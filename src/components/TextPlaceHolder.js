@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   inputAndroid: {
-    width: "100%",
+    width: "96%",
     height: "100%",
     textAlign: "left",
-    color: "white",
+    color: "#4099B8",
     fontWeight: "bold",
     padding: "2.5%",
     marginLeft: "4%",
