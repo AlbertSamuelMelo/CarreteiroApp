@@ -4,7 +4,6 @@ import { StyleSheet, View, Text, AsyncStorage, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
-import Config from "../components/ConfigPlaceHolder"
 
 export default class ValidateScreen extends Component {
   constructor() {
@@ -112,7 +111,7 @@ export default class ValidateScreen extends Component {
   render(){
     return (
       <View style={styles.container}>
-        <StatusBar style="auto" />
+        <StatusBar style="dark" />
         <View style={{height: "40%", width:"100%", alignItems: 'center', justifyContent: "space-around", flexDirection: "row"}}>
             <CameraPlaceHolder validate={ true } callbackFromParent={(value) => this.photoTaked(value)}/>
             <Image source={{ uri: this.props.route.params.dataKey.data.pictureUri }}

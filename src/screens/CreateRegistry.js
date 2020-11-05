@@ -111,7 +111,7 @@ export default class CreateRegistry extends Component {
     this._retrieveData()
     return (
       <View style={styles.container}>
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
         <Config/>
         <CameraPlaceHolder callbackFromParent={(value) => this.photoTaked(value)}/>
           <TextPlaceHolder 

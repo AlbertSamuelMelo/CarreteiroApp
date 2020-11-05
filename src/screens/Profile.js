@@ -20,7 +20,7 @@ export default class Profile extends Component {
   render(){
     return (
       <View style={styles.container}>
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
         <Configure/>
         <CameraPlaceHolder/>
         <TextPlaceHolder text="Albert"/>

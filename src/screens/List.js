@@ -1,3 +1,4 @@
+import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { StyleSheet, View, AsyncStorage, SafeAreaView } from 'react-native';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
@@ -50,6 +51,7 @@ export default class List extends Component {
   render(){
     return (
       <View style={styles.container}>
+          <StatusBar style="dark" />
           <SafeAreaView style={styles.safeArea}>
             <FlatList 
                 data={ this.state.storage ? this.state.dataOnStorage : this.state.keysOnStorage}
