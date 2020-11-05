@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     height: "100%",
     textAlign: "left",
     color: "white",
-    padding: "3.5%",
+    padding: "2.5%",
     marginLeft: "4%",
     fontSize: 23
   },

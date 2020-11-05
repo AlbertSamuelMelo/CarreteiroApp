@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, AsyncStorage, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Config from "../components/ConfigPlaceHolder"
 
-export default class CreateRegistry extends Component {
+export default class ValidateScreen extends Component {
   constructor() {
     super();
     this.state = {
@@ -18,6 +18,8 @@ export default class CreateRegistry extends Component {
       origin: "",
       destiny: "",
       car: "",
+      confirmFromChild: {},
+      confirmChild: false,
       dataFromStore: []
     };
   }
@@ -69,7 +71,7 @@ export default class CreateRegistry extends Component {
     this.setState({ car: car })
   }
 
-  createRegistry(){
+  validateRegistry(){
     if (this.state.material == "" || 
         this.state.origin == "" || 
         this.state.destiny == "" || 
@@ -91,9 +93,7 @@ export default class CreateRegistry extends Component {
           destiny: "",
           car: "",
           picture: "",
-          validate: "",
-          pictureUri: "",
-          validateUri: ""
+          validate: ""
       }}
       packageToSave.key = this.generateKey("CC")
       packageToSave.obra = this.state.obra
@@ -102,37 +102,37 @@ export default class CreateRegistry extends Component {
       packageToSave.data.destiny = this.state.destiny
       packageToSave.data.car = this.state.car
       packageToSave.data.picture = this.state.dataFromChild.base64
+      packageToSave.data.validate = this.state.confirmFromChild.base64
       packageToSave.data.pictureUri = this.state.dataFromChild.uri
+      packageToSave.data.validateUri = this.state.confirmFromChild.uri
       this._storeData(packageToSave);
     }
   }
 
   render(){
-    this._retrieveData()
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
-        <Config/>
-        <CameraPlaceHolder callbackFromParent={(value) => this.photoTaked(value)}/>
-          <TextPlaceHolder 
-            input="Material" 
-            callbackFromParent={(value) => this.materialTaked(value.category)}
-          />
-          <TextPlaceHolder 
-            input="Local" 
-            callbackFromParent={(value) => this.originTaked(value.category)}
-          />
-          <TextPlaceHolder 
-            input="Local" 
-            callbackFromParent={(value) => this.destinyTaked(value.category)}
-          />
-          <TextPlaceHolder 
-            input="Carro" 
-            callbackFromParent={(value) => this.carTaked(value.category)}
-          />
+        <View style={{height: "40%", width:"100%", alignItems: 'center', justifyContent: "space-around", flexDirection: "row"}}>
+            <CameraPlaceHolder validate={ true } callbackFromParent={(value) => this.photoTaked(value)}/>
+            <Image source={{ uri: this.props.route.params.dataKey.data.pictureUri }}
+                style={styles.photoTaked}/>
+        </View>
+            <TextPlaceHolder 
+                text={this.props.route.params.dataKey.data.material} 
+            />
+            <TextPlaceHolder 
+                text={this.props.route.params.dataKey.data.origin}  
+            />
+            <TextPlaceHolder 
+                text={this.props.route.params.dataKey.data.destiny} 
+            />
+            <TextPlaceHolder 
+                text={this.props.route.params.dataKey.data.car}  
+            />
             <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.createRegistry()}>
-            <Text style={styles.createText}>Criar Registro</Text>
+          <TouchableOpacity onPress={() => this.validateRegistry()}>
+            <Text style={styles.createText}>Validar Registro</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -169,5 +169,21 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: "center",
     padding: "0.5%"
+  },  
+  photoTaked: {
+    width: "40%",
+    height: "50%",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 100,
+    borderColor: "#4099B8",
+    borderWidth: 6,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+    shadowOpacity: 0.4,
   }
 });

@@ -41,6 +41,9 @@ export default class List extends Component {
         })
     } else {
         console.log("Selecionou Objeto", item)
+        this.props.navigation.push("Validação", {
+          dataKey: item
+        })
     }
   }
 

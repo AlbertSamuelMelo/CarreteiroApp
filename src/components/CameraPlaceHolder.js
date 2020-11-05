@@ -27,7 +27,7 @@ export default class CameraPlaceHolder extends Component {
 
     render(){
         return (
-            <View style={styles.container}>
+            <View style={this.props.validate ? styles.containerValidate : styles.container}>
                 <TouchableOpacity 
                     onPress={() => {this.toggleModal()}}
                     title={ !this.state.dataChild ? "Tirar foto" : "Repetir"}
@@ -59,6 +59,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: "-90%",
     marginBottom: "10%",
+    borderRadius: 100,
+    borderColor: "#4099B8",
+    borderWidth: 6,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+    shadowOpacity: 0.4,
+  },
+  containerValidate: {
+    width: "40%",
+    height: "50%",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 100,
     borderColor: "#4099B8",
     borderWidth: 6,

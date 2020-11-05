@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateRegistry from "./src/screens/CreateRegistry";
 import Profile from "./src/screens/Profile"
 import List from "./src/screens/List"
-
+import Validate from "./src/screens/ValidateScreen"
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -26,12 +26,22 @@ function ListScreen({ navigation, route }) {
   );
 }
 
+function ValidateScreen({ navigation, route }) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Validate navigation={navigation} route={route}/>
+    </View>
+  )
+}
+
 function ListNavigator() {
   return(
   <NavigationContainer independent={true}>
     <Stack.Navigator initialRouteName="Obras">
       <Stack.Screen name="Obras" component={ListScreen} />
       <Stack.Screen name="List" component={ListScreen} />
+      <Stack.Screen name="Validação" component={ValidateScreen} />
+
     </Stack.Navigator>
   </NavigationContainer>
   )
