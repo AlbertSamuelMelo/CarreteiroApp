@@ -36,12 +36,10 @@ export default class List extends Component {
   selectListItem(item) {
     console.log(item)
     if(typeof(item) == "string") {
-        console.log("Selecionou Key", item)
         this.props.navigation.push("List", {
           key: item
         })
     } else {
-        console.log("Selecionou Objeto", item)
         this.props.navigation.push("Validação", {
           dataKey: item
         })
