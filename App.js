@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { View, Button } from 'react-native';
-import { useNavigation, NavigationContainer, createAppContainer } from '@react-navigation/native';
+import { View, Button, Clipboard } from 'react-native';
+import {  NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateRegistry from "./src/screens/CreateRegistry";
 import Profile from "./src/screens/Profile"
 import List from "./src/screens/List"
 import Validate from "./src/screens/ValidateScreen"
+
+import * as Print from 'expo-print';
+import * as Device from 'expo-device';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +31,41 @@ function ListScreen({ navigation, route }) {
 }
 
 function ValidateScreen({ navigation, route }) {
+  const [count, setCount] = React.useState(0);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={() => 
+          {
+              let strigToPrint = "Registro: " + route.params.dataKey.key +
+                "<br><br>Material:" + route.params.dataKey.data.material + 
+                "<br>Origem: " + route.params.dataKey.data.origin + 
+                "<br>Destino: " + route.params.dataKey.data.destiny + 
+                "<br><br>Carro: " + route.params.dataKey.data.car + "<br><br>"
+                if(route.params.dataKey.data.validateUri != ""){
+                  strigToPrint = strigToPrint + "Registro Validado<br><br>"
+                }
+                // "<br><br>Data: " + data.date;
+            
+              let filePath = Print.printToFileAsync({
+                html: strigToPrint,
+                width : 380,
+                base64 : false,
+                orientation: "portrait"
+              });
+
+              if(Device.osName === "iOS"){
+                Clipboard.setString(strigToPrint.replaceAll("<br>", "\n"))
+                alert("Copy to clipboard")
+              }else{
+                Print.printAsync({uri: filePath.uri})
+              }
+          }
+        } title="Imprimir" />
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Validate navigation={navigation} route={route}/>

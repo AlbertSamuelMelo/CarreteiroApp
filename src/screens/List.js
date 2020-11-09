@@ -34,7 +34,6 @@ export default class List extends Component {
   }
 
   selectListItem(item) {
-    console.log(item)
     if(typeof(item) == "string") {
         this.props.navigation.push("List", {
           key: item

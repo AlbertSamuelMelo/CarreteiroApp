@@ -16,6 +16,14 @@ export default class ValidateScreen extends Component {
         };
     }
 
+    useLayoutEffect() {
+        navigation.setOptions({
+            headerRight: () => (
+            <Button onPress={() => setCount(c => c + 1)} title="Update count" />
+            ),
+        });
+    }
+    
     _storeData = async () => {
         try {
             await AsyncStorage.setItem(this.props.route.params.dataKey.obra, JSON.stringify(this.state.dataFromStore));
@@ -58,10 +66,11 @@ export default class ValidateScreen extends Component {
             }
         }
     }
-
+    
     componentDidMount() {
         this._retrieveData()
     }
+      
     render(){
         return (
             <View style={styles.container}>
