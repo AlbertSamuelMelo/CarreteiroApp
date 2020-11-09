@@ -1,10 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, AsyncStorage, Clipboard } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Config from "../components/ConfigPlaceHolder"
+
+import * as Print from 'expo-print';
+import * as Device from 'expo-device';
 
 export default class CreateRegistry extends Component {
   constructor() {
@@ -22,6 +25,29 @@ export default class CreateRegistry extends Component {
     };
   }
 
+  printRegister = async (data) => {
+    let strigToPrint = "Registro: " + data.key +
+      "<br><br>Obra: " + data.obra
+      "<br><br>Material:" + data.data.material + 
+      "<br>Origem: " + data.data.origin + 
+      "<br>Destino: " + data.data.destiny + 
+      "<br><br>Carro: " + data.data.car + 
+      "<br><br>Data: " + data.data.date + "<br><br>"
+  
+    let filePath = await Print.printToFileAsync({
+      html: strigToPrint,
+      width : 380,
+      base64 : false,
+      orientation: "portrait"
+    });
+
+    if(Device.osName === "iOS"){
+      Clipboard.setString(strigToPrint.replaceAll("<br>", "\n"))
+    }else{
+      Print.printAsync({uri: filePath.uri})
+    }
+}
+
   generateKey = (pre) => {
     return `${ pre }_${ new Date().getTime() }`;
   }
@@ -31,6 +57,7 @@ export default class CreateRegistry extends Component {
       await AsyncStorage.setItem(this.state.obra, JSON.stringify(this.state.dataFromStore));
       console.log("Saved ")
       alert(" Registro Salvo ")
+      this.printRegister(data)
 
     } catch (error) {
       console.log(error)
@@ -70,6 +97,7 @@ export default class CreateRegistry extends Component {
   }
 
   createRegistry(){
+    var thisDate = new Date()
     if (this.state.material == "" || 
         this.state.origin == "" || 
         this.state.destiny == "" || 
@@ -93,7 +121,8 @@ export default class CreateRegistry extends Component {
           picture: "",
           validate: "",
           pictureUri: "",
-          validateUri: ""
+          validateUri: "",
+          date: thisDate.getHours() + ":" + thisDate.getMinutes() + " - " + thisDate.getDate() + "/" + thisDate.getMonth() + "/" + thisDate.getFullYear()
       }}
       packageToSave.key = this.generateKey("CC")
       packageToSave.obra = this.state.obra
