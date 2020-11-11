@@ -23,8 +23,6 @@ export default class ListCell extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: "space-around",
@@ -42,7 +40,7 @@ const styles = StyleSheet.create({
   },
   imageIcon: {
     width: "15%", 
-    height: "50%",
+    height: 30,
     marginRight: "5%",
     opacity: 0.3
     }
