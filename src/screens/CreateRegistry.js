@@ -145,19 +145,19 @@ export default class CreateRegistry extends Component {
         <CameraPlaceHolder callbackFromParent={(value) => this.photoTaked(value)}/>
           <TextPlaceHolder 
             input="Material" 
-            callbackFromParent={(value) => this.materialTaked(value.category)}
+            callbackFromParent={(value) => this.materialTaked(value)}
           />
           <TextPlaceHolder 
             input="Local" 
-            callbackFromParent={(value) => this.originTaked(value.category)}
+            callbackFromParent={(value) => this.originTaked(value)}
           />
           <TextPlaceHolder 
             input="Local" 
-            callbackFromParent={(value) => this.destinyTaked(value.category)}
+            callbackFromParent={(value) => this.destinyTaked(value)}
           />
           <TextPlaceHolder 
             input="Carro" 
-            callbackFromParent={(value) => this.carTaked(value.category)}
+            callbackFromParent={(value) => this.carTaked(value)}
           />
             <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => this.createRegistry()}>

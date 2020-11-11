@@ -27,25 +27,25 @@ export default class CameraPlaceHolder extends Component {
 
     render(){
         return (
-            <View style={this.props.validate ? styles.containerValidate : styles.container}>
-                <TouchableOpacity 
-                    onPress={() => {this.toggleModal()}}
-                    title={ !this.state.dataChild ? "Tirar foto" : "Repetir"}
-                    style={styles.TouchableImage}
-                >
-                    <Image source={!this.state.dataChild ? camera : { uri: this.state.dataFromChild.uri }} 
-                        style={!this.state.dataChild ? styles.phothoIcon : styles.photoTaked} 
-                    /> 
-                </TouchableOpacity>
-                <Modal
-                    style={styles.modalView}
-                    visible={this.state.isModalVisible}
-                    swipeDirection={['down', 'left', 'right']}
-                    onSwipeComplete={this.toggleModal}
-                    onBackdropPress={this.toggleModal}>
-                        <PhotoComponent callbackFromParent={this.photoTaked}/>
-                </Modal>
-            </View>
+          <View style={this.props.validate ? styles.containerValidate : styles.container}>
+            <TouchableOpacity 
+                onPress={() => {this.toggleModal()}}
+                title={ !this.state.dataChild ? "Tirar foto" : "Repetir"}
+                style={styles.TouchableImage}
+            >
+                <Image source={!this.state.dataChild ? camera : { uri: this.state.dataFromChild.uri }} 
+                    style={!this.state.dataChild ? styles.phothoIcon : styles.photoTaked} 
+                /> 
+            </TouchableOpacity>
+            <Modal
+                style={styles.modalView}
+                visible={this.state.isModalVisible}
+                swipeDirection={['down', 'left', 'right']}
+                onSwipeComplete={this.toggleModal}
+                onBackdropPress={this.toggleModal}>
+                    <PhotoComponent callbackFromParent={this.photoTaked}/>
+            </Modal>
+          </View>
           );
     }
 }

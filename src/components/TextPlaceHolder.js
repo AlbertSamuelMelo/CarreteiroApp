@@ -17,7 +17,7 @@ export default class TextPlaceHolder extends Component {
     }
 
     sendAfterUpdate(){
-      this.props.callbackFromParent(this.state)
+      this.props.callbackFromParent(this.state.category)
     }
 
     render(){
