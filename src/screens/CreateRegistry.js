@@ -21,13 +21,18 @@ export default class CreateRegistry extends Component {
       origin: "",
       destiny: "",
       car: "",
-      dataFromStore: []
+      dataFromStore: [],
     };
+    this.cameraComponent = React.createRef();
+    this.materialComponent = React.createRef();
+    this.originComponent = React.createRef();
+    this.destinyComponent = React.createRef();
+    this.carComponent = React.createRef();
   }
 
   printRegister = async (data) => {
     let strigToPrint = "Registro: " + data.key +
-      "<br><br>Obra: " + data.obra
+      "<br><br>Obra: " + data.obra +
       "<br><br>Material:" + data.data.material + 
       "<br>Origem: " + data.data.origin + 
       "<br>Destino: " + data.data.destiny + 
@@ -55,8 +60,14 @@ export default class CreateRegistry extends Component {
     this.state.dataFromStore.push(data)
     try {
       await AsyncStorage.setItem(this.state.obra, JSON.stringify(this.state.dataFromStore));
-      console.log("Saved ")
       alert(" Registro Salvo ")
+      
+      this.cameraComponent.current.clearComponent()
+      this.materialComponent.current.clearComponent()
+      this.originComponent.current.clearComponent()
+      this.destinyComponent.current.clearComponent()
+      this.carComponent.current.clearComponent()
+
       this.printRegister(data)
 
     } catch (error) {
@@ -136,27 +147,36 @@ export default class CreateRegistry extends Component {
     }
   }
 
-  render(){
+  componentDidMount(){
     this._retrieveData()
+  }
+
+  render(){
     return (
       <View style={styles.container}>
         <StatusBar style="light" />
         <Config/>
-        <CameraPlaceHolder callbackFromParent={(value) => this.photoTaked(value)}/>
+        <CameraPlaceHolder             
+          ref={this.cameraComponent}
+          callbackFromParent={(value) => this.photoTaked(value)}/>
           <TextPlaceHolder 
             input="Material" 
+            ref={this.materialComponent}
             callbackFromParent={(value) => this.materialTaked(value)}
           />
           <TextPlaceHolder 
             input="Local" 
+            ref={this.originComponent}
             callbackFromParent={(value) => this.originTaked(value)}
           />
           <TextPlaceHolder 
             input="Local" 
+            ref={this.destinyComponent}
             callbackFromParent={(value) => this.destinyTaked(value)}
           />
           <TextPlaceHolder 
             input="Carro" 
+            ref={this.carComponent}
             callbackFromParent={(value) => this.carTaked(value)}
           />
             <View style={styles.buttonContainer}>

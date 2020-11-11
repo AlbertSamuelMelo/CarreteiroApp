@@ -20,6 +20,10 @@ export default class TextPlaceHolder extends Component {
       this.props.callbackFromParent(this.state.category)
     }
 
+    clearComponent() {
+      this.setState({category:""})
+    }
+
     render(){
         return (
             <View style={this.props.input ? styles.containerIntupt : styles.container}>
@@ -29,6 +33,7 @@ export default class TextPlaceHolder extends Component {
                         onValueChange={
                             (value) => this.changePicker(value)
                         }
+                        value={this.state.category}
                         items={Database[this.props.input]}
                         placeholder={{
                             label: 'Selecione o ' + this.props.input,

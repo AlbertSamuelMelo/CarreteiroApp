@@ -25,6 +25,10 @@ export default class CameraPlaceHolder extends Component {
         this.setState({isModalVisible: !this.state.isModalVisible});
       };
 
+    clearComponent() {
+      this.setState({dataFromChild:{}})
+      this.setState({dataChild:false})
+    }
     render(){
       return (
         <View style={this.props.validate ? styles.containerValidate : styles.container}>
