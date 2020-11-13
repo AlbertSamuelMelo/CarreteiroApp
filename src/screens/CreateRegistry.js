@@ -8,6 +8,9 @@ import Config from "../components/ConfigPlaceHolder"
 
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
+import * as Sharing from 'expo-sharing';
+
+import QRCode from 'react-native-qrcode-svg';
 
 export default class CreateRegistry extends Component {
   constructor() {
@@ -22,7 +25,9 @@ export default class CreateRegistry extends Component {
       destiny: "",
       car: "",
       dataFromStore: [],
+      qrCode: ""
     };
+    this.qrCodeComponent = React.createRef();
     this.cameraComponent = React.createRef();
     this.materialComponent = React.createRef();
     this.originComponent = React.createRef();
@@ -39,6 +44,11 @@ export default class CreateRegistry extends Component {
       "<br><br>Carro: " + data.data.car + 
       "<br><br>Data: " + data.data.date + "<br><br>"
   
+
+    this.setState({
+      qrCode: strigToPrint
+    })
+
     let filePath = await Print.printToFileAsync({
       html: strigToPrint,
       width : 380,
@@ -47,6 +57,7 @@ export default class CreateRegistry extends Component {
     });
 
     if(Device.osName === "iOS"){
+      Sharing.shareAsync(filePath.uri)
       Clipboard.setString(strigToPrint.replaceAll("<br>", "\n"))
     }else{
       Print.printAsync({uri: filePath.uri})
@@ -155,6 +166,11 @@ export default class CreateRegistry extends Component {
     return (
       <View style={styles.container}>
         <StatusBar style="light" />
+        <View>
+          {this.state.qrCode ? <QRCode
+            value={this.state.qrCode}
+          /> : <Text></Text>}
+        </View>
         <Config/>
         <CameraPlaceHolder             
           ref={this.cameraComponent}
