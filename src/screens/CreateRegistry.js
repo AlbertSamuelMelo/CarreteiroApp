@@ -25,7 +25,8 @@ export default class CreateRegistry extends Component {
       destiny: "",
       car: "",
       dataFromStore: [],
-      qrCode: ""
+      qrCode: "",
+      dataQr: ""
     };
     this.qrCodeComponent = React.createRef();
     this.cameraComponent = React.createRef();
@@ -35,22 +36,16 @@ export default class CreateRegistry extends Component {
     this.carComponent = React.createRef();
   }
 
-  printRegister = async (data) => {
-    let strigToPrint = "Registro: " + data.key +
-      "<br><br>Obra: " + data.obra +
-      "<br><br>Material:" + data.data.material + 
-      "<br>Origem: " + data.data.origin + 
-      "<br>Destino: " + data.data.destiny + 
-      "<br><br>Carro: " + data.data.car + 
-      "<br><br>Data: " + data.data.date + "<br><br>"
-  
+  getDataURL(stringToPrint) {
+    this.qrCodeComponent.toDataURL((value) => this.callback(value, stringToPrint));
+  }
+  callback = async (dataURL, stringToPrint) => {
+    this.setState({dataQr: dataURL});
 
-    this.setState({
-      qrCode: strigToPrint
-    })
+    stringToPrint = stringToPrint + `<img src="data:image/jpeg;base64,${this.state.dataQr}"/>`
 
     let filePath = await Print.printToFileAsync({
-      html: strigToPrint,
+      html: stringToPrint,
       width : 380,
       base64 : false,
       orientation: "portrait"
@@ -58,10 +53,36 @@ export default class CreateRegistry extends Component {
 
     if(Device.osName === "iOS"){
       Sharing.shareAsync(filePath.uri)
-      Clipboard.setString(strigToPrint.replaceAll("<br>", "\n"))
+      Clipboard.setString(stringToPrint.replaceAll("<br>", "\n"))
     }else{
       Print.printAsync({uri: filePath.uri})
     }
+  }
+
+  printRegister = (data) => {
+    var qrCapsule = {
+      key: data.key, 
+      obra: data.obra,
+        data:{
+          material: data.data.material,
+          origin: data.data.origin,
+          destiny: data.data.destiny,
+          car: data.data.car
+        }
+    }
+    let strigToPrint = "Registro: " + data.key +
+      "<br><br>Obra: " + data.obra +
+      "<br><br>Material:" + data.data.material + 
+      "<br>Origem: " + data.data.origin + 
+      "<br>Destino: " + data.data.destiny + 
+      "<br><br>Carro: " + data.data.car + 
+      "<br><br>Data: " + data.data.date + "<br><br>" 
+
+    this.setState({
+      qrCode: JSON.stringify(qrCapsule)
+    })
+
+    this.getDataURL(strigToPrint)
 }
 
   generateKey = (pre) => {
@@ -166,9 +187,10 @@ export default class CreateRegistry extends Component {
     return (
       <View style={styles.container}>
         <StatusBar style="light" />
-        <View>
+        <View style={{opacity:0}}>
           {this.state.qrCode ? <QRCode
             value={this.state.qrCode}
+            getRef={(qrValue) => this.qrCodeComponent = qrValue}
           /> : <Text></Text>}
         </View>
         <Config/>
