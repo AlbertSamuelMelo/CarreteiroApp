@@ -3,11 +3,14 @@ import { View } from 'react-native';
 import {  NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import CreateRegistry from "./src/screens/CreateRegistry";
 import Profile from "./src/screens/Profile"
 import List from "./src/screens/List"
 import Validate from "./src/screens/ValidateScreen"
 import ScanQR from "./src/screens/ScanScreen"
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -78,7 +81,33 @@ function ProfileScreen(){
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Criar') {
+              iconName = focused
+                ? 'ios-add-circle'
+                : 'ios-add-circle-outline';
+            } else if (route.name === 'ScanQR') {
+              iconName = focused ? 'ios-barcode' : 'ios-barcode';
+            } else if (route.name === 'Lista') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            } 
+            else if (route.name === 'Perfil') {
+              iconName = focused ? 'ios-person' : 'ios-person';
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: '#115B73',
+          inactiveTintColor: 'gray',
+        }}
+      >
         <Tab.Screen name="Criar" component={CreateScreen} />
         <Tab.Screen name="ScanQR" component={ScanNavigator} />
         <Tab.Screen name="Lista" component={ListNavigator} />
