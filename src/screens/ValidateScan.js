@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, AsyncStorage, Image, Clipboard, Button } from 'react-native';
+import { StyleSheet, View, Text, AsyncStorage, Clipboard, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
@@ -11,7 +11,7 @@ import * as Sharing from 'expo-sharing';
 
 import QRCode from 'react-native-qrcode-svg';
 
-export default class ValidateScreen extends Component {
+export default class ValidateScan extends Component {
     constructor() {
         super();
         this.state = {
@@ -25,21 +25,21 @@ export default class ValidateScreen extends Component {
         this.qrCodeComponent = React.createRef();
     }
 
-    prepareToPrint(){
-        this.props.navigation.setOptions({
-            headerRight: () => (
-              <Button onPress={() => 
-                {
-                    for(var index in this.state.dataFromStore){
-                        if(this.state.dataFromStore[index].key == this.props.route.params.dataKey.key){
-                            this.printRegister(this.state.dataFromStore[index])
-                        }
-                    }
-                }
-              } title="Imprimir" />
-            ),
-          });
-    }
+    // prepareToPrint(){
+    //     this.props.navigation.setOptions({
+    //         headerRight: () => (
+    //           <Button onPress={() => 
+    //             {
+    //                 for(var index in this.state.dataFromStore){
+    //                     if(this.state.dataFromStore[index].key == this.props.route.params.dataKey.key){
+    //                         this.printRegister(this.state.dataFromStore[index])
+    //                     }
+    //                 }
+    //             }
+    //           } title="Imprimir" />
+    //         ),
+    //       });
+    // }
 
     getDataURL(stringToPrint) {
         this.qrCodeComponent.toDataURL((value) => this.callback(value, stringToPrint));
@@ -99,7 +99,6 @@ export default class ValidateScreen extends Component {
         try {
             await AsyncStorage.setItem(this.props.route.params.dataKey.obra, JSON.stringify(this.state.dataFromStore));
             alert(" Registro Atualizado ")
-            this.props.navigation.goBack()
             this.printRegister(data)
 
         } catch (error) {
@@ -112,7 +111,7 @@ export default class ValidateScreen extends Component {
             const dataFromObra = await AsyncStorage.getItem(this.props.route.params.dataKey.obra);
             if (dataFromObra !== null) {
             this.setState({dataFromStore: JSON.parse(dataFromObra)})
-            this.prepareToPrint()
+            // this.prepareToPrint()
             }
         } catch (error) {
             // Error retrieving data
@@ -134,9 +133,15 @@ export default class ValidateScreen extends Component {
                 this.state.dataFromStore[index].data.validate = this.state.confirmFromChild.base64
                 this.state.dataFromStore[index].data.validateUri = this.state.confirmFromChild.uri
                 this._storeData(this.state.dataFromStore[index])
-                break;
+                return;
             }
         }
+        console.log("dados Do QR: ", this.props.route.params.dataKey)
+        this.props.route.params.dataKey.data.validateUri = this.state.confirmFromChild.uri
+        this.props.route.params.dataKey.data.validate = this.state.confirmFromChild.base64
+        this.state.dataFromStore.push(this.props.route.params.dataKey)
+
+        this._storeData(this.props.route.params.dataKey)
     }
     
     componentDidMount() {
@@ -152,23 +157,10 @@ export default class ValidateScreen extends Component {
                         getRef={(qrValue) => this.qrCodeComponent = qrValue}
                     /> : <Text></Text>}
                 </View>
-            <StatusBar style="dark" />
-            <View style={{height: "40%", width:"100%", alignItems: 'center', justifyContent: "space-around", flexDirection: "row"}}>
-                <Image 
-                    source={{ uri: this.props.route.params.dataKey.data.pictureUri }}
-                    style={styles.photoTaked}
-                />
-                { this.props.route.params.dataKey.data.validateUri == "" ? 
-                    <CameraPlaceHolder 
-                        validate={ true } 
-                        callbackFromParent={(value) => this.photoTaked(value)}
-                    /> : 
-                    <Image 
-                        source={{ uri: this.props.route.params.dataKey.data.validateUri }}
-                        style={styles.photoTaked}
-                    /> 
-                }
-            </View>
+                <StatusBar style="dark" />
+                <CameraPlaceHolder 
+                    callbackFromParent={(value) => this.photoTaked(value)}
+                /> 
                 <TextPlaceHolder 
                     text={this.props.route.params.dataKey.data.material} 
                 />
@@ -182,11 +174,11 @@ export default class ValidateScreen extends Component {
                     text={this.props.route.params.dataKey.data.car}  
                 />
                 <View style={styles.buttonContainer}>
-                    {this.props.route.params.dataKey.data.validateUri == "" ?
+                    {this.props.route.params.dataKey.validate != true ?
                     <TouchableOpacity onPress={() => this.validateRegistry()}>
                         <Text style={styles.createText}>Validar Registro</Text>
                     </TouchableOpacity> : <Text style={styles.createText}>Registro Validado</Text>}
-            </View>
+                </View>
             </View>
         );
         }

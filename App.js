@@ -9,7 +9,7 @@ import Profile from "./src/screens/Profile"
 import List from "./src/screens/List"
 import Validate from "./src/screens/ValidateScreen"
 import ScanQR from "./src/screens/ScanScreen"
-
+import ValidateQR from "./src/screens/ValidateScan"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator();
@@ -60,11 +60,20 @@ function ScanScreen({ navigation, route }) {
   );
 }
 
+function ValidateQRScreen({ navigation, route }) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ValidateQR navigation={navigation} route={route}/>
+    </View>
+  );
+}
+
 function ScanNavigator() {
   return(
   <NavigationContainer independent={true}>
     <Stack.Navigator initialRouteName="Scan QR">
       <Stack.Screen name="Scan QR" component={ScanScreen} />
+      <Stack.Screen name="Validar QrCode" component={ValidateQRScreen} />
     </Stack.Navigator>
   </NavigationContainer>
   )
