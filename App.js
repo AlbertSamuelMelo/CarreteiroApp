@@ -31,41 +31,6 @@ function ListScreen({ navigation, route }) {
 }
 
 function ValidateScreen({ navigation, route }) {
-  const [count, setCount] = React.useState(0);
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button onPress={() => 
-          {
-              let strigToPrint = "Registro: " + route.params.dataKey.key +
-                "<br><br>Material:" + route.params.dataKey.data.material + 
-                "<br>Origem: " + route.params.dataKey.data.origin + 
-                "<br>Destino: " + route.params.dataKey.data.destiny + 
-                "<br><br>Carro: " + route.params.dataKey.data.car + "<br><br>"
-                if(route.params.dataKey.data.validateUri != ""){
-                  strigToPrint = strigToPrint + "Registro Validado<br><br>"
-                }
-                // "<br><br>Data: " + data.date;
-            
-              let filePath = Print.printToFileAsync({
-                html: strigToPrint,
-                width : 380,
-                base64 : false,
-                orientation: "portrait"
-              });
-
-              if(Device.osName === "iOS"){
-                Clipboard.setString(strigToPrint.replaceAll("<br>", "\n"))
-                alert("Copy to clipboard")
-              }else{
-                Print.printAsync({uri: filePath.uri})
-              }
-          }
-        } title="Imprimir" />
-      ),
-    });
-  }, [navigation]);
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Validate navigation={navigation} route={route}/>

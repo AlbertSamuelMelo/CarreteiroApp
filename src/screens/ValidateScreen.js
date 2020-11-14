@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, AsyncStorage, Image, Clipboard } from 'react-native';
+import { StyleSheet, View, Text, AsyncStorage, Image, Clipboard, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
@@ -19,16 +19,33 @@ export default class ValidateScreen extends Component {
             confirmFromChild: {},
             confirmChild: false,
             dataFromStore: [],
-            qrCode: "",
+            qrCode: "Clique no imprimir",
             dataQr: ""
         };
         this.qrCodeComponent = React.createRef();
     }
 
+    prepareToPrint(){
+        this.props.navigation.setOptions({
+            headerRight: () => (
+              <Button onPress={() => 
+                {
+                    for(var index in this.state.dataFromStore){
+                        if(this.state.dataFromStore[index].key == this.props.route.params.dataKey.key){
+                            this.printRegister(this.state.dataFromStore[index])
+                        }
+                    }
+                }
+              } title="Imprimir" />
+            ),
+          });
+    }
+
     getDataURL(stringToPrint) {
         this.qrCodeComponent.toDataURL((value) => this.callback(value, stringToPrint));
-      }
-      callback = async (dataURL, stringToPrint) => {
+    }
+
+    callback = async (dataURL, stringToPrint) => {
         this.setState({dataQr: dataURL});
     
         stringToPrint = stringToPrint + `<img src="data:image/jpeg;base64,${this.state.dataQr}"/>`
@@ -46,13 +63,13 @@ export default class ValidateScreen extends Component {
         }else{
           Print.printAsync({uri: filePath.uri})
         }
-      }
+    }
     
-      printRegister = (data) => {
+    printRegister = (data) => {
         var qrCapsule = {
           key: data.key, 
           obra: data.obra,
-          validate: true,
+          validate: this.state.confirmChild,
             data:{
               material: data.data.material,
               origin: data.data.origin,
@@ -66,9 +83,12 @@ export default class ValidateScreen extends Component {
           "<br>Origem: " + data.data.origin + 
           "<br>Destino: " + data.data.destiny + 
           "<br><br>Carro: " + data.data.car + 
-          "<br><br>Data: " + data.data.date + "<br><br>" +
-          "Registro Validado<br><br>"
-    
+          "<br><br>Data: " + data.data.date + "<br><br>"
+        
+        if(this.state.confirmChild){
+        strigToPrint = strigToPrint + "Registro Validado<br><br>"
+        }
+
         this.setState({
           qrCode: JSON.stringify(qrCapsule)
         })
@@ -91,6 +111,7 @@ export default class ValidateScreen extends Component {
             const dataFromObra = await AsyncStorage.getItem(this.props.route.params.dataKey.obra);
             if (dataFromObra !== null) {
             this.setState({dataFromStore: JSON.parse(dataFromObra)})
+            this.prepareToPrint()
             }
         } catch (error) {
             // Error retrieving data
