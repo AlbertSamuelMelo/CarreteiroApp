@@ -1,9 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, AsyncStorage, Image } from 'react-native';
+import { StyleSheet, View, Text, AsyncStorage, Image, Clipboard } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
+
+import * as Print from 'expo-print';
+import * as Device from 'expo-device';
+import * as Sharing from 'expo-sharing';
+
+import QRCode from 'react-native-qrcode-svg';
 
 export default class ValidateScreen extends Component {
     constructor() {
@@ -12,23 +18,68 @@ export default class ValidateScreen extends Component {
             isModalVisible: false,
             confirmFromChild: {},
             confirmChild: false,
-            dataFromStore: []
+            dataFromStore: [],
+            qrCode: "",
+            dataQr: ""
         };
+        this.qrCodeComponent = React.createRef();
     }
 
-    useLayoutEffect() {
-        navigation.setOptions({
-            headerRight: () => (
-            <Button onPress={() => setCount(c => c + 1)} title="Update count" />
-            ),
-        });
-    }
+    getDataURL(stringToPrint) {
+        this.qrCodeComponent.toDataURL((value) => this.callback(value, stringToPrint));
+      }
+      callback = async (dataURL, stringToPrint) => {
+        this.setState({dataQr: dataURL});
     
-    _storeData = async () => {
+        stringToPrint = stringToPrint + `<img src="data:image/jpeg;base64,${this.state.dataQr}"/>`
+    
+        let filePath = await Print.printToFileAsync({
+          html: stringToPrint,
+          width : 380,
+          base64 : false,
+          orientation: "portrait"
+        });
+    
+        if(Device.osName === "iOS"){
+          Sharing.shareAsync(filePath.uri)
+          Clipboard.setString(stringToPrint.replaceAll("<br>", "\n"))
+        }else{
+          Print.printAsync({uri: filePath.uri})
+        }
+      }
+    
+      printRegister = (data) => {
+        var qrCapsule = {
+          key: data.key, 
+          obra: data.obra,
+          validate: true,
+            data:{
+              material: data.data.material,
+              origin: data.data.origin,
+              destiny: data.data.destiny,
+              car: data.data.car,
+            }
+        }
+        let strigToPrint = "Registro: " + data.key +
+          "<br><br>Obra: " + data.obra +
+          "<br><br>Material:" + data.data.material + 
+          "<br>Origem: " + data.data.origin + 
+          "<br>Destino: " + data.data.destiny + 
+          "<br><br>Carro: " + data.data.car + 
+          "<br><br>Data: " + data.data.date + "<br><br>" +
+          "Registro Validado<br><br>"
+    
+        this.setState({
+          qrCode: JSON.stringify(qrCapsule)
+        })
+    
+        this.getDataURL(strigToPrint)
+    }
+    _storeData = async (data) => {
         try {
             await AsyncStorage.setItem(this.props.route.params.dataKey.obra, JSON.stringify(this.state.dataFromStore));
-            console.log("Atualizado")
             alert(" Registro Atualizado ")
+            this.printRegister(data)
 
         } catch (error) {
             console.log(error)
@@ -58,10 +109,9 @@ export default class ValidateScreen extends Component {
         }
         for(var index in this.state.dataFromStore){
             if(this.state.dataFromStore[index].key == this.props.route.params.dataKey.key){
-                console.log("Registro", this.state.dataFromStore[index].key)
                 this.state.dataFromStore[index].data.validate = this.state.confirmFromChild.base64
                 this.state.dataFromStore[index].data.validateUri = this.state.confirmFromChild.uri
-                this._storeData()
+                this._storeData(this.state.dataFromStore[index])
                 break;
             }
         }
@@ -74,6 +124,12 @@ export default class ValidateScreen extends Component {
     render(){
         return (
             <View style={styles.container}>
+                <View style={{opacity:0}}>
+                    {this.state.qrCode ? <QRCode
+                        value={this.state.qrCode}
+                        getRef={(qrValue) => this.qrCodeComponent = qrValue}
+                    /> : <Text></Text>}
+                </View>
             <StatusBar style="dark" />
             <View style={{height: "40%", width:"100%", alignItems: 'center', justifyContent: "space-around", flexDirection: "row"}}>
                 { this.props.route.params.dataKey.data.validateUri == "" ? 
