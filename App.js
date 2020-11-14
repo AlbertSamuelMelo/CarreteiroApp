@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Button, Clipboard } from 'react-native';
+import { View } from 'react-native';
 import {  NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,14 +7,12 @@ import CreateRegistry from "./src/screens/CreateRegistry";
 import Profile from "./src/screens/Profile"
 import List from "./src/screens/List"
 import Validate from "./src/screens/ValidateScreen"
-
-import * as Print from 'expo-print';
-import * as Device from 'expo-device';
+import ScanQR from "./src/screens/ScanScreen"
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function HomeScreen() {
+function CreateScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <CreateRegistry/>
@@ -51,6 +49,24 @@ function ListNavigator() {
   )
 }
 
+function ScanScreen({ navigation, route }) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ScanQR navigation={navigation} route={route}/>
+    </View>
+  );
+}
+
+function ScanNavigator() {
+  return(
+  <NavigationContainer independent={true}>
+    <Stack.Navigator initialRouteName="Scan QR">
+      <Stack.Screen name="Scan QR" component={ScanScreen} />
+    </Stack.Navigator>
+  </NavigationContainer>
+  )
+}
+
 function ProfileScreen(){
   return (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -63,7 +79,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Criar" component={HomeScreen} />
+        <Tab.Screen name="Criar" component={CreateScreen} />
+        <Tab.Screen name="ScanQR" component={ScanNavigator} />
         <Tab.Screen name="Lista" component={ListNavigator} />
         <Tab.Screen name="Perfil" component={ProfileScreen} />
       </Tab.Navigator>
