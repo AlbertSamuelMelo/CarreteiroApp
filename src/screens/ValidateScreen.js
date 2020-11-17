@@ -19,7 +19,6 @@ export default class ValidateScreen extends Component {
             isModalVisible: false,
             confirmFromChild: {},
             confirmChild: false,
-            dataFromStore: [],
             qrCode: "Clique no imprimir",
             dataQr: ""
         };
@@ -31,7 +30,7 @@ export default class ValidateScreen extends Component {
             headerRight: () => (
               <Button onPress={() => 
                 {
-                    
+                  this.printRegister(this.props.route.params.dataKey)
                 }
               } title="Imprimir" />
             ),
@@ -68,19 +67,19 @@ export default class ValidateScreen extends Component {
           obra: data.obra,
           validate: this.state.confirmChild,
             data:{
-              material: data.data.material,
-              origin: data.data.origin,
-              destiny: data.data.destiny,
-              car: data.data.car,
+              material: data.material,
+              origin: data.origin,
+              destiny: data.destiny,
+              car: data.car,
             }
         }
         let strigToPrint = "Registro: " + data.key +
           "<br><br>Obra: " + data.obra +
-          "<br><br>Material:" + data.data.material + 
-          "<br>Origem: " + data.data.origin + 
-          "<br>Destino: " + data.data.destiny + 
-          "<br><br>Carro: " + data.data.car + 
-          "<br><br>Data: " + data.data.date + "<br><br>"
+          "<br><br>Material:" + data.material + 
+          "<br>Origem: " + data.origin + 
+          "<br>Destino: " + data.destiny + 
+          "<br><br>Carro: " + data.car + 
+          "<br><br>Data: " + data.date + "<br><br>"
         
         if(this.state.confirmChild){
         strigToPrint = strigToPrint + "Registro Validado<br><br>"
@@ -92,18 +91,7 @@ export default class ValidateScreen extends Component {
     
         this.getDataURL(strigToPrint)
     }
-    _storeData = async (data) => {
-        try {
-            await AsyncStorage.setItem(this.props.route.params.dataKey.obra, JSON.stringify(this.state.dataFromStore));
-            alert(" Registro Atualizado ")
-            this.props.navigation.goBack()
-            this.printRegister(data)
 
-        } catch (error) {
-            console.log(error)
-        }
-    };
-  
     photoTaked = (confirmFromChild) => {
         this.setState({ confirmFromChild: confirmFromChild })
         this.setState({ confirmChild: true })
@@ -114,17 +102,20 @@ export default class ValidateScreen extends Component {
                 alert("Tire a foto de confirmação")
             return
         }
-        for(var index in this.state.dataFromStore){
-            if(this.state.dataFromStore[index].key == this.props.route.params.dataKey.key){
-                this.state.dataFromStore[index].data.validate = this.state.confirmFromChild.base64
-                this.state.dataFromStore[index].data.validateUri = this.state.confirmFromChild.uri
-                this._storeData(this.state.dataFromStore[index])
-                break;
-            }
-        }
+        var dataToUpdate = this.props.route.params.dataKey
+        dataToUpdate.validate = this.state.confirmFromChild.base64
+        dataToUpdate.validate_uri = this.state.confirmFromChild.uri
+        RegisterSevice.updateRegister(dataToUpdate)
+          .then((response) => {
+            console.log(response)
+            alert(" Registro Atualizado ")
+            this.printRegister(dataToUpdate)
+            this.props.navigation.goBack()
+      })
     }
     
     componentDidMount() {
+      this.prepareToPrint()
     }
       
     render(){

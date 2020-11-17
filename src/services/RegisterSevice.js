@@ -105,49 +105,34 @@ class RegisterService {
     }
 
     //Update
-    updateRegister(register_id){
+    updateRegister(data){
         return new Promise((resolve, reject) => db.transaction(
             tx => {
-                tx.executeSql(`update ${obra}_Registers 
-                    (id,
-                    obra_name, 
-                    material, 
-                    origin,
-                    destiny,
-                    car,
+                tx.executeSql(`update ${data.obra_name}_Registers 
+                    SET 
+                    picture = ?,
+                    picture_uri = ?,
+
+                    validate = ?,
+                    validate_uri = ?
                     
-                    picture,
-                    picture_uri,
-
-                    validate,
-                    validate_uri,
-
-                    created_date) 
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    WHERE id = ?`, 
                     
                     [
-                        data.key,
-                        obra,
-                        data.material,
-                        data.origin,
-                        data.destiny,
-                        data.car,
-
                         data.picture,
-                        data.pictureUri,
+                        data.picture_uri,
     
                         data.validate,
-                        data.validateUri,
-
-                        data.date
-                    ], (_, {}) =>
+                        data.validate_uri,
+                        data.id,
+                    ], (_, {}) => 
                     resolve(200)
                 );
             }, (error) => {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("addRegister transaction complete call back ");
+                console.log("updateRegister transaction complete call back ");
             }
         ))
     }
