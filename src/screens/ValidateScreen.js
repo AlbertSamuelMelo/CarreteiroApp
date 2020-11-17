@@ -106,18 +106,6 @@ export default class ValidateScreen extends Component {
             console.log(error)
         }
     };
-
-    _retrieveData = async () => {
-        try {
-            const dataFromObra = await AsyncStorage.getItem(this.props.route.params.dataKey.obra);
-            if (dataFromObra !== null) {
-            this.setState({dataFromStore: JSON.parse(dataFromObra)})
-            this.prepareToPrint()
-            }
-        } catch (error) {
-            // Error retrieving data
-        }
-    };
   
     photoTaked = (confirmFromChild) => {
         this.setState({ confirmFromChild: confirmFromChild })
@@ -140,7 +128,6 @@ export default class ValidateScreen extends Component {
     }
     
     componentDidMount() {
-        this._retrieveData()
     }
       
     render(){

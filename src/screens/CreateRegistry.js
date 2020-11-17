@@ -5,6 +5,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Config from "../components/ConfigPlaceHolder"
+import Database from "../database/DatabaseInit"
+import RegisterSevice from "../services/RegisterSevice"
 
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
@@ -15,6 +17,7 @@ import QRCode from 'react-native-qrcode-svg';
 export default class CreateRegistry extends Component {
   constructor() {
     super();
+    new Database
     this.state = {
       isModalVisible: false,
       dataFromChild: {},
@@ -88,34 +91,19 @@ export default class CreateRegistry extends Component {
   generateKey = (pre) => {
     return `${ pre }_${ new Date().getTime() }`;
   }
-  _storeData = async (data) => {
-    this.state.dataFromStore.push(data)
-    try {
-      await AsyncStorage.setItem(this.state.obra, JSON.stringify(this.state.dataFromStore));
-      alert(" Registro Salvo ")
-      
-      this.cameraComponent.current.clearComponent()
-      this.materialComponent.current.clearComponent()
-      this.originComponent.current.clearComponent()
-      this.destinyComponent.current.clearComponent()
-      this.carComponent.current.clearComponent()
+  _storeData = (data) => {
 
-      this.printRegister(data)
-
-    } catch (error) {
-      console.log(error)
-    }
-  };
-
-  _retrieveData = async () => {
-    try {
-      const dataFromObra = await AsyncStorage.getItem(this.state.obra);
-      if (dataFromObra !== null) {
-        this.setState({dataFromStore: JSON.parse(dataFromObra)})
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
+    RegisterSevice.createTable(this.state.obra)
+    RegisterSevice.addRegister(this.state.obra, data)
+      .then((response) => {
+        console.log(response)
+        this.cameraComponent.current.clearComponent()
+        this.materialComponent.current.clearComponent()
+        this.originComponent.current.clearComponent()
+        this.destinyComponent.current.clearComponent()
+        this.carComponent.current.clearComponent()
+        alert(" Registro Salvo ")
+    })
   };
   
   photoTaked = (dataFromChild) => {
@@ -156,31 +144,30 @@ export default class CreateRegistry extends Component {
       var packageToSave = {
         key: "", 
         obra: "",
-        data:{
-          material: "",
-          origin: "",
-          destiny: "",
-          car: "",
-          picture: "",
-          validate: "",
-          pictureUri: "",
-          validateUri: "",
-          date: thisDate.getHours() + ":" + thisDate.getMinutes() + " - " + thisDate.getDate() + "/" + thisDate.getMonth() + "/" + thisDate.getFullYear()
-      }}
+        material: "",
+        origin: "",
+        destiny: "",
+        car: "",
+        picture: "",
+        validate: "",
+        pictureUri: "",
+        validateUri: "",
+        date: thisDate.getHours() + ":" + thisDate.getMinutes() + " - " + thisDate.getDate() + "/" + thisDate.getMonth() + "/" + thisDate.getFullYear()
+      }
       packageToSave.key = this.generateKey("CC")
       packageToSave.obra = this.state.obra
-      packageToSave.data.material = this.state.material
-      packageToSave.data.origin = this.state.origin
-      packageToSave.data.destiny = this.state.destiny
-      packageToSave.data.car = this.state.car
-      packageToSave.data.picture = this.state.dataFromChild.base64
-      packageToSave.data.pictureUri = this.state.dataFromChild.uri
+      packageToSave.material = this.state.material
+      packageToSave.origin = this.state.origin
+      packageToSave.destiny = this.state.destiny
+      packageToSave.car = this.state.car
+      packageToSave.picture = this.state.dataFromChild.base64
+      packageToSave.pictureUri = this.state.dataFromChild.uri
       this._storeData(packageToSave);
     }
   }
 
   componentDidMount(){
-    this._retrieveData()
+
   }
 
   render(){

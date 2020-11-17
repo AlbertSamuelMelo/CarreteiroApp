@@ -1,31 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, AsyncStorage, SafeAreaView } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import ListCell from "./ListCell";
+import ObraService from "../services/ObrasService"
+import RegisterService from "../services/RegisterSevice"
 
 export default class List extends Component {
   constructor() {
     super();
     this.state = {
-        keysOnStorage: [""],
         storage: false,
         dataOnStorage: [],
     };
   }
 
-  _retrieveData = async () => {
-    try {
-        const keysOnStorage = await AsyncStorage.getAllKeys()
-        this.setState({keysOnStorage: keysOnStorage})
-
-        if( this.props.route.params.key != undefined ) {
-            this.setState({storage: true})
-            const dataOnKey = await AsyncStorage.getItem(this.props.route.params.key)
-            this.setState({dataOnStorage: JSON.parse(dataOnKey)})
-        }
-    } catch (error) {
-      // Error retrieving data
+  _retrieveData = () => {
+    if (this.props.route.params != undefined){
+      RegisterService.getRegisters(this.props.route.params.key.obra_name)
+      .then((response) => {
+        this.setState({storage: true})
+        this.setState({dataOnStorage: response._array})
+      })
+    } else {
+      ObraService.getObras()
+      .then((response) => {
+        this.setState({dataOnStorage: response._array})
+      })
     }
   };
 
@@ -34,7 +35,8 @@ export default class List extends Component {
   }
 
   selectListItem(item) {
-    if(typeof(item) == "string") {
+    console.log(item)
+    if(item.key == undefined) {
         this.props.navigation.push("List", {
           key: item
         })
@@ -51,7 +53,7 @@ export default class List extends Component {
           <StatusBar style="dark" />
           <SafeAreaView style={styles.safeArea}>
             <FlatList 
-                data={ this.state.storage ? this.state.dataOnStorage : this.state.keysOnStorage}
+                data={this.state.dataOnStorage}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({item, index, separators}) => 
                 <TouchableHighlight
@@ -62,9 +64,9 @@ export default class List extends Component {
                             key={{key:true}} 
                             listItem={ this.state.storage ? {
                               title: 
-                              item.data.material + " - " 
-                              + item.data.car } 
-                              : {title: item}}/>
+                              item.material + " - " 
+                              + item.car } 
+                              : {title: item.obra_name}}/>
                 </TouchableHighlight>}
             />
           </SafeAreaView>
