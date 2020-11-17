@@ -105,8 +105,51 @@ class RegisterService {
     }
 
     //Update
-    updateRegister(){
+    updateRegister(register_id){
+        return new Promise((resolve, reject) => db.transaction(
+            tx => {
+                tx.executeSql(`update ${obra}_Registers 
+                    (id,
+                    obra_name, 
+                    material, 
+                    origin,
+                    destiny,
+                    car,
+                    
+                    picture,
+                    picture_uri,
 
+                    validate,
+                    validate_uri,
+
+                    created_date) 
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    
+                    [
+                        data.key,
+                        obra,
+                        data.material,
+                        data.origin,
+                        data.destiny,
+                        data.car,
+
+                        data.picture,
+                        data.pictureUri,
+    
+                        data.validate,
+                        data.validateUri,
+
+                        data.date
+                    ], (_, {}) =>
+                    resolve(200)
+                );
+            }, (error) => {
+                console.log("error call back : " + JSON.stringify(error));
+                console.log(error);
+            }, () => {
+                console.log("addRegister transaction complete call back ");
+            }
+        ))
     }
 
     //Delete

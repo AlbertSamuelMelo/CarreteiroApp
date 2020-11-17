@@ -35,8 +35,7 @@ export default class List extends Component {
   }
 
   selectListItem(item) {
-    console.log(item)
-    if(item.key == undefined) {
+    if(item.id == undefined) {
         this.props.navigation.push("List", {
           key: item
         })

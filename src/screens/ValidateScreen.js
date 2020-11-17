@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, AsyncStorage, Image, Clipboard, Button } from '
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
+import RegisterSevice from "../services/RegisterSevice"
 
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
@@ -30,11 +31,7 @@ export default class ValidateScreen extends Component {
             headerRight: () => (
               <Button onPress={() => 
                 {
-                    for(var index in this.state.dataFromStore){
-                        if(this.state.dataFromStore[index].key == this.props.route.params.dataKey.key){
-                            this.printRegister(this.state.dataFromStore[index])
-                        }
-                    }
+                    
                 }
               } title="Imprimir" />
             ),
@@ -142,34 +139,34 @@ export default class ValidateScreen extends Component {
             <StatusBar style="dark" />
             <View style={{height: "40%", width:"100%", alignItems: 'center', justifyContent: "space-around", flexDirection: "row"}}>
                 <Image 
-                    source={{ uri: this.props.route.params.dataKey.data.pictureUri }}
+                    source={{ uri: this.props.route.params.dataKey.picture_uri }}
                     style={styles.photoTaked}
                 />
-                { this.props.route.params.dataKey.data.validateUri == "" ? 
+                { this.props.route.params.dataKey.validate_uri == "" ? 
                     <CameraPlaceHolder 
                         validate={ true } 
                         callbackFromParent={(value) => this.photoTaked(value)}
                     /> : 
                     <Image 
-                        source={{ uri: this.props.route.params.dataKey.data.validateUri }}
+                        source={{ uri: this.props.route.params.dataKey.validate_uri }}
                         style={styles.photoTaked}
                     /> 
                 }
             </View>
                 <TextPlaceHolder 
-                    text={this.props.route.params.dataKey.data.material} 
+                    text={this.props.route.params.dataKey.material} 
                 />
                 <TextPlaceHolder 
-                    text={this.props.route.params.dataKey.data.origin}  
+                    text={this.props.route.params.dataKey.origin}  
                 />
                 <TextPlaceHolder 
-                    text={this.props.route.params.dataKey.data.destiny} 
+                    text={this.props.route.params.dataKey.destiny} 
                 />
                 <TextPlaceHolder 
-                    text={this.props.route.params.dataKey.data.car}  
+                    text={this.props.route.params.dataKey.car}  
                 />
                 <View style={styles.buttonContainer}>
-                    {this.props.route.params.dataKey.data.validateUri == "" ?
+                    {this.props.route.params.dataKey.validate_uri == "" ?
                     <TouchableOpacity onPress={() => this.validateRegistry()}>
                         <Text style={styles.createText}>Validar Registro</Text>
                     </TouchableOpacity> : <Text style={styles.createText}>Registro Validado</Text>}

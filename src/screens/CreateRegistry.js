@@ -67,19 +67,19 @@ export default class CreateRegistry extends Component {
       key: data.key, 
       obra: data.obra,
         data:{
-          material: data.data.material,
-          origin: data.data.origin,
-          destiny: data.data.destiny,
-          car: data.data.car
+          material: data.material,
+          origin: data.origin,
+          destiny: data.destiny,
+          car: data.car
         }
     }
     let strigToPrint = "Registro: " + data.key +
       "<br><br>Obra: " + data.obra +
-      "<br><br>Material:" + data.data.material + 
-      "<br>Origem: " + data.data.origin + 
-      "<br>Destino: " + data.data.destiny + 
-      "<br><br>Carro: " + data.data.car + 
-      "<br><br>Data: " + data.data.date + "<br><br>" 
+      "<br><br>Material:" + data.material + 
+      "<br>Origem: " + data.origin + 
+      "<br>Destino: " + data.destiny + 
+      "<br><br>Carro: " + data.car + 
+      "<br><br>Data: " + data.date + "<br><br>" 
 
     this.setState({
       qrCode: JSON.stringify(qrCapsule)
@@ -103,6 +103,7 @@ export default class CreateRegistry extends Component {
         this.destinyComponent.current.clearComponent()
         this.carComponent.current.clearComponent()
         alert(" Registro Salvo ")
+        this.printRegister(data)
     })
   };
   

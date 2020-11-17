@@ -21,19 +21,6 @@ export default class DatabaseInit {
                 PRIMARY KEY (id)
                 );`,
 
-            // `create table if not exists gato (
-            // id integer primary key autoincrement,
-            // nome text,
-            // animal_id int,
-            // foreign key (animal_id) references animal (id)
-            // );`,
-            //  `create table if not exists cachorro (
-            // id integer primary key autoincrement,
-            // nome text,
-            // animal_id int,
-            // foreign key (animal_id) references animal (id)
-            // );`,
-            
             // `INSERT INTO obra (id, obra_name) VALUES (1, 'Teste');`,
             `SELECT * FROM obra`
         ];
