@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, AsyncStorage, Clipboard, Button } from 'react-n
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
+import RegisterSevice from "../services/RegisterSevice"
 
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
@@ -24,22 +25,6 @@ export default class ValidateScan extends Component {
         };
         this.qrCodeComponent = React.createRef();
     }
-
-    // prepareToPrint(){
-    //     this.props.navigation.setOptions({
-    //         headerRight: () => (
-    //           <Button onPress={() => 
-    //             {
-    //                 for(var index in this.state.dataFromStore){
-    //                     if(this.state.dataFromStore[index].key == this.props.route.params.dataKey.key){
-    //                         this.printRegister(this.state.dataFromStore[index])
-    //                     }
-    //                 }
-    //             }
-    //           } title="Imprimir" />
-    //         ),
-    //       });
-    // }
 
     getDataURL(stringToPrint) {
         this.qrCodeComponent.toDataURL((value) => this.callback(value, stringToPrint));
@@ -67,23 +52,22 @@ export default class ValidateScan extends Component {
     
     printRegister = (data) => {
         var qrCapsule = {
-          key: data.key, 
-          obra: data.obra,
-          validate: this.state.confirmChild,
-            data:{
-              material: data.data.material,
-              origin: data.data.origin,
-              destiny: data.data.destiny,
-              car: data.data.car,
-            }
+            id: data.id, 
+            obra_name: data.obra_name,
+            validate: this.state.confirmChild,
+            material: data.material,
+            origin: data.origin,
+            destiny: data.destiny,
+            car: data.car,
+            data: data.created_date
         }
-        let strigToPrint = "Registro: " + data.key +
-          "<br><br>Obra: " + data.obra +
-          "<br><br>Material:" + data.data.material + 
-          "<br>Origem: " + data.data.origin + 
-          "<br>Destino: " + data.data.destiny + 
-          "<br><br>Carro: " + data.data.car + 
-          "<br><br>Data: " + data.data.date + "<br><br>"
+        let strigToPrint = "Registro: " + data.id +
+          "<br><br>Obra: " + data.obra_name +
+          "<br><br>Material:" + data.material + 
+          "<br>Origem: " + data.origin + 
+          "<br>Destino: " + data.destiny + 
+          "<br><br>Carro: " + data.car + 
+          "<br><br>Data: " + data.created_date + "<br><br>"
         
         if(this.state.confirmChild){
         strigToPrint = strigToPrint + "Registro Validado<br><br>"
@@ -92,31 +76,8 @@ export default class ValidateScan extends Component {
         this.setState({
           qrCode: JSON.stringify(qrCapsule)
         })
-    
         this.getDataURL(strigToPrint)
     }
-    _storeData = async (data) => {
-        try {
-            await AsyncStorage.setItem(this.props.route.params.dataKey.obra, JSON.stringify(this.state.dataFromStore));
-            alert(" Registro Atualizado ")
-            this.printRegister(data)
-
-        } catch (error) {
-            console.log(error)
-        }
-    };
-
-    _retrieveData = async () => {
-        try {
-            const dataFromObra = await AsyncStorage.getItem(this.props.route.params.dataKey.obra);
-            if (dataFromObra !== null) {
-            this.setState({dataFromStore: JSON.parse(dataFromObra)})
-            // this.prepareToPrint()
-            }
-        } catch (error) {
-            // Error retrieving data
-        }
-    };
   
     photoTaked = (confirmFromChild) => {
         this.setState({ confirmFromChild: confirmFromChild })
@@ -125,27 +86,28 @@ export default class ValidateScan extends Component {
 
     validateRegistry(){
         if (this.state.confirmFromChild.base64 == undefined){
-                alert("Tire a foto de confirmação")
+            alert("Tire a foto de confirmação")
             return
         }
-        for(var index in this.state.dataFromStore){
-            if(this.state.dataFromStore[index].key == this.props.route.params.dataKey.key){
-                this.state.dataFromStore[index].data.validate = this.state.confirmFromChild.base64
-                this.state.dataFromStore[index].data.validateUri = this.state.confirmFromChild.uri
-                this._storeData(this.state.dataFromStore[index])
-                return;
+        RegisterSevice.getRegisterById(this.props.route.params.dataKey.obra_name, this.props.route.params.dataKey.id)
+        .then((response) => {
+            if (response != null ){
+                var dataToUpdate = response._array[0]
+                dataToUpdate.validate = this.state.confirmFromChild.base64
+                dataToUpdate.validate_uri = this.state.confirmFromChild.uri
+            } else {
+                var dataToUpdate = this.props.route.params.dataKey
+                dataToUpdate.validate = this.state.confirmFromChild.base64
+                dataToUpdate.validate_uri = this.state.confirmFromChild.uri
             }
-        }
-        console.log("dados Do QR: ", this.props.route.params.dataKey)
-        this.props.route.params.dataKey.data.validateUri = this.state.confirmFromChild.uri
-        this.props.route.params.dataKey.data.validate = this.state.confirmFromChild.base64
-        this.state.dataFromStore.push(this.props.route.params.dataKey)
-
-        this._storeData(this.props.route.params.dataKey)
-    }
-    
-    componentDidMount() {
-        this._retrieveData()
+            RegisterSevice.updateRegister(dataToUpdate)
+            .then((response) => {
+                console.log(response)
+                alert(" Registro Atualizado ")
+                this.printRegister(dataToUpdate)
+                this.props.navigation.goBack()
+                })
+            })
     }
       
     render(){
@@ -162,16 +124,16 @@ export default class ValidateScan extends Component {
                     callbackFromParent={(value) => this.photoTaked(value)}
                 /> 
                 <TextPlaceHolder 
-                    text={this.props.route.params.dataKey.data.material} 
+                    text={this.props.route.params.dataKey.material} 
                 />
                 <TextPlaceHolder 
-                    text={this.props.route.params.dataKey.data.origin}  
+                    text={this.props.route.params.dataKey.origin}  
                 />
                 <TextPlaceHolder 
-                    text={this.props.route.params.dataKey.data.destiny} 
+                    text={this.props.route.params.dataKey.destiny} 
                 />
                 <TextPlaceHolder 
-                    text={this.props.route.params.dataKey.data.car}  
+                    text={this.props.route.params.dataKey.car}  
                 />
                 <View style={styles.buttonContainer}>
                     {this.props.route.params.dataKey.validate != true ?

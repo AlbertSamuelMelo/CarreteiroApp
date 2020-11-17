@@ -63,23 +63,22 @@ export default class ValidateScreen extends Component {
     
     printRegister = (data) => {
         var qrCapsule = {
-          key: data.key, 
-          obra: data.obra,
+          id: data.id, 
+          obra_name: data.obra_name,
           validate: this.state.confirmChild,
-            data:{
-              material: data.material,
-              origin: data.origin,
-              destiny: data.destiny,
-              car: data.car,
-            }
+          material: data.material,
+          origin: data.origin,
+          destiny: data.destiny,
+          car: data.car,
+          data: data.created_date
         }
-        let strigToPrint = "Registro: " + data.key +
-          "<br><br>Obra: " + data.obra +
+        let strigToPrint = "Registro: " + data.id +
+          "<br><br>Obra: " + data.obra_name +
           "<br><br>Material:" + data.material + 
           "<br>Origem: " + data.origin + 
           "<br>Destino: " + data.destiny + 
           "<br><br>Carro: " + data.car + 
-          "<br><br>Data: " + data.date + "<br><br>"
+          "<br><br>Data: " + data.created_date + "<br><br>"
         
         if(this.state.confirmChild){
         strigToPrint = strigToPrint + "Registro Validado<br><br>"

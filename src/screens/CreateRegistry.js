@@ -64,22 +64,21 @@ export default class CreateRegistry extends Component {
 
   printRegister = (data) => {
     var qrCapsule = {
-      key: data.key, 
-      obra: data.obra,
-        data:{
-          material: data.material,
-          origin: data.origin,
-          destiny: data.destiny,
-          car: data.car
-        }
+      id: data.id, 
+      obra_name: data.obra_name,
+      material: data.material,
+      origin: data.origin,
+      destiny: data.destiny,
+      car: data.car,
+      data: data.created_date
     }
-    let strigToPrint = "Registro: " + data.key +
-      "<br><br>Obra: " + data.obra +
+    let strigToPrint = "Registro: " + data.id +
+      "<br><br>Obra: " + data.obra_name +
       "<br><br>Material:" + data.material + 
       "<br>Origem: " + data.origin + 
       "<br>Destino: " + data.destiny + 
       "<br><br>Carro: " + data.car + 
-      "<br><br>Data: " + data.date + "<br><br>" 
+      "<br><br>Data: " + data.created_date + "<br><br>" 
 
     this.setState({
       qrCode: JSON.stringify(qrCapsule)
@@ -143,8 +142,8 @@ export default class CreateRegistry extends Component {
       return
     } else {
       var packageToSave = {
-        key: "", 
-        obra: "",
+        id: "", 
+        obra_name: "",
         material: "",
         origin: "",
         destiny: "",
@@ -153,10 +152,10 @@ export default class CreateRegistry extends Component {
         validate: "",
         pictureUri: "",
         validateUri: "",
-        date: thisDate.getHours() + ":" + thisDate.getMinutes() + " - " + thisDate.getDate() + "/" + thisDate.getMonth() + "/" + thisDate.getFullYear()
+        created_date: thisDate.getHours() + ":" + thisDate.getMinutes() + " - " + thisDate.getDate() + "/" + thisDate.getMonth() + "/" + thisDate.getFullYear()
       }
-      packageToSave.key = this.generateKey("CC")
-      packageToSave.obra = this.state.obra
+      packageToSave.id = this.generateKey("CC")
+      packageToSave.obra_name = this.state.obra
       packageToSave.material = this.state.material
       packageToSave.origin = this.state.origin
       packageToSave.destiny = this.state.destiny

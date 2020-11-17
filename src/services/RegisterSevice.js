@@ -61,8 +61,8 @@ class RegisterService {
                     values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
                     
                     [
-                        data.key,
-                        obra,
+                        data.id,
+                        data.obra_name,
                         data.material,
                         data.origin,
                         data.destiny,
@@ -74,7 +74,7 @@ class RegisterService {
                         data.validate,
                         data.validateUri,
 
-                        data.date
+                        data.created_date
                     ], (_, {}) =>
                     resolve(200)
                 );
@@ -93,6 +93,22 @@ class RegisterService {
             tx => {         
                 tx.executeSql(
                     `select * from ${obra}_Registers;`, [], (_, { rows }) =>
+                    resolve(rows)
+                );
+            }, (error) => {
+                console.log("error call back : " + JSON.stringify(error));
+                console.log(error);
+            }, () => {
+                console.log("getRegisters transaction complete call back ");
+            }
+        )) 
+    }
+
+    getRegisterById(obra, id){
+        return new Promise((resolve, reject) => db.transaction(
+            tx => {         
+                tx.executeSql(
+                    `select * from ${obra}_Registers WHERE id = ?;`, [id], (_, { rows }) =>
                     resolve(rows)
                 );
             }, (error) => {

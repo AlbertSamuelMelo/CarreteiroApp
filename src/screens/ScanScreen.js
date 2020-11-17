@@ -29,7 +29,7 @@ export default class ScanQR extends Component {
     this.props.navigation.push("Validar QrCode", {
         dataKey: JSON.parse(data)
       })
-  }
+    }
 
   render(){
     const { hasPermission, scanned } = this.state;
