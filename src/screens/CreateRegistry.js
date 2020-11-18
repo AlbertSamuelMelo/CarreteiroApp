@@ -7,6 +7,7 @@ import TextPlaceHolder from '../components/TextPlaceHolder';
 import Config from "../components/ConfigPlaceHolder"
 import Database from "../database/DatabaseInit"
 import RegisterSevice from "../services/RegisterSevice"
+import ObraSevice from "../services/ObrasService"
 
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
@@ -70,7 +71,7 @@ export default class CreateRegistry extends Component {
       origin: data.origin,
       destiny: data.destiny,
       car: data.car,
-      data: data.created_date
+      created_date: data.created_date
     }
     let strigToPrint = "Registro: " + data.id +
       "<br><br>Obra: " + data.obra_name +
@@ -91,9 +92,9 @@ export default class CreateRegistry extends Component {
     return `${ pre }_${ new Date().getTime() }`;
   }
   _storeData = (data) => {
-
+    ObraSevice.createTable(this.state.obra)
     RegisterSevice.createTable(this.state.obra)
-    RegisterSevice.addRegister(this.state.obra, data)
+    RegisterSevice.addRegister(data)
       .then((response) => {
         console.log(response)
         this.cameraComponent.current.clearComponent()
@@ -148,8 +149,6 @@ export default class CreateRegistry extends Component {
         origin: "",
         destiny: "",
         car: "",
-        picture: "",
-        validate: "",
         pictureUri: "",
         validateUri: "",
         created_date: thisDate.getHours() + ":" + thisDate.getMinutes() + " - " + thisDate.getDate() + "/" + thisDate.getMonth() + "/" + thisDate.getFullYear()
@@ -160,7 +159,6 @@ export default class CreateRegistry extends Component {
       packageToSave.origin = this.state.origin
       packageToSave.destiny = this.state.destiny
       packageToSave.car = this.state.car
-      packageToSave.picture = this.state.dataFromChild.base64
       packageToSave.pictureUri = this.state.dataFromChild.uri
       this._storeData(packageToSave);
     }

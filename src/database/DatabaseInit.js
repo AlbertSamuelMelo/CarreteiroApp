@@ -21,7 +21,7 @@ export default class DatabaseInit {
                 PRIMARY KEY (id)
                 );`,
 
-            // `INSERT INTO obra (id, obra_name) VALUES (1, 'Teste');`,
+            `INSERT INTO obra (id, obra_name) VALUES (1, 'Teste');`,
             `SELECT * FROM obra`
         ];
         db.transaction(

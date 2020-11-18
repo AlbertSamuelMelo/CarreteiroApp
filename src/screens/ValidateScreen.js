@@ -28,11 +28,13 @@ export default class ValidateScreen extends Component {
     prepareToPrint(){
         this.props.navigation.setOptions({
             headerRight: () => (
-              <Button onPress={() => 
+              <TouchableOpacity onPress={() => 
                 {
                   this.printRegister(this.props.route.params.dataKey)
                 }
-              } title="Imprimir" />
+              }>
+                <Text style={{marginRight: 15, color: "#147efb"}}>Imprimir</Text>
+              </TouchableOpacity>
             ),
           });
     }
@@ -59,6 +61,7 @@ export default class ValidateScreen extends Component {
         }else{
           Print.printAsync({uri: filePath.uri})
         }
+        this.props.navigation.goBack()
     }
     
     printRegister = (data) => {
@@ -70,7 +73,7 @@ export default class ValidateScreen extends Component {
           origin: data.origin,
           destiny: data.destiny,
           car: data.car,
-          data: data.created_date
+          created_date: data.created_date
         }
         let strigToPrint = "Registro: " + data.id +
           "<br><br>Obra: " + data.obra_name +
@@ -86,9 +89,7 @@ export default class ValidateScreen extends Component {
 
         this.setState({
           qrCode: JSON.stringify(qrCapsule)
-        })
-    
-        this.getDataURL(strigToPrint)
+        }, () => this.getDataURL(strigToPrint))
     }
 
     photoTaked = (confirmFromChild) => {
@@ -102,14 +103,12 @@ export default class ValidateScreen extends Component {
             return
         }
         var dataToUpdate = this.props.route.params.dataKey
-        dataToUpdate.validate = this.state.confirmFromChild.base64
         dataToUpdate.validate_uri = this.state.confirmFromChild.uri
         RegisterSevice.updateRegister(dataToUpdate)
           .then((response) => {
             console.log(response)
             alert(" Registro Atualizado ")
             this.printRegister(dataToUpdate)
-            this.props.navigation.goBack()
       })
     }
     

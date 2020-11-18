@@ -17,10 +17,8 @@ class RegisterService {
                         destiny text,
                         car text,
 
-                        picture text,
                         picture_uri text,
 
-                        validate text,
                         validate_uri text,
 
                         created_date text,
@@ -36,14 +34,14 @@ class RegisterService {
         );
     }
     // Create
-    addRegister(obra, data){
+    addRegister(data){
         if(data == {} || data == null){
             return
         }
 
         return new Promise((resolve, reject) => db.transaction(
             tx => {
-                tx.executeSql(`insert into ${obra}_Registers 
+                tx.executeSql(`insert into ${data.obra_name}_Registers 
                     (id,
                     obra_name, 
                     material, 
@@ -51,14 +49,12 @@ class RegisterService {
                     destiny,
                     car,
                     
-                    picture,
                     picture_uri,
 
-                    validate,
                     validate_uri,
 
                     created_date) 
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
                     
                     [
                         data.id,
@@ -68,10 +64,8 @@ class RegisterService {
                         data.destiny,
                         data.car,
 
-                        data.picture,
                         data.pictureUri,
     
-                        data.validate,
                         data.validateUri,
 
                         data.created_date
@@ -126,19 +120,15 @@ class RegisterService {
             tx => {
                 tx.executeSql(`update ${data.obra_name}_Registers 
                     SET 
-                    picture = ?,
                     picture_uri = ?,
 
-                    validate = ?,
                     validate_uri = ?
                     
                     WHERE id = ?`, 
                     
                     [
-                        data.picture,
                         data.picture_uri,
     
-                        data.validate,
                         data.validate_uri,
                         data.id,
                     ], (_, {}) => 

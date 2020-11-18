@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import RegisterSevice from "../services/RegisterSevice"
+import ObraS from '../services/ObrasService';
 
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
@@ -48,6 +49,7 @@ export default class ValidateScan extends Component {
         }else{
           Print.printAsync({uri: filePath.uri})
         }
+        this.props.navigation.goBack()
     }
     
     printRegister = (data) => {
@@ -59,7 +61,7 @@ export default class ValidateScan extends Component {
             origin: data.origin,
             destiny: data.destiny,
             car: data.car,
-            data: data.created_date
+            created_date: data.created_date
         }
         let strigToPrint = "Registro: " + data.id +
           "<br><br>Obra: " + data.obra_name +
@@ -75,8 +77,7 @@ export default class ValidateScan extends Component {
 
         this.setState({
           qrCode: JSON.stringify(qrCapsule)
-        })
-        this.getDataURL(strigToPrint)
+        }, () => this.getDataURL(strigToPrint))
     }
   
     photoTaked = (confirmFromChild) => {
@@ -89,25 +90,31 @@ export default class ValidateScan extends Component {
             alert("Tire a foto de confirmação")
             return
         }
+        RegisterSevice.createTable(this.props.route.params.dataKey.obra_name)
         RegisterSevice.getRegisterById(this.props.route.params.dataKey.obra_name, this.props.route.params.dataKey.id)
         .then((response) => {
-            if (response != null ){
+            if (response._array[0] != undefined ){
                 var dataToUpdate = response._array[0]
-                dataToUpdate.validate = this.state.confirmFromChild.base64
                 dataToUpdate.validate_uri = this.state.confirmFromChild.uri
+                RegisterSevice.updateRegister(dataToUpdate)
+                .then((response) => {
+                    alert(" Registro Atualizado ")
+                    this.printRegister(dataToUpdate)
+                    })
             } else {
                 var dataToUpdate = this.props.route.params.dataKey
-                dataToUpdate.validate = this.state.confirmFromChild.base64
-                dataToUpdate.validate_uri = this.state.confirmFromChild.uri
-            }
-            RegisterSevice.updateRegister(dataToUpdate)
-            .then((response) => {
-                console.log(response)
-                alert(" Registro Atualizado ")
-                this.printRegister(dataToUpdate)
-                this.props.navigation.goBack()
+                dataToUpdate.validateUri = this.state.confirmFromChild.uri
+                RegisterSevice.addRegister(dataToUpdate)
+                .then((response) => {
+                    alert(" Registro Validado ")
+                    this.printRegister(dataToUpdate)
                 })
-            })
+            }
+        })
+    }
+    
+    componentDidMount(){
+        console.log("data que veio: ", this.props.route.params.dataKey)
     }
       
     render(){
