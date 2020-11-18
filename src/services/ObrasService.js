@@ -19,7 +19,7 @@ class ObraService {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("Created Obra ", obra);
+                // console.log("Created Obra ", obra);
             }
         );
     }
@@ -35,13 +35,13 @@ class ObraService {
 
                 tx.executeSql(
                     `select * from obra;`, [], (_, { rows }) =>
-                    console.log(JSON.stringify(rows))
+                    // console.log(JSON.stringify(rows))
                 );
             }, (error) => {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("addObra transaction complete call back ");
+                // console.log("addObra transaction complete call back ");
             }
         );
     }
@@ -58,7 +58,7 @@ class ObraService {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("getObras transaction complete call back ");
+                // console.log("getObras transaction complete call back ");
             }
         )) 
     }

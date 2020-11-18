@@ -96,7 +96,6 @@ export default class CreateRegistry extends Component {
     RegisterSevice.createTable(this.state.obra)
     RegisterSevice.addRegister(data)
       .then((response) => {
-        console.log(response)
         this.cameraComponent.current.clearComponent()
         this.materialComponent.current.clearComponent()
         this.originComponent.current.clearComponent()

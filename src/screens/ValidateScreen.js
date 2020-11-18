@@ -106,7 +106,6 @@ export default class ValidateScreen extends Component {
         dataToUpdate.validate_uri = this.state.confirmFromChild.uri
         RegisterSevice.updateRegister(dataToUpdate)
           .then((response) => {
-            console.log(response)
             alert(" Registro Atualizado ")
             this.printRegister(dataToUpdate)
       })

@@ -29,7 +29,7 @@ class RegisterService {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("Created Table ", obra + "_Registers");
+                // console.log("Created Table ", obra + "_Registers");
             }
         );
     }
@@ -76,7 +76,7 @@ class RegisterService {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("addRegister transaction complete call back ");
+                // console.log("addRegister transaction complete call back ");
             }
         ))
     }
@@ -93,7 +93,7 @@ class RegisterService {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("getRegisters transaction complete call back ");
+                // console.log("getRegisters transaction complete call back ");
             }
         )) 
     }
@@ -109,7 +109,7 @@ class RegisterService {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("getRegisters transaction complete call back ");
+                // console.log("getRegisters transaction complete call back ");
             }
         )) 
     }
@@ -138,7 +138,7 @@ class RegisterService {
                 console.log("error call back : " + JSON.stringify(error));
                 console.log(error);
             }, () => {
-                console.log("updateRegister transaction complete call back ");
+                // console.log("updateRegister transaction complete call back ");
             }
         ))
     }
