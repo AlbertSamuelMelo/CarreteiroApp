@@ -6,29 +6,24 @@ import TextPlaceHolder from '../components/TextPlaceHolder';
 import Configure from "../components/ConfigPlaceHolder"
 import api from "./../services/Api"
 
+import RegisterSevice from "../services/RegisterSevice"
+import ObraSevice from "../services/ObrasService"
+
 export default class Profile extends Component {
   constructor() {
     super();
     this.state = {
+      dataToSend: {},
+      obras: []
     };
   }
 
   exportData = async () => {
-    console.log("Export Data")
     try {
       const response = await api.post('saveCreatedRegisters', {
-        dataToSave: [{
-          id: "CC_23156895136", 
-          obra_name: "Teste",
-          material: "Brita 0",
-          origin: "BR - 319",
-          destiny: "Base",
-          car: "LLE - 2229",
-          pictureUri: "",
-          validateUri: "",
-          created_date: "14/10/1995"
-        }]
+        dataToSave: this.state.dataToSend
       });
+      alert("Dados enviados pro servidor")
     } catch (err){
       console.log("Erro:", err)
     }
@@ -36,6 +31,35 @@ export default class Profile extends Component {
 
   resetPassword(){
     console.log("Reset Password")
+  }
+
+  prepareExportRegisters = async () =>{
+    var dataToSend = this.state.dataToSend
+    for(var j = 0; j<this.state.obras.length; j++){
+      await RegisterSevice.getRegisters(this.state.obras[j].obra_name)
+      .then((response) => {
+        dataToSend[this.state.obras[j].obra_name] = response._array
+      })
+    }
+    this.setState({dataToSend: dataToSend})
+  }
+
+  prepareToExport(){
+    ObraSevice.getObras()
+    .then((response) => {
+      var dataToSend = {}
+      for(var i = 0; i<response._array.length; i++){
+        var obraAtual = response._array[i].obra_name
+        dataToSend[obraAtual] = []
+      }
+      this.setState({
+        obras: response._array, 
+        dataToSend: dataToSend
+      }, () => this.prepareExportRegisters())
+    })
+  }
+  componentDidMount(){
+    this.prepareToExport()
   }
 
   render(){
