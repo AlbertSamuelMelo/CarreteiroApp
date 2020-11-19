@@ -8,6 +8,7 @@ export default class TextPlaceHolder extends Component {
         super();
         this.state = {
           category:"",
+          obras: [{"label": "Teste", "value": "Teste"}]
         };
       }
       
@@ -24,6 +25,12 @@ export default class TextPlaceHolder extends Component {
       this.setState({category:""})
     }
 
+    componentDidMount(){
+      if(this.props.obras){
+        this.setState({obras: this.props.obras})
+      }
+    }
+
     render(){
         return (
             <View style={this.props.input ? styles.containerIntupt : styles.container}>
@@ -34,7 +41,7 @@ export default class TextPlaceHolder extends Component {
                             (value) => this.changePicker(value)
                         }
                         value={this.state.category}
-                        items={Database[this.props.input]}
+                        items={this.props.obras ? this.state.obras : Database[this.props.input]}
                         placeholder={{
                             label: 'Selecione o ' + this.props.input,
                             value: null,

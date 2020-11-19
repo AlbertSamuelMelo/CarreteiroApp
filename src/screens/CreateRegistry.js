@@ -23,7 +23,7 @@ export default class CreateRegistry extends Component {
       isModalVisible: false,
       dataFromChild: {},
       dataChild: false,
-      obra: "Teste",
+      obra: "",
       material: "",
       origin: "",
       destiny: "",
@@ -105,7 +105,11 @@ export default class CreateRegistry extends Component {
         this.printRegister(data)
     })
   };
-  
+
+  obraTaked = (obra) => {
+    this.setState({obra: obra})
+  }
+
   photoTaked = (dataFromChild) => {
     this.setState({ dataFromChild: dataFromChild })
     this.setState({ dataChild: true })
@@ -129,10 +133,12 @@ export default class CreateRegistry extends Component {
 
   createRegistry(){
     var thisDate = new Date()
-    if (this.state.material == "" || 
+    if (this.state.obra == "" ||
+        this.state.material == "" || 
         this.state.origin == "" || 
         this.state.destiny == "" || 
         this.state.car == "" ||
+        this.state.obra == null ||
         this.state.material == null || 
         this.state.origin == null || 
         this.state.destiny == null || 
@@ -179,7 +185,9 @@ export default class CreateRegistry extends Component {
         </View>
         <Config 
           screen="Create"
-          navigation={this.props.navigation}/>
+          navigation={this.props.navigation}
+          callbackFromParent={(value) => this.obraTaked(value)}
+        />
         <CameraPlaceHolder             
           ref={this.cameraComponent}
           callbackFromParent={(value) => this.photoTaked(value)}/>

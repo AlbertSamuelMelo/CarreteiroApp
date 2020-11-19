@@ -114,7 +114,6 @@ export default class ValidateScan extends Component {
     }
     
     componentDidMount(){
-        console.log("data que veio: ", this.props.route.params.dataKey)
     }
       
     render(){

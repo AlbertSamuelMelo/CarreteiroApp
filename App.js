@@ -10,6 +10,8 @@ import List from "./src/screens/List"
 import Validate from "./src/screens/ValidateScreen"
 import ScanQR from "./src/screens/ScanScreen"
 import ValidateQR from "./src/screens/ValidateScan"
+import RegisterConfiguration from "./src/screens/RegisterConfiguration"
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import * as Network from 'expo-network';
@@ -28,7 +30,7 @@ function CreateScreen({ navigation, route }) {
 function ConfigureCreateRegistry({ navigation, route }){
   return(
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    <Profile navigation={navigation} route={route}/>
+    <RegisterConfiguration navigation={navigation} route={route}/>
   </View>
   )
 }
