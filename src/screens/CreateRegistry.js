@@ -170,14 +170,16 @@ export default class CreateRegistry extends Component {
   render(){
     return (
       <View style={styles.container}>
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
         <View style={{opacity:0}}>
           {this.state.qrCode ? <QRCode
             value={this.state.qrCode}
             getRef={(qrValue) => this.qrCodeComponent = qrValue}
           /> : <Text></Text>}
         </View>
-        <Config/>
+        <Config 
+          screen="Create"
+          navigation={this.props.navigation}/>
         <CameraPlaceHolder             
           ref={this.cameraComponent}
           callbackFromParent={(value) => this.photoTaked(value)}/>

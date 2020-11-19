@@ -9,10 +9,22 @@ export default class ConfigurePlaceHolder extends Component {
         };
       }
 
+    callConfigScreen(){
+      if(this.props.screen == "Create") {
+        this.props.navigation.push("Configurar Registro", {
+          
+        })
+      } else {
+        this.props.navigation.push("Configurar Usuarios", {
+          
+        })
+      }
+    }
+
     render(){
         return (
             <View style={styles.container}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => this.callConfigScreen()}>
                     <Image style={styles.imageIcon} source={engine}/>
                 </TouchableOpacity>
             </View>

@@ -41,8 +41,11 @@ export default class Profile extends Component {
   render(){
     return (
       <View style={styles.container}>
-        <StatusBar style="light" />
-        <Configure/>
+        <StatusBar style="dark" />
+        <Configure 
+          srceen="Usuarios"
+          navigation={this.props.navigation}
+        />
         <CameraPlaceHolder/>
         <TextPlaceHolder text="Albert"/>
         <TextPlaceHolder text="Adiministrador"/>

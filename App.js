@@ -17,12 +17,31 @@ import * as Network from 'expo-network';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function CreateScreen() {
+function CreateScreen({ navigation, route }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <CreateRegistry/>
+      <CreateRegistry navigation={navigation} route={route}/>
     </View>
   );
+}
+
+function ConfigureCreateRegistry({ navigation, route }){
+  return(
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <Profile navigation={navigation} route={route}/>
+  </View>
+  )
+}
+
+function CreateNavigator(){
+  return(
+    <NavigationContainer independent={true}>
+    <Stack.Navigator initialRouteName="Criar Registro">
+      <Stack.Screen name="Criar Registro" component={CreateScreen} />
+      <Stack.Screen name="Configurar Registro" component={ConfigureCreateRegistry} />
+    </Stack.Navigator>
+  </NavigationContainer>
+  )
 }
 
 function ListScreen({ navigation, route }) {
@@ -81,11 +100,30 @@ function ScanNavigator() {
   )
 }
 
-function ProfileScreen(){
+function ProfileScreen({ navigation, route }){
   return (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    <Profile/>
+    <Profile navigation={navigation} route={route}/>
   </View>
+  )
+}
+
+function ConfigureProfile({ navigation, route }){
+  return(
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <Profile navigation={navigation} route={route}/>
+  </View>
+  )
+}
+
+function ProfileNavigator(){
+  return(
+    <NavigationContainer independent={true}>
+      <Stack.Navigator initialRouteName="Perfil">
+        <Stack.Screen name="Perfil" component={ProfileScreen} />
+        <Stack.Screen name="Configurar Usuarios" component={ConfigureProfile} />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 
@@ -119,10 +157,10 @@ export default function App() {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Criar" component={CreateScreen} />
+        <Tab.Screen name="Criar" component={CreateNavigator} />
         <Tab.Screen name="ScanQR" component={ScanNavigator} />
         <Tab.Screen name="Lista" component={ListNavigator} />
-        <Tab.Screen name="Perfil" component={ProfileScreen} />
+        <Tab.Screen name="Perfil" component={ProfileNavigator} />
       </Tab.Navigator>
     </NavigationContainer>
   );
