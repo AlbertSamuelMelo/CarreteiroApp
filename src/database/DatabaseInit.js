@@ -6,6 +6,9 @@ export default class DatabaseInit {
     constructor() {
         db = DatabaseConnection.getConnection()
         db.exec([{ sql: 'PRAGMA foreign_keys = ON;', args: [] }], false, () =>
+        {
+
+        }
     );
         this.InitDb()
     }
@@ -20,13 +23,16 @@ export default class DatabaseInit {
                 PRIMARY KEY (id)
                 );`,
 
-            `INSERT INTO obra (id, obra_name) VALUES (1, 'Teste');`,
+            //`INSERT INTO obra (obra_name) VALUES ('Teste');`,
             `SELECT * FROM obra`
         ];
         db.transaction(
             tx => {
                 for (var i = 0; i < sql.length; i++) {
                     tx.executeSql(sql[i], [], (_, { rows }) =>
+                    {
+
+                    })
                 }
             }, (error) => {
                 console.log("error call back : " + JSON.stringify(error));

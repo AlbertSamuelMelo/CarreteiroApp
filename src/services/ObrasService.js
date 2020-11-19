@@ -31,11 +31,12 @@ class ObraService {
 
         db.transaction(
             tx => {
-                tx.executeSql(`INSERT INTO obra (id, obra_name) VALUES (1, ?);`, [obra]);
+                tx.executeSql(`INSERT INTO obra (obra_name) VALUES (?);`, [obra]);
 
                 tx.executeSql(
-                    `select * from obra;`, [], (_, { rows }) =>
-                    // console.log(JSON.stringify(rows))
+                    `select * from obra;`, [], (_, { rows }) => {
+                        // console.log(JSON.stringify(rows))
+                    }
                 );
             }, (error) => {
                 console.log("error call back : " + JSON.stringify(error));

@@ -12,6 +12,8 @@ import ScanQR from "./src/screens/ScanScreen"
 import ValidateQR from "./src/screens/ValidateScan"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import * as Network from 'expo-network';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 

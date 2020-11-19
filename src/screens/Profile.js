@@ -4,6 +4,8 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Configure from "../components/ConfigPlaceHolder"
+import api from "./../services/Api"
+
 export default class Profile extends Component {
   constructor() {
     super();
@@ -11,12 +13,31 @@ export default class Profile extends Component {
     };
   }
 
-  exportData(){
+  exportData = async () => {
     console.log("Export Data")
+    try {
+      const response = await api.post('saveCreatedRegisters', {
+        dataToSave: [{
+          id: "CC_23156895136", 
+          obra_name: "Teste",
+          material: "Brita 0",
+          origin: "BR - 319",
+          destiny: "Base",
+          car: "LLE - 2229",
+          pictureUri: "",
+          validateUri: "",
+          created_date: "14/10/1995"
+        }]
+      });
+    } catch (err){
+      console.log("Erro:", err)
+    }
   }
+
   resetPassword(){
     console.log("Reset Password")
   }
+
   render(){
     return (
       <View style={styles.container}>
