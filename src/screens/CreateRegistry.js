@@ -93,6 +93,8 @@ export default class CreateRegistry extends Component {
   }
   _storeData = (data) => {
     ObraSevice.createTable(this.state.obra)
+    ObraSevice.addObra(this.state.obra)
+
     RegisterSevice.createTable(this.state.obra)
     RegisterSevice.addRegister(data)
       .then((response) => {
@@ -132,6 +134,7 @@ export default class CreateRegistry extends Component {
   }
 
   createRegistry(){
+    console.log(this.state.obra)
     var thisDate = new Date()
     if (this.state.obra == "" ||
         this.state.material == "" || 

@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import TextPlaceHolder from '../components/TextPlaceHolder';
-import api from "./../services/Api"
 
 export default class RegisterConfiguration extends Component {
   constructor() {
@@ -10,11 +9,13 @@ export default class RegisterConfiguration extends Component {
     this.state = {
         obra: ""
     };
-
-    this.selectObraComponent = React.createRef();
   }
 
   ObraTaked(obra){
+    this.setState({ obra: obra })
+  }
+
+  criarObra(){
     this.setState({ obra: obra })
   }
 
@@ -28,19 +29,18 @@ export default class RegisterConfiguration extends Component {
     return (
       <View style={styles.container}>
         <StatusBar style="dark" />
-        {/* <TextPlaceHolder 
-            input="Obras"
-            database={this.props.route.params.database}
+        <TextPlaceHolder 
+            input="Criar"
+            callbackFromParent={(value) => this.ObraTaked(value)}
         />
         <View style={styles.exportContainer}>
-          <TouchableOpacity onPress={() => this.exportData()}>
+          <TouchableOpacity onPress={() => this.selectObra()}>
               <Text style={styles.text}>Criar Obra</Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
         <TextPlaceHolder 
             input="Obra"
             obras={this.props.route.params.database}
-            ref={this.selectObraComponent}
             callbackFromParent={(value) => this.ObraTaked(value)}
         />
         <View style={styles.exportContainer}>

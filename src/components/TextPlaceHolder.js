@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text, TextInput} from 'react-native';
 import Picker from 'react-native-picker-select';
 import Database from "../Database.json"
 
@@ -25,6 +25,11 @@ export default class TextPlaceHolder extends Component {
       this.setState({category:""})
     }
 
+    changeCreateObraText(textToCreate){
+      this.setState({category: textToCreate}, 
+        () => this.sendAfterUpdate())
+    }
+
     componentDidMount(){
       if(this.props.obras){
         this.setState({obras: this.props.obras})
@@ -34,7 +39,13 @@ export default class TextPlaceHolder extends Component {
     render(){
         return (
             <View style={this.props.input ? styles.containerIntupt : styles.container}>
-                {this.props.input ? 
+                {this.props.input == "Criar" ? 
+                  <TextInput
+                    style={styles.textInput}
+                    value={this.state.category}
+                    onChangeText={text => this.changeCreateObraText(text)}
+                  />
+                : this.props.input ? 
                     <Picker 
                         style={styles} 
                         onValueChange={
@@ -92,6 +103,16 @@ const styles = StyleSheet.create({
     height: "100%",
     textAlign: "left",
     color: "white",
+    padding: "2.5%",
+    marginLeft: "4%",
+    fontSize: 23
+  },
+  textInput: {
+    width: "100%",
+    height: "100%",
+    textAlign: "left",
+    color: "#4099B8",
+    fontWeight: "bold",
     padding: "2.5%",
     marginLeft: "4%",
     fontSize: 23

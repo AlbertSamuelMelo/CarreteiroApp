@@ -29,7 +29,6 @@ export default class ConfigurePlaceHolder extends Component {
 
     callConfigScreen(){
       if(this.props.screen == "Create") {
-        console.log("Passing: ", this.state.obras)
         this.props.navigation.push("Configurar Registro", {
           database: this.state.obras,
           onGoBack: (value) => this.onGoBack(value),
