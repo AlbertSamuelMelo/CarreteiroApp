@@ -31,7 +31,9 @@ class ObraService {
 
         db.transaction(
             tx => {
-                tx.executeSql(`INSERT INTO obra (obra_name) VALUES (?);`, [obra]);
+                tx.executeSql(
+                "INSERT INTO obra (obra_name)" +
+                "Select '" + obra + "' Where not exists(select * from obra where obra_name = '" + obra + "');");
 
                 tx.executeSql(
                     `select * from obra;`, [], (_, { rows }) => {

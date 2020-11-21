@@ -25,10 +25,12 @@ export default class ConfigurePlaceHolder extends Component {
 
     onGoBack(obra){
       this.props.callbackFromParent(obra)
+      ObraSevice.addObra(obra)
     }
 
     callConfigScreen(){
       if(this.props.screen == "Create") {
+        this.getAllObras()
         this.props.navigation.push("Configurar Registro", {
           database: this.state.obras,
           onGoBack: (value) => this.onGoBack(value),
