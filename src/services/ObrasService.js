@@ -28,7 +28,9 @@ class ObraService {
         if(obra == {} || obra == null){
             return
         }
-
+        if(obra.includes(" ")){
+            obra = obra.replaceAll(" ", "_")
+        }
         db.transaction(
             tx => {
                 tx.executeSql(

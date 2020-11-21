@@ -6,6 +6,9 @@ class RegisterService {
 
     // C R U D
     createTable(obra){
+        if(obra.includes(" ")){
+            obra = obra.replaceAll(" ", "_")
+        }
         db.transaction(
             tx => {
                 tx.executeSql(
@@ -38,7 +41,9 @@ class RegisterService {
         if(data == {} || data == null){
             return
         }
-
+        if(data.obra_name.includes(" ")){
+            data.obra_name = data.obra_name.replaceAll(" ", "_")
+        }
         return new Promise((resolve, reject) => db.transaction(
             tx => {
                 tx.executeSql(`insert into ${data.obra_name}_Registers 
@@ -83,6 +88,9 @@ class RegisterService {
 
     //Read
     getRegisters(obra){
+        if(obra.includes(" ")){
+            obra = obra.replaceAll(" ", "_")
+        }
         return new Promise((resolve, reject) => db.transaction(
             tx => {         
                 tx.executeSql(
@@ -99,6 +107,9 @@ class RegisterService {
     }
 
     getRegisterById(obra, id){
+        if(obra.includes(" ")){
+            obra = obra.replaceAll(" ", "_")
+        }
         return new Promise((resolve, reject) => db.transaction(
             tx => {         
                 tx.executeSql(
@@ -116,6 +127,10 @@ class RegisterService {
 
     //Update
     updateRegister(data){
+        if(data.obra_name.includes(" ")){
+            console.log("Includes")
+            data.obra_name = data.obra_name.replaceAll(" ", "_")
+        }
         return new Promise((resolve, reject) => db.transaction(
             tx => {
                 tx.executeSql(`update ${data.obra_name}_Registers 
