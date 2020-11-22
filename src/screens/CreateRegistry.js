@@ -12,6 +12,7 @@ import ObraSevice from "../services/ObrasService"
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
 import * as Sharing from 'expo-sharing';
+import * as Location from 'expo-location';
 
 import QRCode from 'react-native-qrcode-svg';
 
@@ -30,7 +31,9 @@ export default class CreateRegistry extends Component {
       car: "",
       dataFromStore: [],
       qrCode: "",
-      dataQr: ""
+      dataQr: "",
+      location: {}
+
     };
     this.qrCodeComponent = React.createRef();
     this.cameraComponent = React.createRef();
@@ -159,6 +162,8 @@ export default class CreateRegistry extends Component {
         car: "",
         pictureUri: "",
         validateUri: "",
+        latitude: "",
+        longitude: "",
         created_date: thisDate.getHours() + ":" + thisDate.getMinutes() + " - " + thisDate.getDate() + "/" + thisDate.getMonth() + "/" + thisDate.getFullYear()
       }
       packageToSave.id = this.generateKey("CC")
@@ -167,13 +172,25 @@ export default class CreateRegistry extends Component {
       packageToSave.origin = this.state.origin
       packageToSave.destiny = this.state.destiny
       packageToSave.car = this.state.car
+      packageToSave.latitude = this.state.location.coords.latitude
+      packageToSave.longitude = this.state.location.coords.longitude
       packageToSave.pictureUri = this.state.dataFromChild.uri
       this._storeData(packageToSave);
     }
   }
 
-  componentDidMount(){
+  getLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+    }
 
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({location: location});
+  }
+
+  componentDidMount(){
+    this.getLocation()
   }
 
   render(){

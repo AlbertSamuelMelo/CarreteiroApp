@@ -24,6 +24,10 @@ class RegisterService {
 
                         validate_uri text,
 
+                        latitude text,
+                        longitude text,
+
+
                         created_date text,
                         PRIMARY KEY (id)
                     );`
@@ -58,8 +62,11 @@ class RegisterService {
 
                     validate_uri,
 
+                    latitude,
+                    longitude,
+
                     created_date) 
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
                     
                     [
                         data.id,
@@ -72,6 +79,9 @@ class RegisterService {
                         data.pictureUri,
     
                         data.validateUri,
+
+                        data.latitude,
+                        data.longitude,
 
                         data.created_date
                     ], (_, {}) =>
