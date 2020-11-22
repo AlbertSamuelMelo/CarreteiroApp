@@ -164,7 +164,7 @@ export default class CreateRegistry extends Component {
         validateUri: "",
         latitude: "",
         longitude: "",
-        created_date: thisDate.getDate() + "-" + thisDate.getMonth() + "-" + thisDate.getFullYear() + " " +  thisDate.getHours() + ":" + thisDate.getMinutes()
+        created_date: thisDate.getDate() + "-" + (thisDate.getMonth() + 1) + "-" + thisDate.getFullYear()
       }
       packageToSave.id = this.generateKey("CC")
       packageToSave.obra_name = this.state.obra
