@@ -2,12 +2,26 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import engine from "../../assets/config.png";
 import ObraSevice from "../services/ObrasService"
+import UserSevice from "../services/UsersService"
 
 export default class ConfigurePlaceHolder extends Component {  
     constructor() {
         super();
         this.state = {
-          obras: []
+          obras: [],
+          users: [
+            {
+              label:"Adiministrador",
+              value:"Adiministrador"
+            },
+            {
+              label:"Criador",
+              value:"Criador"
+            },
+            {
+              label:"Validador",
+              value:"Validador"
+            }]
         };
       }
 
@@ -24,8 +38,13 @@ export default class ConfigurePlaceHolder extends Component {
     }
 
     onGoBack(obra){
-      this.props.callbackFromParent(obra)
-      ObraSevice.addObra(obra)
+      if(this.props.screen == "Create") {
+        this.props.callbackFromParent(obra)
+        ObraSevice.addObra(obra)
+      } else {
+        this.props.callbackFromParent(obra)
+        UserSevice.addUser(obra)
+      }
     }
 
     callConfigScreen(){
@@ -37,7 +56,8 @@ export default class ConfigurePlaceHolder extends Component {
         })
       } else {
         this.props.navigation.push("Configurar Usuarios", {
-          
+          database: this.state.users,
+          onGoBack: (value) => this.onGoBack(value),
         })
       }
     }

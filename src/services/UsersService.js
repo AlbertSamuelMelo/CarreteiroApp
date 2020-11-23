@@ -35,14 +35,9 @@ class UserService {
         }
         return new Promise((resolve, reject) => db.transaction(
             tx => {
-                tx.executeSql(`insert into user
-                    (
-                    user_name, 
-                    password, 
-                    type,
-                    ) 
-                    values (?, ?, ?)`, 
-                    
+                tx.executeSql(
+                    "INSERT INTO user (user_name, password, type)" +
+                    "Select '" + user.user_name + "', '" + user.password + "', '" + user.type + "' Where not exists(select * from user where user_name = '" + user.user_name + "');", 
                     [
                         user.user_name,
                         user.password,
@@ -60,10 +55,7 @@ class UserService {
     }
 
     //Read
-    getRegisters(user){
-        if(obra.includes(" ")){
-            obra = obra.replaceAll(" ", "_")
-        }
+    getUsers(){
         return new Promise((resolve, reject) => db.transaction(
             tx => {         
                 tx.executeSql(

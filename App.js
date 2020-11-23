@@ -11,6 +11,7 @@ import Validate from "./src/screens/ValidateScreen"
 import ScanQR from "./src/screens/ScanScreen"
 import ValidateQR from "./src/screens/ValidateScan"
 import RegisterConfiguration from "./src/screens/RegisterConfiguration"
+import UserConfiguration from "./src/screens/UsersConfiguration"
 import Login from"./src/screens/Login"
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -114,7 +115,7 @@ function ProfileScreen({ navigation, route }){
 function ConfigureProfile({ navigation, route }){
   return(
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    <Profile navigation={navigation} route={route}/>
+    <UserConfiguration navigation={navigation} route={route}/>
   </View>
   )
 }
@@ -171,7 +172,7 @@ function LoggedScreens(){
 
 export default function App() {
   return (
-    //<Login/>
-    LoggedScreens()
+    <Login/>
+    // LoggedScreens()
   );
 }

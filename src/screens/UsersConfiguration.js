@@ -3,15 +3,15 @@ import React, {Component} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import api from "./../services/Api"
-import UserService from './../services/UsersService'
+import UserService from "./../services/UsersService"
 
-export default class Login extends Component {
+export default class UsersConfiguration extends Component {
   constructor() {
     super();
     this.state = {
         user: "",
         password: "",
-        userDatabase: []
+        type: ""
     };
   }
 
@@ -23,29 +23,23 @@ export default class Login extends Component {
     this.setState({ password: password })
   }
 
-  login(){
-    for(var i = 0; i<this.state.userDatabase.length; i++){
-      if(this.state.userDatabase[i].user_name == this.state.user 
-        && this.state.userDatabase[i].password == this.state.password) {
-          alert("Login completo")
-        }
-    }
-    alert("Dados Incorretos")
+  typeTaked(type){
+    this.setState({ type: type })
+  }
+
+  createUser(){
+    UserService.addUser({
+        user_name: this.state.user,
+        password: this.state.password,
+        type: this.state.type
+    }).then((response) => {
+        console.log(response)
+        alert("Usuário Criado")
+      })
   }
 
   componentDidMount(){
     UserService.createUsers()
-    UserService.addUser({
-        user_name: "Admin",
-        password: "Admin",
-        type: this.state.type
-      }).then((response) => {
-        console.log(response)
-    })
-    UserService.getUsers()
-    .then((response) => {
-      this.setState({userDatabase : response._array})
-    })
   }
 
   render(){
@@ -60,9 +54,14 @@ export default class Login extends Component {
             input="Senha"
             callbackFromParent={(value) => this.passwordTaked(value)}
         />
+        <TextPlaceHolder 
+            input="Tipo"
+            obras={this.props.route.params.database}
+            callbackFromParent={(value) => this.typeTaked(value)}
+        />
         <View style={styles.exportContainer}>
-          <TouchableOpacity onPress={() => this.login()}>
-              <Text style={styles.text}>Login</Text>
+          <TouchableOpacity onPress={() => this.createUser()}>
+              <Text style={styles.text}>Criar Usuario</Text>
           </TouchableOpacity>
         </View>
       </View>
