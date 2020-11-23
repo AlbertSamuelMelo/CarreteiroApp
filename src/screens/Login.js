@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import api from "./../services/Api"
 import UserService from './../services/UsersService'
+import LoggedService from "./../services/LoggedService"
 
 export default class Login extends Component {
   constructor() {
@@ -28,6 +29,8 @@ export default class Login extends Component {
       if(this.state.userDatabase[i].user_name == this.state.user 
         && this.state.userDatabase[i].password == this.state.password) {
           alert("Login completo")
+          LoggedService.addUser(this.state.userDatabase[i])
+          return
         }
     }
     alert("Dados Incorretos")
@@ -38,12 +41,13 @@ export default class Login extends Component {
     UserService.addUser({
         user_name: "Admin",
         password: "Admin",
-        type: this.state.type
+        type: "Adiministrador"
       }).then((response) => {
         console.log(response)
     })
     UserService.getUsers()
     .then((response) => {
+      console.log(response)
       this.setState({userDatabase : response._array})
     })
   }

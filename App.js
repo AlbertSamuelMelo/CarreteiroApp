@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, useState } from 'react-native';
 import {  NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,6 +13,8 @@ import ValidateQR from "./src/screens/ValidateScan"
 import RegisterConfiguration from "./src/screens/RegisterConfiguration"
 import UserConfiguration from "./src/screens/UsersConfiguration"
 import Login from"./src/screens/Login"
+
+import LoggedService from "./src/services/LoggedService"
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -171,8 +173,15 @@ function LoggedScreens(){
 }
 
 export default function App() {
+  var loggedIn = []
+  LoggedService.createLogged()
+  LoggedService.getUsers()
+  .then((response) => {
+    console.log("Response from get users logged", response._array)
+    loggedIn = response._array
+  }) 
+
   return (
-    <Login/>
-    // LoggedScreens()
+    LoggedScreens()
   );
 }
