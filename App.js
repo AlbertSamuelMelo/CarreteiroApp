@@ -11,6 +11,7 @@ import Validate from "./src/screens/ValidateScreen"
 import ScanQR from "./src/screens/ScanScreen"
 import ValidateQR from "./src/screens/ValidateScan"
 import RegisterConfiguration from "./src/screens/RegisterConfiguration"
+import Login from"./src/screens/Login"
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -129,8 +130,8 @@ function ProfileNavigator(){
   )
 }
 
-export default function App() {
-  return (
+function LoggedScreens(){
+  return(
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -165,5 +166,12 @@ export default function App() {
         <Tab.Screen name="Perfil" component={ProfileNavigator} />
       </Tab.Navigator>
     </NavigationContainer>
+  )
+}
+
+export default function App() {
+  return (
+    //<Login/>
+    LoggedScreens()
   );
 }

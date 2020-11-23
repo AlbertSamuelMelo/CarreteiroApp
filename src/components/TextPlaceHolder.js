@@ -39,11 +39,27 @@ export default class TextPlaceHolder extends Component {
     render(){
         return (
             <View style={this.props.input ? styles.containerIntupt : styles.container}>
-                {this.props.input == "Criar" ? 
+                {this.props.input == "Login" ? 
+                  <TextInput
+                    style={styles.textInputLogin}
+                    value={this.state.category}
+                    onChangeText={text => this.changeCreateObraText(text)}
+                    placeholder="Usuario"
+                  />
+                : this.props.input == "Senha" ? 
+                  <TextInput
+                    style={styles.textInputLogin}
+                    value={this.state.category}
+                    onChangeText={text => this.changeCreateObraText(text)}
+                    placeholder="Senha"
+                    secureTextEntry={true}
+                  /> 
+                : this.props.input == "Criar" ? 
                   <TextInput
                     style={styles.textInput}
                     value={this.state.category}
                     onChangeText={text => this.changeCreateObraText(text)}
+                    placeholder="Insira o nome da obra"
                   />
                 : this.props.input ? 
                     <Picker 
@@ -115,6 +131,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: "2.5%",
     marginLeft: "4%",
+    fontSize: 23
+  },
+  textInputLogin: {
+    width: "100%",
+    height: "100%",
+    textAlign: "center",
+    color: "#4099B8",
+    fontWeight: "bold",
+    padding: "2.5%",
     fontSize: 23
   },
   inputIOS: {
