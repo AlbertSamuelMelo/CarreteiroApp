@@ -29,6 +29,7 @@ class RegisterService {
 
 
                         created_date text,
+                        created_time text,
                         PRIMARY KEY (id)
                     );`
                 );
@@ -65,8 +66,9 @@ class RegisterService {
                     latitude,
                     longitude,
 
-                    created_date) 
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    created_date,
+                    created_time) 
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
                     
                     [
                         data.id,

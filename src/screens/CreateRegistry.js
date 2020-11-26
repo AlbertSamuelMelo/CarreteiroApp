@@ -78,7 +78,8 @@ export default class CreateRegistry extends Component {
       "<br><br>Material:" + data.material + 
       "<br>Origem: " + data.origin + 
       "<br><br>CB: " + data.car + 
-      "<br><br>Data: " + data.created_date + "<br><br>" 
+      "<br><br>Data: " + data.created_date + 
+      "<br><br>Hora de criação: " + data.created_time + "<br><br>"
 
     this.setState({
       qrCode: JSON.stringify(qrCapsule)
@@ -156,7 +157,8 @@ export default class CreateRegistry extends Component {
         validateUri: "",
         latitude: "",
         longitude: "",
-        created_date: thisDate.getDate() + "-" + (thisDate.getMonth() + 1) + "-" + thisDate.getFullYear()
+        created_date: thisDate.getDate() + "-" + (thisDate.getMonth() + 1) + "-" + thisDate.getFullYear(),
+        created_time: thisDate.getHours() + ":" + thisDate.getMinutes()
       }
       packageToSave.id = this.generateKey("CC")
       packageToSave.obra_name = this.state.obra
