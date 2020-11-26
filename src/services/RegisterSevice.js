@@ -145,6 +145,7 @@ class RegisterService {
             tx => {
                 tx.executeSql(`update ${data.obra_name}_Registers 
                     SET 
+                    destiny = ?,
                     picture_uri = ?,
 
                     validate_uri = ?
@@ -152,6 +153,7 @@ class RegisterService {
                     WHERE id = ?`, 
                     
                     [
+                        data.destiny,
                         data.picture_uri,
     
                         data.validate_uri,

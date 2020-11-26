@@ -20,7 +20,8 @@ export default class ValidateScreen extends Component {
             confirmFromChild: {},
             confirmChild: false,
             qrCode: "Clique no imprimir",
-            dataQr: ""
+            dataQr: "",
+            destiny: ""
         };
         this.qrCodeComponent = React.createRef();
     }
@@ -78,10 +79,14 @@ export default class ValidateScreen extends Component {
         let strigToPrint = "Registro: " + data.id +
           "<br><br>Obra: " + data.obra_name +
           "<br><br>Material:" + data.material + 
-          "<br>Origem: " + data.origin + 
-          "<br>Destino: " + data.destiny + 
-          "<br><br>CB: " + data.car + 
-          "<br><br>Data: " + data.created_date + "<br><br>"
+          "<br>Origem: " + data.origin
+        
+        if(data.destiny != null){
+          strigToPrint = strigToPrint + "<br>Destino: " + data.destiny
+        }
+
+        strigToPrint = strigToPrint + "<br><br>CB: " + data.car
+        strigToPrint = strigToPrint +"<br><br>Data: " + data.created_date + "<br><br>"
         
         if(this.state.confirmChild){
         strigToPrint = strigToPrint + "Registro Validado<br><br>"
@@ -97,13 +102,20 @@ export default class ValidateScreen extends Component {
         this.setState({ confirmChild: true })
     }
 
+    destinyTaked = (destiny) => {
+      this.setState({ destiny: destiny })
+    }
+
     validateRegistry(){
-        if (this.state.confirmFromChild.base64 == undefined){
-                alert("Tire a foto de confirmação")
-            return
+        if (this.state.confirmFromChild.base64 == undefined 
+            || this.state.destiny == null
+            || this.state.destiny == ""){
+              alert("Preencha todos os campos")
+              return
         }
         var dataToUpdate = this.props.route.params.dataKey
         dataToUpdate.validate_uri = this.state.confirmFromChild.uri
+        dataToUpdate.destiny = this.state.destiny
         RegisterSevice.updateRegister(dataToUpdate)
           .then((response) => {
             alert(" Registro Atualizado ")
@@ -147,9 +159,16 @@ export default class ValidateScreen extends Component {
                 <TextPlaceHolder 
                     text={this.props.route.params.dataKey.origin}  
                 />
-                <TextPlaceHolder 
+                {this.props.route.params.dataKey.destiny == "" 
+                || this.props.route.params.dataKey.destiny == undefined
+                || this.props.route.params.dataKey.destiny == null ? 
+                  <TextPlaceHolder 
+                    input="Local" 
+                    callbackFromParent={(value) => this.destinyTaked(value)}
+                  />
+                : <TextPlaceHolder 
                     text={this.props.route.params.dataKey.destiny} 
-                />
+                  />}
                 <TextPlaceHolder 
                     text={this.props.route.params.dataKey.car}  
                 />
