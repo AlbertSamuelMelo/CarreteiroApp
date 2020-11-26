@@ -27,7 +27,6 @@ export default class CreateRegistry extends Component {
       obra: "",
       material: "",
       origin: "",
-      destiny: "",
       car: "",
       dataFromStore: [],
       qrCode: "",
@@ -39,7 +38,6 @@ export default class CreateRegistry extends Component {
     this.cameraComponent = React.createRef();
     this.materialComponent = React.createRef();
     this.originComponent = React.createRef();
-    this.destinyComponent = React.createRef();
     this.carComponent = React.createRef();
   }
 
@@ -72,7 +70,6 @@ export default class CreateRegistry extends Component {
       obra_name: data.obra_name,
       material: data.material,
       origin: data.origin,
-      destiny: data.destiny,
       car: data.car,
       created_date: data.created_date
     }
@@ -80,7 +77,6 @@ export default class CreateRegistry extends Component {
       "<br><br>Obra: " + data.obra_name +
       "<br><br>Material:" + data.material + 
       "<br>Origem: " + data.origin + 
-      "<br>Destino: " + data.destiny + 
       "<br><br>CB: " + data.car + 
       "<br><br>Data: " + data.created_date + "<br><br>" 
 
@@ -104,7 +100,6 @@ export default class CreateRegistry extends Component {
         this.cameraComponent.current.clearComponent()
         this.materialComponent.current.clearComponent()
         this.originComponent.current.clearComponent()
-        this.destinyComponent.current.clearComponent()
         this.carComponent.current.clearComponent()
         alert(" Registro Salvo ")
         this.printRegister(data)
@@ -142,12 +137,10 @@ export default class CreateRegistry extends Component {
     if (this.state.obra == "" ||
         this.state.material == "" || 
         this.state.origin == "" || 
-        this.state.destiny == "" || 
         this.state.car == "" ||
         this.state.obra == null ||
         this.state.material == null || 
         this.state.origin == null || 
-        this.state.destiny == null || 
         this.state.car == null ||  
         this.state.dataFromChild.base64 == undefined){
       alert("Preencha todos os campos")
@@ -158,7 +151,6 @@ export default class CreateRegistry extends Component {
         obra_name: "",
         material: "",
         origin: "",
-        destiny: "",
         car: "",
         pictureUri: "",
         validateUri: "",
@@ -170,7 +162,6 @@ export default class CreateRegistry extends Component {
       packageToSave.obra_name = this.state.obra
       packageToSave.material = this.state.material
       packageToSave.origin = this.state.origin
-      packageToSave.destiny = this.state.destiny
       packageToSave.car = this.state.car
       packageToSave.latitude = this.state.location.coords.latitude
       packageToSave.longitude = this.state.location.coords.longitude
@@ -211,6 +202,7 @@ export default class CreateRegistry extends Component {
         <CameraPlaceHolder             
           ref={this.cameraComponent}
           callbackFromParent={(value) => this.photoTaked(value)}/>
+        <View style={{width: "100%", height: "10%"}}></View>
           <TextPlaceHolder 
             input="Material" 
             ref={this.materialComponent}
@@ -221,11 +213,11 @@ export default class CreateRegistry extends Component {
             ref={this.originComponent}
             callbackFromParent={(value) => this.originTaked(value)}
           />
-          <TextPlaceHolder 
+          {/* <TextPlaceHolder 
             input="Local" 
             ref={this.destinyComponent}
             callbackFromParent={(value) => this.destinyTaked(value)}
-          />
+          /> */}
           <TextPlaceHolder 
             input="CB" 
             ref={this.carComponent}
