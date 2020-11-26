@@ -25,28 +25,32 @@ export default class CameraPlaceHolder extends Component {
         this.setState({isModalVisible: !this.state.isModalVisible});
       };
 
+    clearComponent() {
+      this.setState({dataFromChild:{}})
+      this.setState({dataChild:false})
+    }
     render(){
-        return (
-            <View style={styles.container}>
-                <TouchableOpacity 
-                    onPress={() => {this.toggleModal()}}
-                    title={ !this.state.dataChild ? "Tirar foto" : "Repetir"}
-                    style={styles.TouchableImage}
-                >
-                    <Image source={!this.state.dataChild ? camera : { uri: this.state.dataFromChild.uri }} 
-                        style={!this.state.dataChild ? styles.phothoIcon : styles.photoTaked} 
-                    /> 
-                </TouchableOpacity>
-                <Modal
-                    style={styles.modalView}
-                    visible={this.state.isModalVisible}
-                    swipeDirection={['down', 'left', 'right']}
-                    onSwipeComplete={this.toggleModal}
-                    onBackdropPress={this.toggleModal}>
-                        <PhotoComponent callbackFromParent={this.photoTaked}/>
-                </Modal>
-            </View>
-          );
+      return (
+        <View style={this.props.validate ? styles.containerValidate : styles.container}>
+          <TouchableOpacity 
+              onPress={() => {this.toggleModal()}}
+              title={ !this.state.dataChild ? "Tirar foto" : "Repetir"}
+              style={styles.TouchableImage}
+          >
+              <Image source={!this.state.dataChild ? camera : { uri: this.state.dataFromChild.uri }} 
+                  style={!this.state.dataChild ? styles.phothoIcon : styles.photoTaked} 
+              /> 
+          </TouchableOpacity>
+          <Modal
+              style={styles.modalView}
+              visible={this.state.isModalVisible}
+              swipeDirection={['down', 'left', 'right']}
+              onSwipeComplete={this.toggleModal}
+              onBackdropPress={this.toggleModal}>
+                  <PhotoComponent callbackFromParent={this.photoTaked}/>
+          </Modal>
+        </View>
+        );
     }
 }
 
@@ -59,6 +63,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: "-90%",
     marginBottom: "10%",
+    borderRadius: 100,
+    borderColor: "#4099B8",
+    borderWidth: 6,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+    shadowOpacity: 0.4,
+  },
+  containerValidate: {
+    width: "40%",
+    height: "50%",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 100,
     borderColor: "#4099B8",
     borderWidth: 6,

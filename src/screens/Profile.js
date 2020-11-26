@@ -4,24 +4,72 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Configure from "../components/ConfigPlaceHolder"
+import api from "./../services/Api"
+
+import RegisterSevice from "../services/RegisterSevice"
+import ObraSevice from "../services/ObrasService"
+
 export default class Profile extends Component {
   constructor() {
     super();
     this.state = {
+      dataToSend: {},
+      obras: []
     };
   }
 
-  exportData(){
-    console.log("Export Data")
+  exportData = async () => {
+    try {
+      const response = await api.post('saveCreatedRegisters', {
+        dataToSave: this.state.dataToSend
+      });
+      alert("Dados enviados pro servidor")
+    } catch (err){
+      console.log("Erro:", err)
+    }
   }
+
   resetPassword(){
     console.log("Reset Password")
   }
+
+  prepareExportRegisters = async () =>{
+    var dataToSend = this.state.dataToSend
+    for(var j = 0; j<this.state.obras.length; j++){
+      await RegisterSevice.getRegisters(this.state.obras[j].obra_name)
+      .then((response) => {
+        dataToSend[this.state.obras[j].obra_name] = response._array
+      })
+    }
+    this.setState({dataToSend: dataToSend})
+  }
+
+  prepareToExport(){
+    ObraSevice.getObras()
+    .then((response) => {
+      var dataToSend = {}
+      for(var i = 0; i<response._array.length; i++){
+        var obraAtual = response._array[i].obra_name
+        dataToSend[obraAtual] = []
+      }
+      this.setState({
+        obras: response._array, 
+        dataToSend: dataToSend
+      }, () => this.prepareExportRegisters())
+    })
+  }
+  componentDidMount(){
+    this.prepareToExport()
+  }
+
   render(){
     return (
       <View style={styles.container}>
-        <StatusBar style="auto" />
-        <Configure/>
+        <StatusBar style="dark" />
+        <Configure 
+          srceen="Usuarios"
+          navigation={this.props.navigation}
+        />
         <CameraPlaceHolder/>
         <TextPlaceHolder text="Albert"/>
         <TextPlaceHolder text="Adiministrador"/>

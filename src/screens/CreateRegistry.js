@@ -1,53 +1,120 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, AsyncStorage, Clipboard } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Config from "../components/ConfigPlaceHolder"
+import Database from "../database/DatabaseInit"
+import RegisterSevice from "../services/RegisterSevice"
+import ObraSevice from "../services/ObrasService"
+
+import * as Print from 'expo-print';
+import * as Device from 'expo-device';
+import * as Sharing from 'expo-sharing';
+import * as Location from 'expo-location';
+
+import QRCode from 'react-native-qrcode-svg';
 
 export default class CreateRegistry extends Component {
   constructor() {
     super();
+    new Database
     this.state = {
       isModalVisible: false,
       dataFromChild: {},
       dataChild: false,
-      obra: "Teste",
+      obra: "",
       material: "",
       origin: "",
       destiny: "",
       car: "",
-      dataFromStore: []
+      dataFromStore: [],
+      qrCode: "",
+      dataQr: "",
+      location: {}
+
     };
+    this.qrCodeComponent = React.createRef();
+    this.cameraComponent = React.createRef();
+    this.materialComponent = React.createRef();
+    this.originComponent = React.createRef();
+    this.destinyComponent = React.createRef();
+    this.carComponent = React.createRef();
   }
+
+  getDataURL(stringToPrint) {
+    this.qrCodeComponent.toDataURL((value) => this.callback(value, stringToPrint));
+  }
+  callback = async (dataURL, stringToPrint) => {
+    this.setState({dataQr: dataURL});
+
+    stringToPrint = stringToPrint + `<img src="data:image/jpeg;base64,${this.state.dataQr}"/>`
+
+    let filePath = await Print.printToFileAsync({
+      html: stringToPrint,
+      width : 380,
+      base64 : false,
+      orientation: "portrait"
+    });
+
+    if(Device.osName === "iOS"){
+      Sharing.shareAsync(filePath.uri)
+      Clipboard.setString(stringToPrint.replaceAll("<br>", "\n"))
+    }else{
+      Print.printAsync({uri: filePath.uri})
+    }
+  }
+
+  printRegister = (data) => {
+    var qrCapsule = {
+      id: data.id, 
+      obra_name: data.obra_name,
+      material: data.material,
+      origin: data.origin,
+      destiny: data.destiny,
+      car: data.car,
+      created_date: data.created_date
+    }
+    let strigToPrint = "Registro: " + data.id +
+      "<br><br>Obra: " + data.obra_name +
+      "<br><br>Material:" + data.material + 
+      "<br>Origem: " + data.origin + 
+      "<br>Destino: " + data.destiny + 
+      "<br><br>Carro: " + data.car + 
+      "<br><br>Data: " + data.created_date + "<br><br>" 
+
+    this.setState({
+      qrCode: JSON.stringify(qrCapsule)
+    })
+
+    this.getDataURL(strigToPrint)
+}
 
   generateKey = (pre) => {
     return `${ pre }_${ new Date().getTime() }`;
   }
-  _storeData = async (data) => {
-    this.state.dataFromStore.push(data)
-    try {
-      await AsyncStorage.setItem(this.state.obra, JSON.stringify(this.state.dataFromStore));
-      console.log("Saved ")
-      alert(" Registro Salvo ")
+  _storeData = (data) => {
+    ObraSevice.createTable(this.state.obra)
+    ObraSevice.addObra(this.state.obra)
 
-    } catch (error) {
-      console.log(error)
-    }
+    RegisterSevice.createTable(this.state.obra)
+    RegisterSevice.addRegister(data)
+      .then((response) => {
+        this.cameraComponent.current.clearComponent()
+        this.materialComponent.current.clearComponent()
+        this.originComponent.current.clearComponent()
+        this.destinyComponent.current.clearComponent()
+        this.carComponent.current.clearComponent()
+        alert(" Registro Salvo ")
+        this.printRegister(data)
+    })
   };
 
-  _retrieveData = async () => {
-    try {
-      const dataFromObra = await AsyncStorage.getItem(this.state.obra);
-      if (dataFromObra !== null) {
-        this.setState({dataFromStore: JSON.parse(dataFromObra)})
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-  };
-  
+  obraTaked = (obra) => {
+    this.setState({obra: obra})
+  }
+
   photoTaked = (dataFromChild) => {
     this.setState({ dataFromChild: dataFromChild })
     this.setState({ dataChild: true })
@@ -70,10 +137,14 @@ export default class CreateRegistry extends Component {
   }
 
   createRegistry(){
-    if (this.state.material == "" || 
+    console.log(this.state.obra)
+    var thisDate = new Date()
+    if (this.state.obra == "" ||
+        this.state.material == "" || 
         this.state.origin == "" || 
         this.state.destiny == "" || 
         this.state.car == "" ||
+        this.state.obra == null ||
         this.state.material == null || 
         this.state.origin == null || 
         this.state.destiny == null || 
@@ -83,49 +154,82 @@ export default class CreateRegistry extends Component {
       return
     } else {
       var packageToSave = {
-        key: "", 
-        obra: "",
-        data:{
-          material: "",
-          origin: "",
-          destiny: "",
-          car: "",
-          picture: "",
-          validate: ""
-      }}
-      packageToSave.key = this.generateKey("CC")
-      packageToSave.obra = this.state.obra
-      packageToSave.data.material = this.state.material
-      packageToSave.data.origin = this.state.origin
-      packageToSave.data.destiny = this.state.destiny
-      packageToSave.data.car = this.state.car
-      packageToSave.data.picture = this.state.dataFromChild.base64
+        id: "", 
+        obra_name: "",
+        material: "",
+        origin: "",
+        destiny: "",
+        car: "",
+        pictureUri: "",
+        validateUri: "",
+        latitude: "",
+        longitude: "",
+        created_date: thisDate.getDate() + "-" + (thisDate.getMonth() + 1) + "-" + thisDate.getFullYear()
+      }
+      packageToSave.id = this.generateKey("CC")
+      packageToSave.obra_name = this.state.obra
+      packageToSave.material = this.state.material
+      packageToSave.origin = this.state.origin
+      packageToSave.destiny = this.state.destiny
+      packageToSave.car = this.state.car
+      packageToSave.latitude = this.state.location.coords.latitude
+      packageToSave.longitude = this.state.location.coords.longitude
+      packageToSave.pictureUri = this.state.dataFromChild.uri
       this._storeData(packageToSave);
     }
   }
 
+  getLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({location: location});
+  }
+
+  componentDidMount(){
+    this.getLocation()
+  }
+
   render(){
-    this._retrieveData()
     return (
       <View style={styles.container}>
-        <StatusBar style="auto" />
-        <Config/>
-        <CameraPlaceHolder callbackFromParent={(value) => this.photoTaked(value)}/>
+        <StatusBar style="dark" />
+        <View style={{opacity:0}}>
+          {this.state.qrCode ? <QRCode
+            value={this.state.qrCode}
+            getRef={(qrValue) => this.qrCodeComponent = qrValue}
+          /> : <Text></Text>}
+        </View>
+        <Config 
+          screen="Create"
+          navigation={this.props.navigation}
+          callbackFromParent={(value) => this.obraTaked(value)}
+        />
+        <CameraPlaceHolder             
+          ref={this.cameraComponent}
+          callbackFromParent={(value) => this.photoTaked(value)}/>
           <TextPlaceHolder 
             input="Material" 
-            callbackFromParent={(value) => this.materialTaked(value.category)}
+            ref={this.materialComponent}
+            callbackFromParent={(value) => this.materialTaked(value)}
           />
           <TextPlaceHolder 
             input="Local" 
-            callbackFromParent={(value) => this.originTaked(value.category)}
+            ref={this.originComponent}
+            callbackFromParent={(value) => this.originTaked(value)}
           />
           <TextPlaceHolder 
             input="Local" 
-            callbackFromParent={(value) => this.destinyTaked(value.category)}
+            ref={this.destinyComponent}
+            callbackFromParent={(value) => this.destinyTaked(value)}
           />
           <TextPlaceHolder 
             input="Carro" 
-            callbackFromParent={(value) => this.carTaked(value.category)}
+            ref={this.carComponent}
+            callbackFromParent={(value) => this.carTaked(value)}
           />
             <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => this.createRegistry()}>
