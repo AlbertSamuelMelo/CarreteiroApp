@@ -81,7 +81,7 @@ export default class CreateRegistry extends Component {
       "<br><br>Material:" + data.material + 
       "<br>Origem: " + data.origin + 
       "<br>Destino: " + data.destiny + 
-      "<br><br>Carro: " + data.car + 
+      "<br><br>CB: " + data.car + 
       "<br><br>Data: " + data.created_date + "<br><br>" 
 
     this.setState({
@@ -227,7 +227,7 @@ export default class CreateRegistry extends Component {
             callbackFromParent={(value) => this.destinyTaked(value)}
           />
           <TextPlaceHolder 
-            input="Carro" 
+            input="CB" 
             ref={this.carComponent}
             callbackFromParent={(value) => this.carTaked(value)}
           />

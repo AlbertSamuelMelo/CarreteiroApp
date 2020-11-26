@@ -68,7 +68,7 @@ export default class ValidateScan extends Component {
           "<br><br>Material:" + data.material + 
           "<br>Origem: " + data.origin + 
           "<br>Destino: " + data.destiny + 
-          "<br><br>Carro: " + data.car + 
+          "<br><br>CB: " + data.car + 
           "<br><br>Data: " + data.created_date + "<br><br>"
         
         if(this.state.confirmChild){
