@@ -74,7 +74,9 @@ export default class ValidateScreen extends Component {
           origin: data.origin,
           destiny: data.destiny,
           car: data.car,
-          created_date: data.created_date
+          created_date: data.created_date,
+          created_time: data.created_time,
+          validate_time: data.validate_time
         }
         let strigToPrint = "Registro: " + data.id +
           "<br><br>Obra: " + data.obra_name +
@@ -86,10 +88,12 @@ export default class ValidateScreen extends Component {
         }
 
         strigToPrint = strigToPrint + "<br><br>CB: " + data.car
-        strigToPrint = strigToPrint +"<br><br>Data: " + data.created_date + "<br><br>"
-        
+        strigToPrint = strigToPrint + "<br><br>Data: " + data.created_date
+        strigToPrint = strigToPrint + "<br><br>Hora de criação: " + data.created_time + "<br><br>"
+
         if(this.state.confirmChild){
-        strigToPrint = strigToPrint + "Registro Validado<br><br>"
+          strigToPrint = strigToPrint + "Hora da Validação: " + data.validate_time + "<br><br>"
+          strigToPrint = strigToPrint + "Registro Validado<br><br>"
         }
 
         this.setState({
@@ -107,6 +111,7 @@ export default class ValidateScreen extends Component {
     }
 
     validateRegistry(){
+      var thisDate = new Date()
         if (this.state.confirmFromChild.base64 == undefined 
             || this.state.destiny == null
             || this.state.destiny == ""){
@@ -115,6 +120,7 @@ export default class ValidateScreen extends Component {
         }
         var dataToUpdate = this.props.route.params.dataKey
         dataToUpdate.validate_uri = this.state.confirmFromChild.uri
+        dataToUpdate.validate_time = thisDate.getHours() + ":" + thisDate.getMinutes(),
         dataToUpdate.destiny = this.state.destiny
         RegisterSevice.updateRegister(dataToUpdate)
           .then((response) => {

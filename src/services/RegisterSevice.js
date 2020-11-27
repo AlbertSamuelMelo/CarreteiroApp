@@ -30,6 +30,7 @@ class RegisterService {
 
                         created_date text,
                         created_time text,
+                        validate_time text,
                         PRIMARY KEY (id)
                     );`
                 );
@@ -67,8 +68,9 @@ class RegisterService {
                     longitude,
 
                     created_date,
-                    created_time) 
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    created_time,
+                    validate_time) 
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
                     
                     [
                         data.id,
@@ -85,7 +87,9 @@ class RegisterService {
                         data.latitude,
                         data.longitude,
 
-                        data.created_date
+                        data.created_date,
+                        data.created_time,
+                        data.validate_time
                     ], (_, {}) =>
                     resolve(200)
                 );
@@ -150,8 +154,8 @@ class RegisterService {
                     destiny = ?,
                     picture_uri = ?,
 
-                    validate_uri = ?
-                    
+                    validate_uri = ?,
+                    validate_time = ?
                     WHERE id = ?`, 
                     
                     [
@@ -159,6 +163,7 @@ class RegisterService {
                         data.picture_uri,
     
                         data.validate_uri,
+                        data.validate_time,
                         data.id,
                     ], (_, {}) => 
                     resolve(200)

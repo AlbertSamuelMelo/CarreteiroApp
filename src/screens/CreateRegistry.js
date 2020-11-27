@@ -71,7 +71,8 @@ export default class CreateRegistry extends Component {
       material: data.material,
       origin: data.origin,
       car: data.car,
-      created_date: data.created_date
+      created_date: data.created_date,
+      created_time: data.created_time
     }
     let strigToPrint = "Registro: " + data.id +
       "<br><br>Obra: " + data.obra_name +
@@ -158,7 +159,8 @@ export default class CreateRegistry extends Component {
         latitude: "",
         longitude: "",
         created_date: thisDate.getDate() + "-" + (thisDate.getMonth() + 1) + "-" + thisDate.getFullYear(),
-        created_time: thisDate.getHours() + ":" + thisDate.getMinutes()
+        created_time: thisDate.getHours() + ":" + thisDate.getMinutes(),
+        validate_time: ""
       }
       packageToSave.id = this.generateKey("CC")
       packageToSave.obra_name = this.state.obra
