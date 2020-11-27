@@ -62,23 +62,27 @@ export default class ValidateScan extends Component {
             origin: data.origin,
             destiny: data.destiny,
             car: data.car,
-            created_date: data.created_date
+            created_date: data.created_date,
+            created_time: data.created_time,
+            validate_time: data.validate_time
         }
         let strigToPrint = "Registro: " + data.id +
         "<br><br>Obra: " + data.obra_name +
         "<br><br>Material:" + data.material + 
         "<br>Origem: " + data.origin
       
-      if(data.destiny != null){
-        strigToPrint = strigToPrint + "<br>Destino: " + data.destiny
-      }
+        if(data.destiny != null){
+          strigToPrint = strigToPrint + "<br>Destino: " + data.destiny
+        }
 
-      strigToPrint = strigToPrint + "<br><br>CB: " + data.car
-      strigToPrint = strigToPrint +"<br><br>Data: " + data.created_date + "<br><br>"
+        strigToPrint = strigToPrint + "<br><br>CB: " + data.car
+        strigToPrint = strigToPrint + "<br><br>Data: " + data.created_date
+        strigToPrint = strigToPrint + "<br><br>Hora de criação: " + data.created_time + "<br><br>"
       
-      if(this.state.confirmChild){
-      strigToPrint = strigToPrint + "Registro Validado<br><br>"
-      }
+        if(this.state.confirmChild){
+          strigToPrint = strigToPrint + "Hora da Validação: " + data.validate_time + "<br><br>"
+          strigToPrint = strigToPrint + "Registro Validado<br><br>"
+        }
 
         this.setState({
           qrCode: JSON.stringify(qrCapsule)
@@ -95,6 +99,7 @@ export default class ValidateScan extends Component {
     }
 
     validateRegistry(){
+        var thisDate = new Date()
         if (this.state.confirmFromChild.base64 == undefined 
             || this.state.destiny == null
             || this.state.destiny == ""){
@@ -107,6 +112,7 @@ export default class ValidateScan extends Component {
             if (response._array[0] != undefined ){
                 var dataToUpdate = response._array[0]
                 dataToUpdate.destiny = this.state.destiny
+                dataToUpdate.validate_time = thisDate.getHours() + ":" + thisDate.getMinutes(),
                 dataToUpdate.validate_uri = this.state.confirmFromChild.uri
                 RegisterSevice.updateRegister(dataToUpdate)
                 .then((response) => {
@@ -116,6 +122,7 @@ export default class ValidateScan extends Component {
             } else {
                 var dataToUpdate = this.props.route.params.dataKey
                 dataToUpdate.destiny = this.state.destiny
+                dataToUpdate.validate_time = thisDate.getHours() + ":" + thisDate.getMinutes(),
                 dataToUpdate.validateUri = this.state.confirmFromChild.uri
                 RegisterSevice.addRegister(dataToUpdate)
                 .then((response) => {
