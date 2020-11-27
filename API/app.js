@@ -145,18 +145,20 @@ function createXlxs(data){
   // need to create a workbook object. Almost everything in ExcelJS is based off of the workbook object.
   let workbook = new Excel.Workbook()
   
-  let worksheet = workbook.addWorksheet('Debtors')
+  let worksheet = workbook.addWorksheet('Registros')
   
   worksheet.columns = [
     {header: 'Registro', key: 'id'},
     {header: 'Obra', key: 'obra_name'},
+    {header: 'CBMS', key: 'car'},
     {header: 'Material', key: 'material'},
-    {header: 'Origem', key: 'origin'},
-    {header: 'Destino', key: 'destiny'},
-    {header: 'Carro', key: 'car'},
+    {header: 'E.Origem', key: 'origin'},
+    {header: 'E.Destino', key: 'destiny'},
     {header: 'Latitude', key: 'latitude'},
     {header: 'Longitude', key: 'longitude'},
     {header: 'Data', key: 'created_date'},
+    {header: 'Hora de criação', key: 'created_time'},
+    {header: 'Hora da Validação', key: 'validate_time'},
   ]
   
   // force the columns to be at least as long as their header row.
