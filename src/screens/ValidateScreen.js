@@ -81,10 +81,10 @@ export default class ValidateScreen extends Component {
         let strigToPrint = "Registro: " + data.id +
           "<br><br>Obra: " + data.obra_name +
           "<br><br>Material:" + data.material + 
-          "<br>Origem: " + data.origin
+          "<br>Estaca de Origem: " + data.origin
         
         if(data.destiny != null){
-          strigToPrint = strigToPrint + "<br>Destino: " + data.destiny
+          strigToPrint = strigToPrint + "<br>Estaca de Destino: " + data.destiny
         }
 
         strigToPrint = strigToPrint + "<br><br>CB: " + data.car
