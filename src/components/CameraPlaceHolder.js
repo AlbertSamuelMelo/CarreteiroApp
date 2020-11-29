@@ -106,8 +106,10 @@ const styles = StyleSheet.create({
     height: 75 
   },
   photoTaked: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 100,
+    width: "85%",
+    height: "118%",
+    transform: [{ rotate: '-90deg' }],
+    borderRadius:110
+
   }
 });

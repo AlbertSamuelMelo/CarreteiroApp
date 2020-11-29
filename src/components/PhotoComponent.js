@@ -61,6 +61,7 @@ export default function CameraPage(props) {
               paddingHorizontal: 15,
               alignSelf: 'center',
               marginTop: "150%",
+              transform: [{ rotate: '90deg' }]
             }}
             onPress={ takePicture.bind(this) }>
                 <Image source={cameraImage} style={{ width: 100, height: 75 }} />

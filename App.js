@@ -19,9 +19,14 @@ import LoggedService from "./src/services/LoggedService"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import * as Network from 'expo-network';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+async function changeScreenOrientation() {
+  await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+}
 
 function CreateScreen({ navigation, route }) {
   return (
@@ -173,6 +178,7 @@ function LoggedScreens(){
 }
 
 export default function App() {
+  changeScreenOrientation()
   var loggedIn = []
   LoggedService.createLogged()
   LoggedService.getUsers()
