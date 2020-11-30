@@ -56,6 +56,8 @@ function createTable(table){
     'longitude VARCHAR(255),' +
     /*Add photo later*/
     'created_date VARCHAR(255),' +
+    'created_time VARCHAR(255),' +
+    'validate_time VARCHAR(255),' +
     'PRIMARY KEY (id));'
     
     ,function (error, results, fields) {
@@ -75,7 +77,9 @@ function insertTable(register){
       "car, " +
       "latitude, " +
       "longitude, " +
-      "created_date)" +
+      "created_date, " +
+      "created_time, " + 
+      "validate_time)" +
     "Select '" + register.id + "'," + 
     "'" + register.obra_name + "'," +
     "'" + register.material + "'," +
@@ -85,6 +89,8 @@ function insertTable(register){
     "'" + register.latitude + "'," +
     "'" + register.longitude + "'," +
     "'" + register.created_date + "' " +
+    "'" + register.created_time + "' " +
+    "'" + register.validate_time + "' " +
     "Where not exists (select * from " + register.obra_name + "_Registers where id = '" + register.id + "');"
     
     ,function (error, results, fields) {
@@ -209,6 +215,7 @@ app.get('/getExportData/:date', function(req, res) {
 });
 
 app.post('/saveCreatedRegisters', function(req, res){
+  console.log("Save")
   var dataToSave = req.body.dataToSave
   saveObras(dataToSave, res)
   // console.log("Chegou a requesição", req.body.dataToSave);
