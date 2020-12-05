@@ -2667,6 +2667,13 @@ expo-print@~9.1.0:
   resolved "https://registry.yarnpkg.com/expo-print/-/expo-print-9.1.0.tgz#b5ed2285af5ebc049a0cff8e669ca098577ce44a"
   integrity sha512-yMUQ9MQAKTQ8NcQZOqS0Ecf5CbZlF44LmUQnXvBojvMavnfqMxDwzhLj0MA8E+vH6xWoqlWw/kXJjX8r+e1diQ==
 
+expo-screen-orientation@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-2.0.0.tgz#3d73eb6de51c906d1c657d9ffdd5c06378f5b53d"
+  integrity sha512-pVjzNL3nQyr3iPzn34dOkNgBIwsdcLDshS+/J6otjKPswJxu34jnnFsYrB0tX/xTc0pYTHL5N+ycXIuk14ElYA==
+  dependencies:
+    fbjs "1.0.0"
+
 expo-sharing@~8.4.1:
   version "8.4.1"
   resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-8.4.1.tgz#250e537d970af861a45fd194bd804e9389fdc25a"

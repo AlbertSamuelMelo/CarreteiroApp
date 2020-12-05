@@ -61,6 +61,14 @@ export default class TextPlaceHolder extends Component {
                     onChangeText={text => this.changeCreateObraText(text)}
                     placeholder="Insira o nome da obra"
                   />
+                : this.props.input == "Local" ? 
+                  <TextInput
+                    style={styles.textInput}
+                    value={this.state.category}
+                    onChangeText={text => this.changeCreateObraText(text)}
+                    placeholder="Insira o numero da estaca"
+                    keyboardType="number-pad"
+                  /> 
                 : this.props.input ? 
                     <Picker 
                         style={styles} 

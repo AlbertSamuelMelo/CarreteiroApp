@@ -56,6 +56,8 @@ function createTable(table){
     'longitude VARCHAR(255),' +
     /*Add photo later*/
     'created_date VARCHAR(255),' +
+    'created_time VARCHAR(255),' +
+    'validate_time VARCHAR(255),' +
     'PRIMARY KEY (id));'
     
     ,function (error, results, fields) {
@@ -75,7 +77,9 @@ function insertTable(register){
       "car, " +
       "latitude, " +
       "longitude, " +
-      "created_date)" +
+      "created_date, " +
+      "created_time, " + 
+      "validate_time)" +
     "Select '" + register.id + "'," + 
     "'" + register.obra_name + "'," +
     "'" + register.material + "'," +
@@ -84,9 +88,24 @@ function insertTable(register){
     "'" + register.car + "'," +
     "'" + register.latitude + "'," +
     "'" + register.longitude + "'," +
-    "'" + register.created_date + "' " +
-    "Where not exists (select * from " + register.obra_name + "_Registers where id = '" + register.id + "');"
-    
+    "'" + register.created_date + "', " +
+    "'" + register.created_time + "', " +
+    "'" + register.validate_time + "' " +
+    " Where not exists (select * from " + register.obra_name + "_Registers where id = '" + register.id + "');"
+    ,function (error, results, fields) {
+      updateTable(register)
+      if (error) throw error;
+    }
+  );
+}
+
+function updateTable(register){
+  connection.query(
+    "UPDATE " + register.obra_name + "_Registers" + 
+    " SET" +
+    " destiny = '" + register.destiny + "'," + 
+    " validate_time = '" + register.validate_time + "'" + 
+    " WHERE id = '" + register.id + "';"
     ,function (error, results, fields) {
       if (error) throw error;
     }
@@ -107,8 +126,7 @@ async function saveObras(dataToSave, res){
   res.send("")
 }
 
-async function getTableRegisters( obra, dateToFilter ){
-  console.log("Obra", obra)
+async function getTableRegisters( obra, dateToFilter, res ){
   var query = ""
 
   for(var i = 0 ; i<obra.length; i++) {
@@ -123,19 +141,24 @@ async function getTableRegisters( obra, dateToFilter ){
     query
     
     ,function (error, results, fields) {
-      createXlxs( results )
+      if( results != undefined ){
+        createXlxs( results )
+        res.send("Ok")
+      } else {
+        res.send("Sem registros pra essa data")
+      }
       if (error) throw error;
     }
   );
 }
 
-async function getObras(dateToFilter){
+async function getObras(dateToFilter, res){
   await connection.query(
 
     "Select * from obra;"
     
     ,function (error, results, fields) {
-      getTableRegisters(results, dateToFilter)
+      getTableRegisters(results, dateToFilter, res)
       if (error) throw error;
     }
   );
@@ -145,18 +168,20 @@ function createXlxs(data){
   // need to create a workbook object. Almost everything in ExcelJS is based off of the workbook object.
   let workbook = new Excel.Workbook()
   
-  let worksheet = workbook.addWorksheet('Debtors')
+  let worksheet = workbook.addWorksheet('Registros')
   
   worksheet.columns = [
     {header: 'Registro', key: 'id'},
     {header: 'Obra', key: 'obra_name'},
+    {header: 'CBMS', key: 'car'},
     {header: 'Material', key: 'material'},
-    {header: 'Origem', key: 'origin'},
-    {header: 'Destino', key: 'destiny'},
-    {header: 'Carro', key: 'car'},
+    {header: 'E.Origem', key: 'origin'},
+    {header: 'E.Destino', key: 'destiny'},
     {header: 'Latitude', key: 'latitude'},
     {header: 'Longitude', key: 'longitude'},
     {header: 'Data', key: 'created_date'},
+    {header: 'Hora de criação', key: 'created_time'},
+    {header: 'Hora da Validação', key: 'validate_time'},
   ]
   
   // force the columns to be at least as long as their header row.
@@ -201,9 +226,8 @@ app.get('/', function (req, res) {
 })
 
 app.get('/getExportData/:date', function(req, res) {
-  getObras(req.params.date);
+  getObras(req.params.date, res);
   //createXlxs()
-  res.send("Ok")
 });
 
 app.post('/saveCreatedRegisters', function(req, res){
