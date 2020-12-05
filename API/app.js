@@ -88,11 +88,24 @@ function insertTable(register){
     "'" + register.car + "'," +
     "'" + register.latitude + "'," +
     "'" + register.longitude + "'," +
-    "'" + register.created_date + "' " +
-    "'" + register.created_time + "' " +
+    "'" + register.created_date + "', " +
+    "'" + register.created_time + "', " +
     "'" + register.validate_time + "' " +
-    "Where not exists (select * from " + register.obra_name + "_Registers where id = '" + register.id + "');"
-    
+    " Where not exists (select * from " + register.obra_name + "_Registers where id = '" + register.id + "');"
+    ,function (error, results, fields) {
+      updateTable(register)
+      if (error) throw error;
+    }
+  );
+}
+
+function updateTable(register){
+  connection.query(
+    "UPDATE " + register.obra_name + "_Registers" + 
+    " SET" +
+    " destiny = '" + register.destiny + "'," + 
+    " validate_time = '" + register.validate_time + "'" + 
+    " WHERE id = '" + register.id + "';"
     ,function (error, results, fields) {
       if (error) throw error;
     }
@@ -113,8 +126,7 @@ async function saveObras(dataToSave, res){
   res.send("")
 }
 
-async function getTableRegisters( obra, dateToFilter ){
-  console.log("Obra", obra)
+async function getTableRegisters( obra, dateToFilter, res ){
   var query = ""
 
   for(var i = 0 ; i<obra.length; i++) {
@@ -129,19 +141,24 @@ async function getTableRegisters( obra, dateToFilter ){
     query
     
     ,function (error, results, fields) {
-      createXlxs( results )
+      if( results != undefined ){
+        createXlxs( results )
+        res.send("Ok")
+      } else {
+        res.send("Sem registros pra essa data")
+      }
       if (error) throw error;
     }
   );
 }
 
-async function getObras(dateToFilter){
+async function getObras(dateToFilter, res){
   await connection.query(
 
     "Select * from obra;"
     
     ,function (error, results, fields) {
-      getTableRegisters(results, dateToFilter)
+      getTableRegisters(results, dateToFilter, res)
       if (error) throw error;
     }
   );
@@ -209,13 +226,11 @@ app.get('/', function (req, res) {
 })
 
 app.get('/getExportData/:date', function(req, res) {
-  getObras(req.params.date);
+  getObras(req.params.date, res);
   //createXlxs()
-  res.send("Ok")
 });
 
 app.post('/saveCreatedRegisters', function(req, res){
-  console.log("Save")
   var dataToSave = req.body.dataToSave
   saveObras(dataToSave, res)
   // console.log("Chegou a requesição", req.body.dataToSave);
