@@ -38,7 +38,6 @@ export default class CreateRegistry extends Component {
     this.cameraComponent = React.createRef();
     this.materialComponent = React.createRef();
     this.originComponent = React.createRef();
-    this.destinyComponent = React.createRef();
     this.carComponent = React.createRef();
   }
 
@@ -103,7 +102,6 @@ export default class CreateRegistry extends Component {
         this.cameraComponent.current.clearComponent()
         this.materialComponent.current.clearComponent()
         this.originComponent.current.clearComponent()
-        this.destinyComponent.current.clearComponent()
         this.carComponent.current.clearComponent()
         alert(" Registro Salvo ")
         this.printRegister(data)
