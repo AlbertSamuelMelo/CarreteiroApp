@@ -133,6 +133,7 @@ function ProfileNavigator(){
       <Stack.Navigator initialRouteName="Perfil">
         <Stack.Screen name="Perfil" component={ProfileScreen} />
         <Stack.Screen name="Configurar Usuarios" component={ConfigureProfile} />
+        <Stack.Screen name="Login" component={LoginScreen}  />
       </Stack.Navigator>
     </NavigationContainer>
   )

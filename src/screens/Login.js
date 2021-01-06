@@ -30,8 +30,13 @@ export default class Login extends Component {
         && this.state.userDatabase[i].password == this.state.password) {
           alert("Login completo")
           LoggedService.addUser(this.state.userDatabase[i])
-          this.props.navigation.push("Criar", {
-
+          this.props.navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'Criar',
+              },
+            ],
           })
           return
         }

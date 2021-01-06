@@ -15,10 +15,6 @@ export default class ConfigurePlaceHolder extends Component {
               value:"Adiministrador"
             },
             {
-              label:"Criador",
-              value:"Criador"
-            },
-            {
               label:"Validador",
               value:"Validador"
             }]

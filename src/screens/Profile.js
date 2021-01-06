@@ -5,6 +5,7 @@ import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Configure from "../components/ConfigPlaceHolder"
 import api from "./../services/Api"
+import LoggedService from "./../services/LoggedService"
 
 import RegisterSevice from "../services/RegisterSevice"
 import ObraSevice from "../services/ObrasService"
@@ -14,7 +15,9 @@ export default class Profile extends Component {
     super();
     this.state = {
       dataToSend: {},
-      obras: []
+      obras: [],
+      user: "",
+      type: ""
     };
   }
 
@@ -29,8 +32,16 @@ export default class Profile extends Component {
     }
   }
 
-  resetPassword(){
-    console.log("Reset Password")
+  logout(){
+    LoggedService.deleteuser()
+    this.props.navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'Login',
+        },
+      ],
+    })
   }
 
   prepareExportRegisters = async () =>{
@@ -60,6 +71,13 @@ export default class Profile extends Component {
   }
   componentDidMount(){
     this.prepareToExport()
+    LoggedService.getUsers()
+    .then((response) => {
+      this.setState({
+        user: response._array[0].user_name,
+        type: response._array[0].type
+      })
+    }) 
   }
 
   render(){
@@ -71,16 +89,16 @@ export default class Profile extends Component {
           navigation={this.props.navigation}
         />
         <CameraPlaceHolder/>
-        <TextPlaceHolder text="Albert"/>
-        <TextPlaceHolder text="Adiministrador"/>
+        <TextPlaceHolder text={this.state.user}/>
+        <TextPlaceHolder text={this.state.type}/>
         <View style={styles.exportContainer}>
           <TouchableOpacity onPress={() => this.exportData()}>
               <Text style={styles.text}>Exportar Dados</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.resetContainer}>
-          <TouchableOpacity onPress={() => this.resetPassword()}>
-              <Text style={styles.textPassword}>Resetar Password</Text>
+          <TouchableOpacity onPress={() => this.logout()}>
+              <Text style={styles.textPassword}>Logout</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -35,6 +35,7 @@ export default class UsersConfiguration extends Component {
     }).then((response) => {
         console.log(response)
         alert("Usuário Criado")
+        this.props.navigation.goBack()
       })
   }
 
