@@ -147,7 +147,7 @@ function LoginScreen({ navigation, route }){
   )
 }
 
-function LoggedScreens(){
+function LoggedScreensAdministrator(){
   return(
     <NavigationContainer independent={true}>
       <Tab.Navigator
@@ -186,6 +186,40 @@ function LoggedScreens(){
   )
 }
 
+function LoggedScreens(){
+  return(
+    <NavigationContainer independent={true}>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'ScanQR') {
+              iconName = focused ? 'ios-barcode' : 'ios-barcode';
+            } else if (route.name === 'Lista') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            } 
+            else if (route.name === 'Perfil') {
+              iconName = focused ? 'ios-person' : 'ios-person';
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: '#115B73',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tab.Screen name="ScanQR" component={ScanNavigator} />
+        <Tab.Screen name="Lista" component={ListNavigator} />
+        <Tab.Screen name="Perfil" component={ProfileNavigator} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  )
+}
+
 export default function App() {
   changeScreenOrientation()
   LoggedService.createLogged()
@@ -194,7 +228,8 @@ export default function App() {
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="Login" >
         <Stack.Screen name="Login" component={LoginScreen}  />
-        <Stack.Screen name="Criar" component={LoggedScreens} options={{headerShown: false}}/>
+        <Stack.Screen name="Adiministrador" component={LoggedScreensAdministrator} options={{headerShown: false}}/>
+        <Stack.Screen name="Validador" component={LoggedScreens} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
     //LoggedScreens()
