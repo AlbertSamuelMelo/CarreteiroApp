@@ -23,11 +23,16 @@ export default class ScanQR extends Component {
     this.setState({ hasPermission: status === 'granted' });
   }
 
+  callbackOnBack() {
+    this.setState({ scanned: false });
+  }
+
   handleBarCodeScanned = ({ type, data }) => {
     this.setState({ scanned: true });
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     this.props.navigation.push("Validar QrCode", {
-        dataKey: JSON.parse(data)
+        dataKey: JSON.parse(data),
+        callback: this.callbackOnBack.bind(this)
       })
     }
 

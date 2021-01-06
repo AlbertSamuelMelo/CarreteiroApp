@@ -564,3 +564,4 @@
 [1101/090849.560:ERROR:process_reader_win.cc(151)] SuspendThread: Acesso negado. (0x5)
 [1101/090849.561:ERROR:process_reader_win.cc(123)] NtOpenThread: {Acesso Negado} Um processo solicitou acesso a um objeto, mas o direito de acesso não lhe foi concedido. (0xc0000022)
 [1101/090849.561:ERROR:exception_snapshot_win.cc(99)] thread ID 31728 not found in process
+[0106/055105.085:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)

@@ -8,6 +8,7 @@ import Config from "../components/ConfigPlaceHolder"
 import Database from "../database/DatabaseInit"
 import RegisterSevice from "../services/RegisterSevice"
 import ObraSevice from "../services/ObrasService"
+import LoggedService from "./../services/LoggedService"
 
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
@@ -31,8 +32,8 @@ export default class CreateRegistry extends Component {
       dataFromStore: [],
       qrCode: "",
       dataQr: "",
-      location: {}
-
+      location: {},
+      user: ""
     };
     this.qrCodeComponent = React.createRef();
     this.cameraComponent = React.createRef();
@@ -72,7 +73,8 @@ export default class CreateRegistry extends Component {
       origin: data.origin,
       car: data.car,
       created_date: data.created_date,
-      created_time: data.created_time
+      created_time: data.created_time,
+      created_user: data.created_user
     }
     let strigToPrint = "Registro: " + data.id +
       "<br><br>Obra: " + data.obra_name +
@@ -80,7 +82,8 @@ export default class CreateRegistry extends Component {
       "<br>Estaca de Origem: " + data.origin + 
       "<br><br>CB: " + data.car + 
       "<br><br>Data: " + data.created_date + 
-      "<br><br>Hora de criação: " + data.created_time + "<br><br>"
+      "<br><br>Hora de criação: " + data.created_time + "<br><br>" +
+      "<br><br>Criado por: " + data.created_user + "<br><br>"
 
     this.setState({
       qrCode: JSON.stringify(qrCapsule)
@@ -161,7 +164,9 @@ export default class CreateRegistry extends Component {
         longitude: "",
         created_date: thisDate.getDate() + "-" + (thisDate.getMonth() + 1) + "-" + thisDate.getFullYear(),
         created_time: thisDate.getHours() + ":" + thisDate.getMinutes(),
-        validate_time: ""
+        validate_time: "",
+        created_user: this.state.user,
+        validator_user: ""
       }
       packageToSave.id = this.generateKey("CC")
       packageToSave.obra_name = this.state.obra
@@ -189,6 +194,12 @@ export default class CreateRegistry extends Component {
 
   componentDidMount(){
     this.getLocation()
+    LoggedService.getUsers()
+    .then((response) => {
+      this.setState({
+        user: response._array[0].user_name,
+      })
+    }) 
   }
 
   render(){

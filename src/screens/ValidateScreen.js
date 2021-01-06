@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import RegisterSevice from "../services/RegisterSevice"
+import LoggedService from "./../services/LoggedService"
 
 import * as Print from 'expo-print';
 import * as Device from 'expo-device';
@@ -21,7 +22,8 @@ export default class ValidateScreen extends Component {
             confirmChild: false,
             qrCode: "Clique no imprimir",
             dataQr: "",
-            destiny: ""
+            destiny: "",
+            user: ""
         };
         this.qrCodeComponent = React.createRef();
     }
@@ -76,7 +78,9 @@ export default class ValidateScreen extends Component {
           car: data.car,
           created_date: data.created_date,
           created_time: data.created_time,
-          validate_time: data.validate_time
+          validate_time: data.validate_time,
+          created_user: data.created_user,
+          validator_user: data.validator_user
         }
         let strigToPrint = "Registro: " + data.id +
           "<br><br>Obra: " + data.obra_name +
@@ -89,11 +93,12 @@ export default class ValidateScreen extends Component {
 
         strigToPrint = strigToPrint + "<br><br>CB: " + data.car
         strigToPrint = strigToPrint + "<br><br>Data: " + data.created_date
-        strigToPrint = strigToPrint + "<br><br>Hora de criação: " + data.created_time + "<br><br>"
+        strigToPrint = strigToPrint + "<br><br>Hora de criação: " + data.created_time + "<br><br>" +
+        "<br><br>Criado por: " + data.created_user + "<br><br>"
 
         if(this.state.confirmChild){
           strigToPrint = strigToPrint + "Hora da Validação: " + data.validate_time + "<br><br>"
-          strigToPrint = strigToPrint + "Registro Validado<br><br>"
+          strigToPrint = strigToPrint + "Registro Validado por " + data.validator_user + "<br><br>"
         }
 
         this.setState({
@@ -121,7 +126,8 @@ export default class ValidateScreen extends Component {
         var dataToUpdate = this.props.route.params.dataKey
         dataToUpdate.validate_uri = this.state.confirmFromChild.uri
         dataToUpdate.validate_time = thisDate.getHours() + ":" + thisDate.getMinutes(),
-        dataToUpdate.destiny = this.state.destiny
+        dataToUpdate.destiny = this.state.destiny,
+        dataToUpdate.validator_user = this.state.user
         RegisterSevice.updateRegister(dataToUpdate)
           .then((response) => {
             alert(" Registro Atualizado ")
@@ -131,6 +137,12 @@ export default class ValidateScreen extends Component {
     
     componentDidMount() {
       this.prepareToPrint()
+      LoggedService.getUsers()
+      .then((response) => {
+        this.setState({
+          user: response._array[0].user_name,
+        })
+      })
     }
       
     render(){

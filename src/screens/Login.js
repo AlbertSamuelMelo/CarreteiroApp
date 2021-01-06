@@ -63,7 +63,7 @@ export default class Login extends Component {
           index: 0,
           routes: [
             {
-              name: 'Criar',
+              name: this.state.userDatabase[i].type,
             },
           ],
         })

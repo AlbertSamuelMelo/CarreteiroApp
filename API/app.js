@@ -58,6 +58,8 @@ function createTable(table){
     'created_date VARCHAR(255),' +
     'created_time VARCHAR(255),' +
     'validate_time VARCHAR(255),' +
+    'created_user VARCHAR(255),' +
+    'validator_user VARCHAR(255),' +
     'PRIMARY KEY (id));'
     
     ,function (error, results, fields) {
@@ -79,7 +81,9 @@ function insertTable(register){
       "longitude, " +
       "created_date, " +
       "created_time, " + 
-      "validate_time)" +
+      "validate_time, " +
+      "created_user, " +
+      "validator_user) " +
       "VALUES (" +
         "'" + register.id + "'," +
         "'" + register.obra_name + "'," +
@@ -91,11 +95,14 @@ function insertTable(register){
         "'" + register.longitude + "'," +
         "'" + register.created_date + "'," +
         "'" + register.created_time + "'," +
-        "'" + register.validate_time + "'" +
+        "'" + register.validate_time + "'," +
+        "'" + register.created_user + "'," +
+        "'" + register.validator_user + "'" +
       ")" +
       "ON DUPLICATE KEY UPDATE " + 
       "destiny = '" + register.destiny + "'," +
-      "validate_time = '" + register.validate_time + "';"
+      "validate_time = '" + register.validate_time + "'," +
+      "validator_user = '" + register.validator_user + "';"
     ,function (error, results, fields) {
       if (error) throw error;
     }
@@ -172,6 +179,8 @@ function createXlxs(data){
     {header: 'Data', key: 'created_date'},
     {header: 'Hora de criação', key: 'created_time'},
     {header: 'Hora da Validação', key: 'validate_time'},
+    {header: 'Criador do Registro', key: 'created_user'},
+    {header: 'Validador do Registro', key: 'validator_user'}
   ]
   
   // force the columns to be at least as long as their header row.

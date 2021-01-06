@@ -31,6 +31,9 @@ class RegisterService {
                         created_date text,
                         created_time text,
                         validate_time text,
+                        
+                        created_user text,
+                        validator_user text,
                         PRIMARY KEY (id)
                     );`
                 );
@@ -69,8 +72,11 @@ class RegisterService {
 
                     created_date,
                     created_time,
-                    validate_time) 
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                    validate_time,
+                    
+                    created_user,
+                    validator_user) 
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
                     
                     [
                         data.id,
@@ -89,7 +95,10 @@ class RegisterService {
 
                         data.created_date,
                         data.created_time,
-                        data.validate_time
+                        data.validate_time,
+
+                        data.created_user,
+                        data.validator_user
                     ], (_, {}) =>
                     resolve(200)
                 );
@@ -155,7 +164,9 @@ class RegisterService {
                     picture_uri = ?,
 
                     validate_uri = ?,
-                    validate_time = ?
+                    validate_time = ?,
+
+                    validator_user = ?
                     WHERE id = ?`, 
                     
                     [
@@ -164,6 +175,7 @@ class RegisterService {
     
                         data.validate_uri,
                         data.validate_time,
+                        data.validator_user,
                         data.id,
                     ], (_, {}) => 
                     resolve(200)
