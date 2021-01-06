@@ -86,7 +86,7 @@ export default class ValidateScan extends Component {
         "<br><br>Criado por: " + data.created_user + "<br><br>"
 
       
-        if(this.state.confirmChild){
+        if(data.validate_uri){
           strigToPrint = strigToPrint + "Hora da Validação: " + data.validate_time + "<br><br>"
           strigToPrint = strigToPrint + "Registro Validado por " + data.validator_user + "<br><br>"
         }
