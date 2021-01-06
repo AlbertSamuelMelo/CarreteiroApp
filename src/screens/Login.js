@@ -30,6 +30,9 @@ export default class Login extends Component {
         && this.state.userDatabase[i].password == this.state.password) {
           alert("Login completo")
           LoggedService.addUser(this.state.userDatabase[i])
+          this.props.navigation.push("Criar", {
+
+          })
           return
         }
     }
@@ -42,14 +45,25 @@ export default class Login extends Component {
         user_name: "Admin",
         password: "Admin",
         type: "Adiministrador"
-      }).then((response) => {
-        console.log(response)
-    })
+      }).then((response) => {})
     UserService.getUsers()
     .then((response) => {
       console.log(response)
       this.setState({userDatabase : response._array})
     })
+    LoggedService.getUsers()
+    .then((response) => {
+      if(response._array.length != 0){
+        this.props.navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Criar',
+            },
+          ],
+        })
+      }
+    }) 
   }
 
   render(){

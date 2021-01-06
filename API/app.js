@@ -80,32 +80,22 @@ function insertTable(register){
       "created_date, " +
       "created_time, " + 
       "validate_time)" +
-    "Select '" + register.id + "'," + 
-    "'" + register.obra_name + "'," +
-    "'" + register.material + "'," +
-    "'" + register.origin + "'," +
-    "'" + register.destiny + "'," +
-    "'" + register.car + "'," +
-    "'" + register.latitude + "'," +
-    "'" + register.longitude + "'," +
-    "'" + register.created_date + "', " +
-    "'" + register.created_time + "', " +
-    "'" + register.validate_time + "' " +
-    " Where not exists (select * from " + register.obra_name + "_Registers where id = '" + register.id + "');"
-    ,function (error, results, fields) {
-      updateTable(register)
-      if (error) throw error;
-    }
-  );
-}
-
-function updateTable(register){
-  connection.query(
-    "UPDATE " + register.obra_name + "_Registers" + 
-    " SET" +
-    " destiny = '" + register.destiny + "'," + 
-    " validate_time = '" + register.validate_time + "'" + 
-    " WHERE id = '" + register.id + "';"
+      "VALUES (" +
+        "'" + register.id + "'," +
+        "'" + register.obra_name + "'," +
+        "'" + register.material + "'," +
+        "'" + register.origin + "'," +
+        "'" + register.destiny + "'," +
+        "'" + register.car + "'," +
+        "'" + register.latitude + "'," +
+        "'" + register.longitude + "'," +
+        "'" + register.created_date + "'," +
+        "'" + register.created_time + "'," +
+        "'" + register.validate_time + "'" +
+      ")" +
+      "ON DUPLICATE KEY UPDATE " + 
+      "destiny = '" + register.destiny + "'," +
+      "validate_time = '" + register.validate_time + "';"
     ,function (error, results, fields) {
       if (error) throw error;
     }

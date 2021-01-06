@@ -138,9 +138,17 @@ function ProfileNavigator(){
   )
 }
 
+function LoginScreen({ navigation, route }){
+  return(
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Login navigation={navigation} route={route}/>
+    </View>
+  )
+}
+
 function LoggedScreens(){
   return(
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -179,15 +187,15 @@ function LoggedScreens(){
 
 export default function App() {
   changeScreenOrientation()
-  var loggedIn = []
   LoggedService.createLogged()
-  LoggedService.getUsers()
-  .then((response) => {
-    console.log("Response from get users logged", response._array)
-    loggedIn = response._array
-  }) 
 
   return (
-    LoggedScreens()
+    <NavigationContainer independent={true}>
+      <Stack.Navigator initialRouteName="Login" >
+        <Stack.Screen name="Login" component={LoginScreen}  />
+        <Stack.Screen name="Criar" component={LoggedScreens} options={{headerShown: false}}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+    //LoggedScreens()
   );
 }
