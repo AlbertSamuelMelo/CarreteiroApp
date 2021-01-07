@@ -42,6 +42,56 @@ function insertObra(obra){
   );
 }
 
+function createUser(){
+  connection.query(
+
+    'CREATE TABLE if not exists user (' +
+    'user_name varchar(255),' +
+    'password varchar(255),' +
+    'type varchar(255),' +
+    'PRIMARY KEY (user_name));'
+    
+    
+    ,function (error, results, fields) {
+      if (error) throw error;
+    }
+  );
+}
+
+async function getUser(res){
+  await connection.query(
+
+    "Select * from user;"
+    
+    ,function (error, results, fields) {
+      res.send(results)
+      if (error) throw error;
+    }
+  );
+}
+
+function insertUser(user){
+  connection.query(
+
+    "INSERT INTO user (" +
+      "user_name, " +
+      "password, " +
+      "type) " +
+      "VALUES (" +
+        "'" + user.user_name + "'," +
+        "'" + user.password + "'," +
+        "'" + user.type + "'" +
+      ")" +
+      "ON DUPLICATE KEY UPDATE " + 
+      "password = IF('" + user.password + "' <> '', '" + user.password + "', password), " +
+      "type = IF('" + user.type + "' <> '', '" + user.type + "', type);"
+    
+    ,function (error, results, fields) {
+      if (error) throw error;
+    }
+  );
+}
+
 function createTable(table){
   connection.query(
 
@@ -121,6 +171,14 @@ async function saveObras(dataToSave, res){
     for(var j = 0; j<numberOfRegisterOnObra; j++){
       await insertTable(dataToSave[Object.keys(dataToSave)[i]][j])
     }
+  }
+  res.send("")
+}
+
+async function saveUser(dataToSave, res){
+  await createUser()
+  for(var i = 0; i<Object.keys(dataToSave).length; i++){
+    await insertUser(Object.keys(dataToSave)[i])
   }
   res.send("")
 }
@@ -240,6 +298,16 @@ app.post('/saveCreatedRegisters', function(req, res){
   var dataToSave = req.body.dataToSave
   saveObras(dataToSave, res)
   // console.log("Chegou a requesição", req.body.dataToSave);
+});
+
+app.get('/getUser', function(req, res) {
+  getUser(res);
+});
+
+app.post('/saveUser', function(req, res){
+  var dataToSave = req.body.dataToSave
+  console.log("Chegou a requesição", req.body.dataToSave);
+  saveUser(dataToSave, res)
 });
 
 app.listen(3000)
