@@ -6,6 +6,7 @@ import TextPlaceHolder from '../components/TextPlaceHolder';
 import Configure from "../components/ConfigPlaceHolder"
 import api from "./../services/Api"
 import LoggedService from "./../services/LoggedService"
+import UserService from './../services/UsersService'
 
 import RegisterSevice from "../services/RegisterSevice"
 import ObraSevice from "../services/ObrasService"
@@ -15,6 +16,7 @@ export default class Profile extends Component {
     super();
     this.state = {
       dataToSend: {},
+      userToSend:{},
       obras: [],
       user: "",
       type: ""
@@ -27,6 +29,14 @@ export default class Profile extends Component {
         dataToSave: this.state.dataToSend
       });
       alert("Dados enviados pro servidor")
+    } catch (err){
+      console.log("Erro:", err)
+    }
+
+    try {
+      const response = await api.post('saveUser', {
+        dataToSave: this.state.userToSend
+      });
     } catch (err){
       console.log("Erro:", err)
     }
@@ -69,7 +79,23 @@ export default class Profile extends Component {
       }, () => this.prepareExportRegisters())
     })
   }
+
+  prepareUsersToExport(){
+    UserService.getUsers()
+    .then((response) => {
+      var usersToSend = {}
+      for(var i = 0; i<response._array.length; i++){
+        var userAtual = response._array[i].user_name
+        usersToSend[userAtual] = response._array[i]
+      }
+      this.setState({
+        userToSend: usersToSend
+      })
+    })
+  }
+
   componentDidMount(){
+    this.prepareUsersToExport()
     this.prepareToExport()
     LoggedService.getUsers()
     .then((response) => {

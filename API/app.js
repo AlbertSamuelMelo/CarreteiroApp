@@ -178,7 +178,7 @@ async function saveObras(dataToSave, res){
 async function saveUser(dataToSave, res){
   await createUser()
   for(var i = 0; i<Object.keys(dataToSave).length; i++){
-    await insertUser(Object.keys(dataToSave)[i])
+    await insertUser(dataToSave[Object.keys(dataToSave)[i]])
   }
   res.send("")
 }
@@ -306,7 +306,6 @@ app.get('/getUser', function(req, res) {
 
 app.post('/saveUser', function(req, res){
   var dataToSave = req.body.dataToSave
-  console.log("Chegou a requesição", req.body.dataToSave);
   saveUser(dataToSave, res)
 });
 
