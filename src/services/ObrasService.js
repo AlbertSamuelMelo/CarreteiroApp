@@ -29,7 +29,7 @@ class ObraService {
             return
         }
         if(obra.includes(" ")){
-            obra = obra.replaceAll(" ", "_")
+            obra = obra.replace(/ /g, "_")
         }
         db.transaction(
             tx => {

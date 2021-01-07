@@ -7,7 +7,7 @@ class RegisterService {
     // C R U D
     createTable(obra){
         if(obra.includes(" ")){
-            obra = obra.replaceAll(" ", "_")
+            obra = obra.replace(/ /g, "_")
         }
         db.transaction(
             tx => {
@@ -114,7 +114,7 @@ class RegisterService {
     //Read
     getRegisters(obra){
         if(obra.includes(" ")){
-            obra = obra.replaceAll(" ", "_")
+            obra = obra.replace(/ /g, "_")
         }
         return new Promise((resolve, reject) => db.transaction(
             tx => {         
@@ -133,7 +133,7 @@ class RegisterService {
 
     getRegisterById(obra, id){
         if(obra.includes(" ")){
-            obra = obra.replaceAll(" ", "_")
+            obra = obra.replace(/ /g, "_")
         }
         return new Promise((resolve, reject) => db.transaction(
             tx => {         
