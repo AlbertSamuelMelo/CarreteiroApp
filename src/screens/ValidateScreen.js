@@ -96,7 +96,7 @@ export default class ValidateScreen extends Component {
         strigToPrint = strigToPrint + "<br><br>Hora de criação: " + data.created_time + "<br><br>" +
         "<br><br>Criado por: " + data.created_user + "<br><br>"
 
-        if(data.validate_uri){
+        if(data.destiny != null){
           strigToPrint = strigToPrint + "Hora da Validação: " + data.validate_time + "<br><br>"
           strigToPrint = strigToPrint + "Registro Validado por " + data.validator_user + "<br><br>"
         }

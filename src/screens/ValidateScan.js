@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import RegisterSevice from "../services/RegisterSevice"
-import ObraS from '../services/ObrasService';
+import ObraSevice from "../services/ObrasService"
 import LoggedService from "./../services/LoggedService"
 
 import * as Print from 'expo-print';
@@ -86,7 +86,7 @@ export default class ValidateScan extends Component {
         "<br><br>Criado por: " + data.created_user + "<br><br>"
 
       
-        if(data.validate_uri){
+        if(data.destiny != null){
           strigToPrint = strigToPrint + "Hora da Validação: " + data.validate_time + "<br><br>"
           strigToPrint = strigToPrint + "Registro Validado por " + data.validator_user + "<br><br>"
         }
@@ -113,6 +113,9 @@ export default class ValidateScan extends Component {
               alert("Preencha todos os campos")
               return
         }
+        ObraSevice.createTable(this.props.route.params.dataKey.obra_name)
+        ObraSevice.addObra(this.props.route.params.dataKey.obra_name)
+
         RegisterSevice.createTable(this.props.route.params.dataKey.obra_name)
         RegisterSevice.getRegisterById(this.props.route.params.dataKey.obra_name, this.props.route.params.dataKey.id)
         .then((response) => {

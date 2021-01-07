@@ -100,9 +100,11 @@ function insertTable(register){
         "'" + register.validator_user + "'" +
       ")" +
       "ON DUPLICATE KEY UPDATE " + 
-      "destiny = '" + register.destiny + "'," +
-      "validate_time = '" + register.validate_time + "'," +
-      "validator_user = '" + register.validator_user + "';"
+      "destiny = IF('" + register.destiny + "' <> '" + null + "', '" + register.destiny + "', destiny), " +
+      "latitude = IF('" + register.latitude + "' <> '" + null + "', '" + register.latitude + "', latitude), " +
+      "longitude = IF('" + register.longitude + "' <> '" + null + "', '" + register.longitude + "', longitude), " +
+      "validate_time = IF('" + register.validate_time + "' <> '', '" + register.validate_time + "', validate_time), " +
+      "validator_user = IF('" + register.validator_user + "' <> '', '" + register.validator_user + "', validator_user);"
     ,function (error, results, fields) {
       if (error) throw error;
     }

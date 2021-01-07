@@ -35,16 +35,16 @@ class UserService {
         return new Promise((resolve, reject) => db.transaction(
             tx => {
                 tx.executeSql(
-                    "insert into user" + 
-                    "(user_name, " +
-                    "password," +
-                    "type) " +
-                    "values (?, ?, ?) ON CONFLICT(user_name) DO UPDATE SET password = ?;", 
+                    `INSERT OR REPLACE INTO user
+                    (user_name,
+                    password,
+                    type
+                    )
+                    VALUES (?, ?, ?)`, 
                     [
                         user.user_name,
                         user.password,
                         user.type,
-                        user.password,
                     ], (_, {}) =>
                     resolve("ResolveAddUser")
                 );
