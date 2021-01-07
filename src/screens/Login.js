@@ -44,18 +44,33 @@ export default class Login extends Component {
     alert("Dados Incorretos")
   }
 
+  async getUserFromServer(){
+    try {
+      const response = await api.get('getUser');
+      for(var i = 0; i<response.data.length; i++){
+        UserService.addUser({
+          user_name: response.data[i].user_name,
+          password: response.data[i].password,
+          type: response.data[i].type
+        }).then((response) => {})
+      }
+    } catch (err){
+      console.log("Erro:", err)
+    }
+  }
   componentDidMount(){
     UserService.createUsers()
     UserService.addUser({
         user_name: "Admin",
         password: "Admin",
         type: "Adiministrador"
-      }).then((response) => {})
-    UserService.getUsers()
-    .then((response) => {
-      console.log("Resposta do getUsers", response)
-      this.setState({userDatabase : response._array})
-    })
+      }).then((response) => {
+        this.getUserFromServer()
+        UserService.getUsers()
+        .then((response) => {
+          this.setState({userDatabase : response._array})
+        })
+      })
     LoggedService.getUsers()
     .then((response) => {
       if(response._array.length != 0){
