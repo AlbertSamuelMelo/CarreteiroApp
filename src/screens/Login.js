@@ -53,7 +53,7 @@ export default class Login extends Component {
       }).then((response) => {})
     UserService.getUsers()
     .then((response) => {
-      console.log(response)
+      console.log("Resposta do getUsers", response)
       this.setState({userDatabase : response._array})
     })
     LoggedService.getUsers()

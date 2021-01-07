@@ -32,7 +32,7 @@ export default class ScanQR extends Component {
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     this.props.navigation.push("Validar QrCode", {
         dataKey: JSON.parse(data),
-        callback: this.callbackOnBack.bind(this)
+        callbackToScan: this.callbackOnBack.bind(this)
       })
     }
 

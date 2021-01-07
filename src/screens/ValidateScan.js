@@ -52,7 +52,7 @@ export default class ValidateScan extends Component {
         }else{
           Print.printAsync({uri: filePath.uri})
         }
-        this.props.route.params.callback();
+        this.props.route.params.callbackToScan();
         this.props.navigation.goBack()
     }
     

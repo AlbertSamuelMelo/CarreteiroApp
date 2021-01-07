@@ -10,11 +10,10 @@ class UserService {
             tx => {
                 tx.executeSql(
                     `create table if not exists user (
-                        id integer AUTO_INCREMENT,
                         user_name text,
                         password text,
                         type text,
-                        PRIMARY KEY (id)
+                        PRIMARY KEY (user_name)
                     );`,
                 );
             }, (error) => {
@@ -36,14 +35,18 @@ class UserService {
         return new Promise((resolve, reject) => db.transaction(
             tx => {
                 tx.executeSql(
-                    "INSERT INTO user (user_name, password, type)" +
-                    "Select '" + user.user_name + "', '" + user.password + "', '" + user.type + "' Where not exists(select * from user where user_name = '" + user.user_name + "');", 
+                    "insert into user" + 
+                    "(user_name, " +
+                    "password," +
+                    "type) " +
+                    "values (?, ?, ?) ON CONFLICT(user_name) DO UPDATE SET password = ?;", 
                     [
                         user.user_name,
                         user.password,
                         user.type,
+                        user.password,
                     ], (_, {}) =>
-                    resolve(200)
+                    resolve("ResolveAddUser")
                 );
             }, (error) => {
                 console.log("error call back : " + JSON.stringify(error));
