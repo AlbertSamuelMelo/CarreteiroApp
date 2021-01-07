@@ -139,8 +139,8 @@ async function getTableRegisters( obra, dateToFilter, res ){
     
     ,function (error, results, fields) {
       if( results != undefined ){
-        createXlxs( results )
-        res.send("Ok")
+        createXlxs( results, res )
+        //res.send("Ok")
       } else {
         res.send("Sem registros pra essa data")
       }
@@ -161,7 +161,7 @@ async function getObras(dateToFilter, res){
   );
 }
 
-function createXlxs(data){
+function createXlxs(data, response){
   // need to create a workbook object. Almost everything in ExcelJS is based off of the workbook object.
   let workbook = new Excel.Workbook()
   
@@ -217,7 +217,12 @@ function createXlxs(data){
   ]
   
   // Keep in mind that reading and writing is promise based.
-  workbook.xlsx.writeFile('Registers.xlsx')
+  response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	response.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+	workbook.xlsx.write(response)
+		.then(function (data) {
+			response.end();
+		});
 }
 
 app.get('/', function (req, res) {
