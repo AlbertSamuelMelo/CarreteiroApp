@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import cameraImage from "../../assets/camera.png"
 import * as MediaLibrary from 'expo-media-library';
+import * as Permissions from 'expo-permissions';
 
 export default function CameraPage(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -24,7 +25,10 @@ export default function CameraPage(props) {
       let photo = await this.camera.takePictureAsync({
         base64: true,
       });
-      MediaLibrary.saveToLibraryAsync(photo.uri)
+      const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+      if (permission.status === 'granted') {
+        MediaLibrary.saveToLibraryAsync(photo.uri)
+      }
       returnToParent(photo)
     }
   };

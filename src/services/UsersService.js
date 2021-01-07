@@ -30,7 +30,7 @@ class UserService {
             return
         }
         if(user.user_name.includes(" ")){
-            user.user_name = user.user_name.replaceAll(" ", "_")
+            user.user_name = user.user_name.replace(/ /g, "_")
         }
         return new Promise((resolve, reject) => db.transaction(
             tx => {

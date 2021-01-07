@@ -51,7 +51,7 @@ class RegisterService {
             return
         }
         if(data.obra_name.includes(" ")){
-            data.obra_name = data.obra_name.replaceAll(" ", "_")
+            data.obra_name = data.obra_name.replace(/ /g, "_")
         }
         return new Promise((resolve, reject) => db.transaction(
             tx => {
@@ -154,7 +154,7 @@ class RegisterService {
     updateRegister(data){
         if(data.obra_name.includes(" ")){
             console.log("Includes")
-            data.obra_name = data.obra_name.replaceAll(" ", "_")
+            data.obra_name = data.obra_name.replace(/ /g, "_")
         }
         return new Promise((resolve, reject) => db.transaction(
             tx => {

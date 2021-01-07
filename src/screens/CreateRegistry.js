@@ -59,7 +59,7 @@ export default class CreateRegistry extends Component {
 
     if(Device.osName === "iOS"){
       Sharing.shareAsync(filePath.uri)
-      Clipboard.setString(stringToPrint.replaceAll("<br>", "\n"))
+      Clipboard.setString(stringToPrint.replace(/<br>/g, "\n"))
     }else{
       Print.printAsync({uri: filePath.uri})
     }

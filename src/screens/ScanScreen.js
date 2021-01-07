@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -16,6 +16,17 @@ export default class ScanQR extends Component {
 
   async componentDidMount() {
     this.getPermissionsAsync();
+    this.props.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={() => 
+          {
+            this.setState({ scanned: false });
+          }
+        }>
+          <Text style={{marginRight: 15, color: "#147efb"}}>Re Scan</Text>
+        </TouchableOpacity>
+      ),
+    });
   }
 
   getPermissionsAsync = async () => {
@@ -32,7 +43,7 @@ export default class ScanQR extends Component {
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     this.props.navigation.push("Validar QrCode", {
         dataKey: JSON.parse(data),
-        callbackToScan: this.callbackOnBack()
+        //callbackToScan: this.callbackOnBack()
       })
     }
 
