@@ -33,7 +33,7 @@ export default class UsersConfiguration extends Component {
         password: this.state.password,
         type: this.state.type
     }).then((response) => {
-        console.log(response)
+        //console.log(response)
         alert("Usuário Criado")
         this.props.navigation.goBack()
       })

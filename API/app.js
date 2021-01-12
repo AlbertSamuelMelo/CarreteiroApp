@@ -2,6 +2,8 @@ const express = require('express')
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
 const Excel = require('exceljs');
+var multer = require('multer')
+var cors = require('cors');
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -12,6 +14,20 @@ var connection = mysql.createConnection({
 
 const app = express()
 connection.connect();
+
+app.use(cors())
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '/Develop/CarreteiroApp2/CarreteiroApp/API/public')
+  },
+  filename: function (req, file, cb) {
+    //console.log(file)
+    cb(null, file.originalname + '.jpg')
+  }
+})
+ 
+var upload = multer({ storage: storage })
 
 app.use(bodyParser.json());
 
@@ -104,7 +120,6 @@ function createTable(table){
     'car VARCHAR(255),' +
     'latitude VARCHAR(255),' +
     'longitude VARCHAR(255),' +
-    /*Add photo later*/
     'created_date VARCHAR(255),' +
     'created_time VARCHAR(255),' +
     'validate_time VARCHAR(255),' +
@@ -161,7 +176,7 @@ function insertTable(register){
   );
 }
 
-async function saveObras(dataToSave, res){
+async function saveObras(dataToSave){
   await createObra()
   for(var i = 0; i<Object.keys(dataToSave).length; i++){
     await insertObra(Object.keys(dataToSave)[i])
@@ -172,7 +187,6 @@ async function saveObras(dataToSave, res){
       await insertTable(dataToSave[Object.keys(dataToSave)[i]][j])
     }
   }
-  res.send("")
 }
 
 async function saveUser(dataToSave, res){
@@ -296,8 +310,13 @@ app.get('/getExportData/:date', function(req, res) {
 
 app.post('/saveCreatedRegisters', function(req, res){
   var dataToSave = req.body.dataToSave
-  saveObras(dataToSave, res)
-  // console.log("Chegou a requesição", req.body.dataToSave);
+  saveObras(dataToSave)
+  res.status(200).json({ message: "success!" });
+});
+
+app.post('/savePhotoRegisters', upload.array('file'), (req, res) => {
+  //console.log(req.file)
+  res.status(200).json({ message: "success!" });
 });
 
 app.get('/getUser', function(req, res) {

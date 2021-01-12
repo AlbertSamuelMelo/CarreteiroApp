@@ -7,6 +7,7 @@ import Configure from "../components/ConfigPlaceHolder"
 import api from "./../services/Api"
 import LoggedService from "./../services/LoggedService"
 import UserService from './../services/UsersService'
+import FormData from 'form-data';
 
 import RegisterSevice from "../services/RegisterSevice"
 import ObraSevice from "../services/ObrasService"
@@ -21,17 +22,35 @@ export default class Profile extends Component {
       user: "",
       type: ""
     };
+    this.formData = new FormData();
   }
 
   exportData = async () => {
     try {
+      const response = await api.post('savePhotoRegisters', this.formData,
+      {
+        headers: {
+          Accept: 'application/json',
+          "Content-Type": `multipart/form-data; boundary=${this.formData._boundary};`
+        }
+      }
+      ).then( () => {
+        alert("Fotos enviadas para o servidor")
+      })
+    } catch (err){
+      console.error("Erro:", err)
+    }
+
+    try {
       const response = await api.post('saveCreatedRegisters', {
         dataToSave: this.state.dataToSend
       });
-      alert("Dados enviados pro servidor")
+      alert("Dados enviados para o servidor")
     } catch (err){
       console.log("Erro:", err)
     }
+
+
 
     try {
       const response = await api.post('saveUser', {
@@ -54,12 +73,35 @@ export default class Profile extends Component {
     })
   }
 
+  createFormData = (register) => {
+    if(register.picture_uri != "" && register.picture_uri != null){
+      this.formData.append('file', {
+        name: register.id + "_picture",
+        type: 'image/jpg',
+        uri: Platform.OS === 'android' ? register.picture_uri : register.picture_uri.replace('file://', ''),
+      });
+    }
+
+    if(register.validate_uri != "" && register.validate_uri != null){
+      this.formData.append('file', {
+        name: register.id + "_validate",
+        type: 'image/jpg',
+        uri: Platform.OS === 'android' ? register.validate_uri : register.validate_uri.replace('file://', ''),
+      });
+    }
+  };
+
   prepareExportRegisters = async () =>{
     var dataToSend = this.state.dataToSend
     for(var j = 0; j<this.state.obras.length; j++){
       await RegisterSevice.getRegisters(this.state.obras[j].obra_name)
       .then((response) => {
-        dataToSend[this.state.obras[j].obra_name] = response._array
+        var registersArray = []
+        for(var x = 0; x<response._array.length; x++){
+          this.createFormData(response._array[x])
+          registersArray.push(response._array[x])
+        }
+        dataToSend[this.state.obras[j].obra_name] = registersArray
       })
     }
     this.setState({dataToSend: dataToSend})

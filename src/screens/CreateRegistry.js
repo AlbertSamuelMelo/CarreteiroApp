@@ -137,7 +137,7 @@ export default class CreateRegistry extends Component {
   }
 
   createRegistry(){
-    console.log(this.state.obra)
+    //console.log(this.state.obra)
     var thisDate = new Date()
     if (this.state.obra == "" ||
         this.state.material == "" || 
