@@ -168,10 +168,13 @@ export default class Profile extends Component {
         ) : (
           <>
             <StatusBar style="dark" />
+            {this.state.type != "Apontador" ? 
             <Configure 
               srceen="Usuarios"
               navigation={this.props.navigation}
-            />
+            /> : 
+            <>
+            </>}
             <CameraPlaceHolder/>
             <TextPlaceHolder text={this.state.user}/>
             <TextPlaceHolder text={this.state.type}/>
