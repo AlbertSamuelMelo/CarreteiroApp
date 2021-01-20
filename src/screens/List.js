@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, SafeAreaView } from 'react-native';
-import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
+import { StyleSheet, View, SafeAreaView, FlatList } from 'react-native';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import ListCell from "./ListCell";
 import ObraService from "../services/ObrasService"
 import RegisterService from "../services/RegisterSevice"
@@ -12,20 +12,25 @@ export default class List extends Component {
     this.state = {
         storage: false,
         dataOnStorage: [],
+        isLoading: false
     };
   }
 
   _retrieveData = () => {
+    this.setState({isLoading:true})
+
     if (this.props.route.params != undefined){
       RegisterService.getRegisters(this.props.route.params.key.obra_name)
       .then((response) => {
         this.setState({storage: true})
         this.setState({dataOnStorage: response._array})
+        this.setState({isLoading:false})
       })
     } else {
       ObraService.getObras()
       .then((response) => {
         this.setState({dataOnStorage: response._array})
+        this.setState({isLoading:false})
       })
     }
   };
@@ -54,6 +59,8 @@ export default class List extends Component {
             <FlatList 
                 data={this.state.dataOnStorage}
                 keyExtractor={(item, index) => index.toString()}
+                refreshing={this.state.isLoading}
+                onRefresh={this._retrieveData}
                 renderItem={({item, index, separators}) => 
                 <TouchableHighlight
                     onPress={() => this.selectListItem(item)}
@@ -69,7 +76,6 @@ export default class List extends Component {
                 </TouchableHighlight>}
             />
           </SafeAreaView>
-
       </View>
     );
   }

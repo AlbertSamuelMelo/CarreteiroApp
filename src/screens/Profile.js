@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import TextPlaceHolder from '../components/TextPlaceHolder';
 import Configure from "../components/ConfigPlaceHolder"
@@ -20,12 +20,14 @@ export default class Profile extends Component {
       userToSend:{},
       obras: [],
       user: "",
-      type: ""
+      type: "",
+      onLoad: true
     };
     this.formData = new FormData();
   }
 
   exportData = async () => {
+    this.setState({onLoad: true})
     try {
       const response = await api.post('savePhotoRegisters', this.formData,
       {
@@ -46,6 +48,7 @@ export default class Profile extends Component {
         dataToSave: this.state.dataToSend
       });
       alert("Dados enviados para o servidor")
+      this.setState({onLoad: false})
     } catch (err){
       console.log("Erro:", err)
     }
@@ -105,6 +108,7 @@ export default class Profile extends Component {
       })
     }
     this.setState({dataToSend: dataToSend})
+    this.setState({onLoad: false})
   }
 
   prepareToExport(){
@@ -137,6 +141,7 @@ export default class Profile extends Component {
   }
 
   componentDidMount(){
+    this.setState({onLoad: true})
     this.prepareUsersToExport()
     this.prepareToExport()
     LoggedService.getUsers()
@@ -150,25 +155,38 @@ export default class Profile extends Component {
 
   render(){
     return (
-      <View style={styles.container}>
-        <StatusBar style="dark" />
-        <Configure 
-          srceen="Usuarios"
-          navigation={this.props.navigation}
-        />
-        <CameraPlaceHolder/>
-        <TextPlaceHolder text={this.state.user}/>
-        <TextPlaceHolder text={this.state.type}/>
-        <View style={styles.exportContainer}>
-          <TouchableOpacity onPress={() => this.exportData()}>
-              <Text style={styles.text}>Exportar Dados</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.resetContainer}>
-          <TouchableOpacity onPress={() => this.logout()}>
-              <Text style={styles.textPassword}>Logout</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={!this.state.onLoad ? styles.container : styles.containerOnLoad}>
+        {this.state.onLoad ? (
+          <ActivityIndicator
+            //visibility of Overlay Loading Spinner
+            visible={this.state.onLoad}
+            //Text with the Spinner
+            textContent={'Loading...'}
+            size="large"
+            color="#FFFFFF"
+          />
+        ) : (
+          <>
+            <StatusBar style="dark" />
+            <Configure 
+              srceen="Usuarios"
+              navigation={this.props.navigation}
+            />
+            <CameraPlaceHolder/>
+            <TextPlaceHolder text={this.state.user}/>
+            <TextPlaceHolder text={this.state.type}/>
+            <View style={styles.exportContainer}>
+              <TouchableOpacity onPress={() => this.exportData()}>
+                  <Text style={styles.text}>Exportar Dados</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.resetContainer}>
+              <TouchableOpacity onPress={() => this.logout()}>
+                  <Text style={styles.textPassword}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
     );
   }
@@ -181,6 +199,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#115B73',
     alignItems: 'center',
     justifyContent: 'flex-end',
+  },
+  containerOnLoad: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: '#115B73',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   exportContainer: {
     width: "90%",

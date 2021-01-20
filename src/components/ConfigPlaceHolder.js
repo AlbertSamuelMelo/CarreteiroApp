@@ -15,8 +15,8 @@ export default class ConfigurePlaceHolder extends Component {
               value:"Adiministrador"
             },
             {
-              label:"Validador",
-              value:"Validador"
+              label:"Apontador",
+              value:"Apontador"
             }]
         };
       }

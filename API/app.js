@@ -254,7 +254,7 @@ function createXlxs(data, response){
     {header: 'Hora de criação', key: 'created_time'},
     {header: 'Hora da Validação', key: 'validate_time'},
     {header: 'Criador do Registro', key: 'created_user'},
-    {header: 'Validador do Registro', key: 'validator_user'}
+    {header: 'Apontador do Registro', key: 'validator_user'}
   ]
   
   // force the columns to be at least as long as their header row.

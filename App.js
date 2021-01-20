@@ -229,7 +229,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login" >
         <Stack.Screen name="Login" component={LoginScreen}  />
         <Stack.Screen name="Adiministrador" component={LoggedScreensAdministrator} options={{headerShown: false}}/>
-        <Stack.Screen name="Validador" component={LoggedScreens} options={{headerShown: false}}/>
+        <Stack.Screen name="Apontador" component={LoggedScreens} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
     //LoggedScreens()

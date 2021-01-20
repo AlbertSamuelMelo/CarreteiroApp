@@ -20,6 +20,10 @@ export default class RegisterConfiguration extends Component {
   }
 
   selectObra(){
+    if(this.state.obra == ""){
+      alert("Selecione uma obra ou crie uma " + this.state.obra)
+      return
+    }
     alert("Obra selecionada " + this.state.obra)
     this.props.route.params.onGoBack(this.state.obra);
     this.props.navigation.goBack()
