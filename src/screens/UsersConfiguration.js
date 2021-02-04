@@ -40,7 +40,9 @@ export default class UsersConfiguration extends Component {
   }
 
   listCbms(){
-    this.props.navigation.push("List")
+    this.props.navigation.push("List", {
+      key: "CBMS"
+    })
   }
 
   componentDidMount(){

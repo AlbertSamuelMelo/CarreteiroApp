@@ -19,14 +19,19 @@ export default class List extends Component {
   _retrieveData = () => {
     this.setState({isLoading:true})
 
-    if (this.props.route.params != undefined){
+    if (this.props.route.params.key == "CBMS"){
+      console.log(" SUCESSO ")
+      this.setState({isLoading:false})
+    } 
+    else if (this.props.route.params != undefined) {
       RegisterService.getRegisters(this.props.route.params.key.obra_name)
       .then((response) => {
         this.setState({storage: true})
         this.setState({dataOnStorage: response._array})
         this.setState({isLoading:false})
       })
-    } else {
+    }
+    else {
       ObraService.getObras()
       .then((response) => {
         this.setState({dataOnStorage: response._array})
