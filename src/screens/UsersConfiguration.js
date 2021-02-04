@@ -39,6 +39,10 @@ export default class UsersConfiguration extends Component {
       })
   }
 
+  listCbms(){
+    this.props.navigation.push("List")
+  }
+
   componentDidMount(){
     UserService.createUsers()
   }
@@ -47,6 +51,11 @@ export default class UsersConfiguration extends Component {
     return (
       <View style={styles.container}>
         <StatusBar style="dark" />
+        <View style={styles.exportContainer}>
+          <TouchableOpacity onPress={() => this.listCbms()}>
+              <Text style={styles.text}>Registro de CBMS</Text>
+          </TouchableOpacity>
+        </View>
         <TextPlaceHolder 
             input="Login"
             callbackFromParent={(value) => this.userTaked(value)}

@@ -134,6 +134,7 @@ function ProfileNavigator(){
         <Stack.Screen name="Perfil" component={ProfileScreen} />
         <Stack.Screen name="Configurar Usuarios" component={ConfigureProfile} />
         <Stack.Screen name="Login" component={LoginScreen}  />
+        <Stack.Screen name="List" component={ListScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
