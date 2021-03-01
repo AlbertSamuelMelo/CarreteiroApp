@@ -7,6 +7,7 @@ import ObraService from "../services/ObrasService"
 import RegisterService from "../services/RegisterSevice"
 import CBMSService from "../services/CBMSServices"
 import DialogInput from 'react-native-dialog-input';
+import api from "./../services/Api"
 
 export default class List extends Component {
   constructor() {
@@ -15,14 +16,15 @@ export default class List extends Component {
         storage: false,
         dataOnStorage: [],
         isLoading: false,
-        isDialogVisible: false
+        isDialogVisible: false,
+        cbms: false
     };
   }
 
   _retrieveData = () => {
     this.setState({isLoading:true})
 
-    if (this.props.route.params.key == "CBMS"){
+    if (this.props.route.params != undefined && this.props.route.params.key == "CBMS"){
       this.props.navigation.setOptions({
         headerRight: () => (
           <TouchableOpacity onPress={() => 
@@ -34,9 +36,9 @@ export default class List extends Component {
           </TouchableOpacity>
         ),
       });
-      CBMSService.createTable(this.state.obra)
       CBMSService.getCBMS()
       .then((response) => {
+        this.setState({cbms: true})
         this.setState({dataOnStorage: response._array})
         this.setState({isLoading:false})
       })
@@ -79,6 +81,16 @@ export default class List extends Component {
     this.setState({isDialogVisible: false})
   }
 
+  deleteCBMSFromServer = async (cbmsToDelete) => {
+    try {
+      const response = await api.delete('deleteCBMS', {
+        dataToDelete: cbmsToDelete
+      });
+    } catch (err){
+      console.log("Erro:", err)
+    }
+  }
+
   deleteCBMS(item){
     Alert.alert(
       "Alert Title",
@@ -91,6 +103,7 @@ export default class List extends Component {
         },
         { text: "Delete", onPress: () => {
           CBMSService.deleteCBMS(item.cbms_name)
+          this.deleteCBMSFromServer(item.cbms_name)
           alert("CBMS: " + item.cbms_name + " deletado")
         } }
       ],
@@ -127,7 +140,7 @@ export default class List extends Component {
                               title: 
                               item.material + " - " 
                               + item.car } 
-                              : this.props.route.params.key == "CBMS" ? 
+                              : this.state.cbms ? 
                               {title: item.cbms_name} 
                               : {title: item.obra_name}}/>
                 </TouchableHighlight>}

@@ -11,6 +11,7 @@ import FormData from 'form-data';
 
 import RegisterSevice from "../services/RegisterSevice"
 import ObraSevice from "../services/ObrasService"
+import CBMSService from "../services/CBMSServices"
 
 export default class Profile extends Component {
   constructor() {
@@ -18,6 +19,7 @@ export default class Profile extends Component {
     this.state = {
       dataToSend: {},
       userToSend:{},
+      cbmsToSend:{},
       obras: [],
       user: "",
       type: "",
@@ -53,14 +55,20 @@ export default class Profile extends Component {
       console.log("Erro:", err)
     }
 
-
-
     try {
       const response = await api.post('saveUser', {
         dataToSave: this.state.userToSend
       });
     } catch (err){
       console.log("Erro:", err)
+    }
+
+    try {
+      const response = await api.post('saveCBMS', {
+        dataToSave: this.state.cbmsToSend
+      });
+    } catch (err){
+      console.log("Erro no saveCBMS:", err)
     }
   }
 
@@ -140,8 +148,23 @@ export default class Profile extends Component {
     })
   }
 
+  prepareCBMSToExport(){
+    CBMSService.getCBMS()
+    .then((response) => {
+      var cbmsList = {}
+      for(var i = 0; i<=response._array.length - 1; i++){
+        var cbmsAtual = response._array[i].cbms_name
+        cbmsList[cbmsAtual] = response._array[i]
+      }
+      this.setState({
+        cbmsToSend: cbmsList
+      })
+    })
+  }
+
   componentDidMount(){
     this.setState({onLoad: true})
+    this.prepareCBMSToExport()
     this.prepareUsersToExport()
     this.prepareToExport()
     LoggedService.getUsers()

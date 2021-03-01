@@ -31,6 +31,64 @@ var upload = multer({ storage: storage })
 
 app.use(bodyParser.json());
 
+function createCBMS(){
+  connection.query(
+
+    'CREATE TABLE if not exists cbms (' +
+    'id INT AUTO_INCREMENT,' +
+    'cbms_name varchar(255),' +
+    'PRIMARY KEY (id));'
+    
+    
+    ,function (error, results, fields) {
+      if (error) throw error;
+    }
+  );
+}
+
+async function getCBMS(res){
+  createCBMS()
+  await connection.query(
+
+    "Select * from cbms;"
+    
+    ,function (error, results, fields) {
+      if (error) throw error;
+      res.send(results)
+    }
+  );
+}
+
+function insertCBMS(cbms){
+  connection.query(
+
+    "INSERT INTO cbms (cbms_name)" +
+    "Select '" + cbms + "' Where not exists(select * from cbms where cbms_name = '" + cbms + "');"
+    
+    ,function (error, results, fields) {
+      if (error) throw error;
+    }
+  );
+}
+
+async function saveCBMS(dataToSave){
+  await createCBMS()
+  for(var i = 0; i<Object.keys(dataToSave).length; i++){
+    await insertCBMS(Object.keys(dataToSave)[i])
+  }
+}
+
+function deleteCBMS(cbms){
+  connection.query(
+
+    "DELETE FROM cbms WHERE cbms_name = '" + cbms + "';"
+
+    ,function (error, results, fields) {
+      if (error) throw error;
+    }
+  );
+}
+
 function createObra(){
   connection.query(
 
@@ -75,6 +133,7 @@ function createUser(){
 }
 
 async function getUser(res){
+  createUser()
   await connection.query(
 
     "Select * from user;"
@@ -223,6 +282,19 @@ async function getTableRegisters( obra, dateToFilter, res ){
   );
 }
 
+async function getObrasFromServer(res){
+  createObra()
+  await connection.query(
+
+    "Select * from obra;"
+    
+    ,function (error, results, fields) {
+      res.send(results)
+      if (error) throw error;
+    }
+  );
+}
+
 async function getObras(dateToFilter, res){
   await connection.query(
 
@@ -317,6 +389,24 @@ app.post('/saveCreatedRegisters', function(req, res){
 app.post('/savePhotoRegisters', upload.array('file'), (req, res) => {
   //console.log(req.file)
   res.status(200).json({ message: "success!" });
+});
+
+app.get('/getCBMS', function(req, res) {
+  getCBMS(res);
+});
+
+app.post('/saveCBMS', function(req, res){
+  var dataToSave = req.body.dataToSave
+  saveCBMS(dataToSave)
+});
+
+app.delete('/deleteCBMS', function(req, res){
+  var dataToDelete = req.body.dataToDelete
+  deleteCBMS(dataToDelete)
+});
+
+app.get('/getObra', function(req, res) {
+  getObrasFromServer(res);
 });
 
 app.get('/getUser', function(req, res) {

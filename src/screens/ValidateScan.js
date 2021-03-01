@@ -113,7 +113,7 @@ export default class ValidateScan extends Component {
               alert("Preencha todos os campos")
               return
         }
-        ObraSevice.createTable(this.props.route.params.dataKey.obra_name)
+        ObraSevice.createTable()
         ObraSevice.addObra(this.props.route.params.dataKey.obra_name)
 
         RegisterSevice.createTable(this.props.route.params.dataKey.obra_name)

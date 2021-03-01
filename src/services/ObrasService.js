@@ -5,7 +5,7 @@ const db=DatabaseConnection.getConnection()
 class ObraService {
 
     // C R U D
-    createTable(obra){
+    createTable(){
         db.transaction(
             tx => {
                 tx.executeSql(

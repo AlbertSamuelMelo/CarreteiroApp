@@ -96,7 +96,7 @@ export default class CreateRegistry extends Component {
     return `${ pre }_${ new Date().getTime() }`;
   }
   _storeData = (data) => {
-    ObraSevice.createTable(this.state.obra)
+    ObraSevice.createTable()
     ObraSevice.addObra(this.state.obra)
 
     RegisterSevice.createTable(this.state.obra)

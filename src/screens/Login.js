@@ -5,6 +5,9 @@ import TextPlaceHolder from '../components/TextPlaceHolder';
 import api from "./../services/Api"
 import UserService from './../services/UsersService'
 import LoggedService from "./../services/LoggedService"
+import ObraSevice from "../services/ObrasService"
+import CBMSService from "../services/CBMSServices"
+import ObraS from '../services/ObrasService';
 
 export default class Login extends Component {
   constructor() {
@@ -58,7 +61,35 @@ export default class Login extends Component {
       console.log("Erro:", err)
     }
   }
+
+  async getObraFromServer(){
+    try {
+      const response = await api.get('getObra');
+      for(var i = 0; i<response.data.length; i++){
+        ObraSevice.addObra(response.data[i].obra_name)
+      }
+    } catch (err){
+      console.log("Erro:", err)
+    }
+  }
+
+  async getCBMSFromServer(){
+    try {
+      const response = await api.get('getCBMS');
+      for(var i = 0; i<response.data.length; i++){
+        CBMSService.addCBMS(response.data[i].cbms_name)
+      }
+    } catch (err){
+      console.log("Erro:", err)
+    }
+  }
+
   componentDidMount(){
+    ObraSevice.createTable()
+    this.getObraFromServer()
+    CBMSService.createTable()
+    this.getCBMSFromServer()
+
     UserService.createUsers()
     UserService.addUser({
         user_name: "Admin",

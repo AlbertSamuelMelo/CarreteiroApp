@@ -5,7 +5,7 @@ const db=DatabaseConnection.getConnection()
 class CBMSServices {
 
     // C R U D
-    createTable(cbms){
+    createTable(){
         db.transaction(
             tx => {
                 tx.executeSql(
