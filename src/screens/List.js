@@ -5,6 +5,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import ListCell from "./ListCell";
 import ObraService from "../services/ObrasService"
 import RegisterService from "../services/RegisterSevice"
+import CBMSService from "../services/CBMSServices"
 import DialogInput from 'react-native-dialog-input';
 
 export default class List extends Component {
@@ -33,7 +34,12 @@ export default class List extends Component {
           </TouchableOpacity>
         ),
       });
-      this.setState({isLoading:false})
+      CBMSService.createTable(this.state.obra)
+      CBMSService.getCBMS()
+      .then((response) => {
+        this.setState({dataOnStorage: response._array})
+        this.setState({isLoading:false})
+      })
     } 
     else if (this.props.route.params != undefined) {
       RegisterService.getRegisters(this.props.route.params.key.obra_name)
@@ -67,8 +73,8 @@ export default class List extends Component {
         })
     }
   }
-  sendInput() {
-    console.log("sendInput")
+  sendInput(inputText) {
+    CBMSService.addCBMS(inputText)
     alert("Salvo")
     this.setState({isDialogVisible: false})
   }
@@ -101,6 +107,8 @@ export default class List extends Component {
                               title: 
                               item.material + " - " 
                               + item.car } 
+                              : this.props.route.params.key == "CBMS" ? 
+                              {title: item.cbms_name} 
                               : {title: item.obra_name}}/>
                 </TouchableHighlight>}
             />
