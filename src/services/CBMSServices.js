@@ -10,9 +10,8 @@ class CBMSServices {
             tx => {
                 tx.executeSql(
                     `create table if not exists cbms (
-                        id integer AUTO_INCREMENT,
                         cbms_name text,
-                        PRIMARY KEY (id)
+                        PRIMARY KEY (cbms_name)
                     );`,
                 );
             }, (error) => {
@@ -74,11 +73,11 @@ class CBMSServices {
     }
 
     //Delete
-    deleteCBMS(cbms_id){
+    deleteCBMS(cbms_name){
         db.transaction(
             tx => {
                 tx.executeSql(
-                    'DELETE FROM cbms WHERE id = ?;', [cbms_id], (_, { rows }) => {
+                    'DELETE FROM cbms WHERE cbms_name = ?;', [cbms_name], (_, { rows }) => {
                         // console.log(JSON.stringify(rows))
                     }
                 );

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Text, Alert } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import ListCell from "./ListCell";
 import ObraService from "../services/ObrasService"
@@ -79,6 +79,25 @@ export default class List extends Component {
     this.setState({isDialogVisible: false})
   }
 
+  deleteCBMS(item){
+    Alert.alert(
+      "Alert Title",
+      "My Alert Msg",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Delete", onPress: () => {
+          CBMSService.deleteCBMS(item.cbms_name)
+          alert("CBMS: " + item.cbms_name + " deletado")
+        } }
+      ],
+      { cancelable: false }
+    );
+  }
+
   render(){
     return (
       <View style={styles.container}>
@@ -99,6 +118,7 @@ export default class List extends Component {
                 renderItem={({item, index, separators}) => 
                 <TouchableHighlight
                     onPress={() => this.selectListItem(item)}
+                    onLongPress={() => { this.deleteCBMS(item) }}
                     onShowUnderlay={separators.highlight}
                     onHideUnderlay={separators.unhighlight}>
                         <ListCell 
