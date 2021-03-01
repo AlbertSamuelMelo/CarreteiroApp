@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput} from 'react-native';
 import Picker from 'react-native-picker-select';
 import Database from "../Database.json"
+import CBMSService from "../services/CBMSServices"
 
 export default class TextPlaceHolder extends Component {  
     constructor() {
         super();
         this.state = {
           category:"",
-          obras: [{"label": "Teste", "value": "Teste"}]
+          obras: [{"label": "Teste", "value": "Teste"}],
+          cbmsList: []
         };
       }
       
@@ -33,6 +35,16 @@ export default class TextPlaceHolder extends Component {
     componentDidMount(){
       if(this.props.obras){
         this.setState({obras: this.props.obras})
+      } else if (this.props.input == "CBMS"){
+        CBMSService.createTable()
+        CBMSService.getCBMS()
+        .then((response) => {
+          var list = []
+          for(var i = 0; i<response._array.length; i++){
+            list.push({"label": response._array[i].cbms_name, "value": response._array[i].cbms_name})
+          }
+          this.setState({isLoading:false, cbmsList: list })
+        })
       }
     }
 
@@ -69,7 +81,21 @@ export default class TextPlaceHolder extends Component {
                     placeholder="Insira o numero da estaca"
                     keyboardType="number-pad"
                   /> 
-                : this.props.input ? 
+                  : this.props.input == "CBMS"? 
+                  <Picker 
+                      style={styles} 
+                      onValueChange={
+                          (value) => this.changePicker(value)
+                      }
+                      value={this.state.category}
+                      items={this.state.cbmsList}
+                      placeholder={{
+                          label: 'Selecione o ' + this.props.input,
+                          value: null,
+                          backgroundColor: 'white',
+                        }
+                      }/>
+                  : this.props.input ? 
                     <Picker 
                         style={styles} 
                         onValueChange={

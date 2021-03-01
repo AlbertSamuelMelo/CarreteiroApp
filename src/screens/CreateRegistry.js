@@ -237,7 +237,7 @@ export default class CreateRegistry extends Component {
             callbackFromParent={(value) => this.destinyTaked(value)}
           /> */}
           <TextPlaceHolder 
-            input="CB" 
+            input="CBMS" 
             ref={this.carComponent}
             callbackFromParent={(value) => this.carTaked(value)}
           />
