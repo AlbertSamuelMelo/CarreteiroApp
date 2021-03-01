@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, View, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import ListCell from "./ListCell";
 import ObraService from "../services/ObrasService"
 import RegisterService from "../services/RegisterSevice"
+import DialogInput from 'react-native-dialog-input';
 
 export default class List extends Component {
   constructor() {
@@ -12,7 +13,8 @@ export default class List extends Component {
     this.state = {
         storage: false,
         dataOnStorage: [],
-        isLoading: false
+        isLoading: false,
+        isDialogVisible: false
     };
   }
 
@@ -20,7 +22,17 @@ export default class List extends Component {
     this.setState({isLoading:true})
 
     if (this.props.route.params.key == "CBMS"){
-      console.log(" SUCESSO ")
+      this.props.navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity onPress={() => 
+            {
+              this.setState({isDialogVisible: true})
+            }
+          }>
+            <Text style={{marginRight: 15, color: "#147efb"}}>Criar CMBS</Text>
+          </TouchableOpacity>
+        ),
+      });
       this.setState({isLoading:false})
     } 
     else if (this.props.route.params != undefined) {
@@ -55,11 +67,23 @@ export default class List extends Component {
         })
     }
   }
+  sendInput() {
+    console.log("sendInput")
+    alert("Salvo")
+    this.setState({isDialogVisible: false})
+  }
 
   render(){
     return (
       <View style={styles.container}>
           <StatusBar style="dark" />
+          <DialogInput isDialogVisible={this.state.isDialogVisible}
+            title={"Criar CBMS"}
+            message={"Digite a placa da CMBS"}
+            hintInput ={"CMBS"}
+            submitInput={ (inputText) => {this.sendInput(inputText)} }
+            closeDialog={ () => {this.setState({isDialogVisible: false})}}>
+          </DialogInput>
           <SafeAreaView style={styles.safeArea}>
             <FlatList 
                 data={this.state.dataOnStorage}
